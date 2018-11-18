@@ -1,0 +1,20 @@
+{
+	"member": [
+		{
+			"kind": "member",
+			"type": "Platform",
+			"name": "platform",
+			"memberof": "Window",
+			"scope": "instance"
+		}
+	],
+	"function": [],
+	"globalMember": [],
+	"globalFunction": [],
+	"class": {
+		"kind": "interface",
+		"name": "Window",
+		"memberof": "",
+		"filename": "c:\\Users\\PajamaCat\\Downloads\\tiaoyitiao-master\\tiaoyitiao-master\\跳一跳白鹭源码\\src\\Platform.ts"
+	}
+}

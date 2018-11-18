@@ -1,0 +1,63 @@
+{
+	"member": [
+		{
+			"kind": "member",
+			"type": "eui.Button",
+			"name": "beginBtn",
+			"memberof": "BeginScene",
+			"scope": "instance",
+			"description": "// 开始按钮"
+		}
+	],
+	"function": [
+		{
+			"kind": "function",
+			"name": "BeginScene",
+			"memberof": "BeginScene",
+			"scope": "instance"
+		},
+		{
+			"kind": "function",
+			"type": "void",
+			"name": "childrenCreated",
+			"memberof": "BeginScene",
+			"scope": "instance"
+		},
+		{
+			"kind": "function",
+			"type": "void",
+			"name": "partAdded",
+			"memberof": "BeginScene",
+			"scope": "instance",
+			"params": [
+				{
+					"name": "partName",
+					"type": "string",
+					"description": ""
+				},
+				{
+					"name": "instance",
+					"type": "any",
+					"description": ""
+				}
+			]
+		},
+		{
+			"kind": "function",
+			"name": "release",
+			"memberof": "BeginScene",
+			"scope": "instance",
+			"description": "// 移除事件"
+		}
+	],
+	"globalMember": [],
+	"globalFunction": [],
+	"class": {
+		"kind": "class",
+		"name": "BeginScene",
+		"memberof": "",
+		"filename": "c:\\Users\\PajamaCat\\Downloads\\tiaoyitiao-master\\tiaoyitiao-master\\跳一跳白鹭源码\\src\\scene\\BeginScene.ts",
+		"augments": [],
+		"implements": []
+	}
+}

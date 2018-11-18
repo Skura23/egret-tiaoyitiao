@@ -1,0 +1,30 @@
+{
+	"member": [],
+	"function": [
+		{
+			"kind": "function",
+			"name": "getUserInfo",
+			"memberof": "DebugPlatform",
+			"scope": "instance"
+		},
+		{
+			"kind": "function",
+			"name": "login",
+			"memberof": "DebugPlatform",
+			"scope": "instance"
+		}
+	],
+	"globalMember": [],
+	"globalFunction": [],
+	"class": {
+		"kind": "class",
+		"name": "DebugPlatform",
+		"memberof": "",
+		"filename": "c:\\Users\\PajamaCat\\Downloads\\tiaoyitiao-master\\tiaoyitiao-master\\跳一跳白鹭源码\\src\\Platform.ts",
+		"implements": [
+			{
+				"name": "Platform"
+			}
+		]
+	}
+}

@@ -1,0 +1,30 @@
+{
+	"member": [],
+	"function": [
+		{
+			"kind": "function",
+			"type": "void",
+			"name": "createChildren",
+			"memberof": "Main",
+			"scope": "instance"
+		},
+		{
+			"kind": "function",
+			"type": "void",
+			"name": "createGameScene",
+			"memberof": "Main",
+			"scope": "instance",
+			"description": "创建场景界面Create scene interface"
+		}
+	],
+	"globalMember": [],
+	"globalFunction": [],
+	"class": {
+		"kind": "class",
+		"name": "Main",
+		"memberof": "",
+		"filename": "c:\\Users\\PajamaCat\\Downloads\\tiaoyitiao-master\\tiaoyitiao-master\\跳一跳白鹭源码\\src\\Main.ts",
+		"description": "//////////////////////////////////////////////////////////////////////////////////////",
+		"augments": []
+	}
+}

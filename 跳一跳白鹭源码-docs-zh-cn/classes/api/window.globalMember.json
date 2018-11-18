@@ -1,0 +1,20 @@
+{
+	"globalMember": [
+		{
+			"filename": "c:\\Users\\PajamaCat\\Downloads\\tiaoyitiao-master\\tiaoyitiao-master\\跳一跳白鹭源码\\src\\ThemeAdapter.ts",
+			"kind": "globalMember",
+			"type": "{paths:string[],skins:any}",
+			"name": "generateEUI",
+			"memberof": "window",
+			"scope": "instance"
+		},
+		{
+			"filename": "c:\\Users\\PajamaCat\\Downloads\\tiaoyitiao-master\\tiaoyitiao-master\\跳一跳白鹭源码\\src\\Platform.ts",
+			"kind": "globalMember",
+			"type": "Platform",
+			"name": "platform",
+			"memberof": "window",
+			"scope": "instance"
+		}
+	]
+}

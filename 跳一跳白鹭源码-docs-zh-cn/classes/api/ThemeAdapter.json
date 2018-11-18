@@ -1,0 +1,45 @@
+{
+	"member": [],
+	"function": [
+		{
+			"kind": "function",
+			"type": "void",
+			"name": "getTheme",
+			"memberof": "ThemeAdapter",
+			"scope": "instance",
+			"description": "解析主题",
+			"params": [
+				{
+					"name": "url",
+					"type": "string",
+					"description": "待解析的主题url"
+				},
+				{
+					"name": "onSuccess",
+					"type": "Function",
+					"description": "解析完成回调函数，示例：compFunc(e:egret.Event):void;"
+				},
+				{
+					"name": "onError",
+					"type": "Function",
+					"description": "解析失败回调函数，示例：errorFunc():void;"
+				},
+				{
+					"name": "thisObject",
+					"type": "any",
+					"description": "回调的this引用"
+				}
+			]
+		}
+	],
+	"globalMember": [],
+	"globalFunction": [],
+	"class": {
+		"kind": "class",
+		"name": "ThemeAdapter",
+		"memberof": "",
+		"filename": "c:\\Users\\PajamaCat\\Downloads\\tiaoyitiao-master\\tiaoyitiao-master\\跳一跳白鹭源码\\src\\ThemeAdapter.ts",
+		"description": "//////////////////////////////////////////////////////////////////////////////////////",
+		"implements": []
+	}
+}

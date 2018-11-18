@@ -1,0 +1,136 @@
+{
+	"member": [
+		{
+			"kind": "member",
+			"type": "eui.Group",
+			"name": "blockPanel",
+			"memberof": "GameScene",
+			"scope": "instance",
+			"description": "// 游戏场景组"
+		},
+		{
+			"kind": "member",
+			"type": "number",
+			"name": "direction",
+			"memberof": "GameScene",
+			"scope": "instance",
+			"description": "// 下一个盒子方向(1靠右侧出现/-1靠左侧出现)",
+			"default": "1"
+		},
+		{
+			"kind": "member",
+			"type": "number",
+			"name": "factor",
+			"memberof": "GameScene",
+			"scope": "instance",
+			"description": "//添加factor的set,get方法,注意用public"
+		},
+		{
+			"kind": "member",
+			"type": "number",
+			"name": "jumpDistance",
+			"memberof": "GameScene",
+			"scope": "instance",
+			"description": "// 跳的距离",
+			"default": "0"
+		},
+		{
+			"kind": "member",
+			"type": "eui.Group",
+			"name": "overPanel",
+			"memberof": "GameScene",
+			"scope": "instance",
+			"description": "// 游戏结束场景"
+		},
+		{
+			"kind": "member",
+			"type": "eui.Label",
+			"name": "overScoreLabel",
+			"memberof": "GameScene",
+			"scope": "instance"
+		},
+		{
+			"kind": "member",
+			"type": "eui.Image",
+			"name": "player",
+			"memberof": "GameScene",
+			"scope": "instance",
+			"description": "// 小 i"
+		},
+		{
+			"kind": "member",
+			"type": "eui.Button",
+			"name": "restart",
+			"memberof": "GameScene",
+			"scope": "instance"
+		},
+		{
+			"kind": "member",
+			"type": "eui.Label",
+			"name": "scoreLabel",
+			"memberof": "GameScene",
+			"scope": "instance",
+			"description": "// 游戏场景中的积分"
+		},
+		{
+			"kind": "member",
+			"type": "number",
+			"name": "tanAngle",
+			"memberof": "GameScene",
+			"scope": "instance",
+			"description": "// tanθ角度值",
+			"default": "0.556047197640118"
+		}
+	],
+	"function": [
+		{
+			"kind": "function",
+			"name": "GameScene",
+			"memberof": "GameScene",
+			"scope": "instance"
+		},
+		{
+			"kind": "function",
+			"type": "void",
+			"name": "childrenCreated",
+			"memberof": "GameScene",
+			"scope": "instance"
+		},
+		{
+			"kind": "function",
+			"type": "void",
+			"name": "partAdded",
+			"memberof": "GameScene",
+			"scope": "instance",
+			"params": [
+				{
+					"name": "partName",
+					"type": "string",
+					"description": ""
+				},
+				{
+					"name": "instance",
+					"type": "any",
+					"description": ""
+				}
+			]
+		},
+		{
+			"kind": "function",
+			"name": "reset",
+			"memberof": "GameScene",
+			"scope": "instance",
+			"description": "// 重置游戏"
+		}
+	],
+	"globalMember": [],
+	"globalFunction": [],
+	"class": {
+		"kind": "class",
+		"name": "GameScene",
+		"memberof": "",
+		"filename": "c:\\Users\\PajamaCat\\Downloads\\tiaoyitiao-master\\tiaoyitiao-master\\跳一跳白鹭源码\\src\\scene\\GameScene.ts",
+		"augments": [],
+		"implements": []
+	}
+}

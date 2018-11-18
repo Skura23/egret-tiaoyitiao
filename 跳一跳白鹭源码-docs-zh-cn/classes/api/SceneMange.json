@@ -1,0 +1,41 @@
+{
+	"member": [],
+	"function": [
+		{
+			"kind": "function",
+			"name": "SceneMange",
+			"memberof": "SceneMange",
+			"scope": "instance"
+		},
+		{
+			"kind": "function",
+			"name": "changeScene",
+			"memberof": "SceneMange",
+			"scope": "instance",
+			"description": "// 切换场景",
+			"params": [
+				{
+					"name": "type",
+					"description": ""
+				}
+			]
+		},
+		{
+			"kind": "function",
+			"type": "SceneMange",
+			"name": "getInstance",
+			"memberof": "SceneMange",
+			"scope": "static",
+			"description": "// 实例化单例获取方法"
+		}
+	],
+	"globalMember": [],
+	"globalFunction": [],
+	"class": {
+		"kind": "class",
+		"name": "SceneMange",
+		"memberof": "",
+		"filename": "c:\\Users\\PajamaCat\\Downloads\\tiaoyitiao-master\\tiaoyitiao-master\\跳一跳白鹭源码\\src\\SceneManage.ts",
+		"augments": []
+	}
+}
