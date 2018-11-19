@@ -184,8 +184,35 @@ var GameScene = (function (_super) {
         var _this = this;
         // 根据this.jumpDistance来判断跳跃是否成功
         if (Math.pow(this.currentBlock.x - this.player.x, 2) + Math.pow(this.currentBlock.y - this.player.y, 2) <= 70 * 70) {
+            var increment = 1;
+            // if(){
+            // 	// 靠近中心 2分
+            // 	increment = 2;
+            // }
             // 更新积分
-            this.score++;
+            this.score += increment;
+            // 直接新增、操作画布元素
+            // var increTextSpr:egret.Sprite = new egret.Sprite();
+            var increText = new egret.TextField();
+            increText.text = '+' + increment;
+            increText.size = 40;
+            increText.textColor = 0x000000;
+            // increTextSpr.addChild(increText);
+            increText.x = this.player.x - 20;
+            increText.y = this.player.y - 160;
+            // increText.alpha=0.2;
+            this.blockPanel.addChild(increText);
+            // egret.Tween.get(increText).to({
+            // 	// x: 100,
+            // 	y: increText.y - 100,
+            // 	alpha: 0
+            // }, 600).call(() => {
+            // 	this.blockPanel.removeChild(increText);
+            // })
+            // egret.setTimeout(function(){
+            // 	this.blockPanel.removeChild(increText);
+            // }, this, 800)
+            // 直接新增、操作画布元素 end
             this.scoreLabel.text = this.score.toString();
             // 随机下一个方块出现的位置
             this.direction = Math.random() > 0.5 ? 1 : -1;
@@ -200,13 +227,13 @@ var GameScene = (function (_super) {
             PlayerY = this.player.y - (this.currentBlock.y - blockY);
             // 更新页面
             // z 给update传入当前方块与下一方块的距离值以控制其他方块移动
-            this.update(this.currentBlock.x - blockX, this.currentBlock.y - blockY);
+            this.update(this.currentBlock.x - blockX, this.currentBlock.y - blockY, increText);
             // 更新小人的位置
             // z 移动小人位置
             egret.Tween.get(this.player).to({
                 x: playerX,
                 y: PlayerY,
-            }, 1000).call(function () {
+            }, 900).call(function () {
                 // 开始创建下一个方块
                 _this.addBlock();
                 // 让屏幕重新可点;
@@ -223,8 +250,8 @@ var GameScene = (function (_super) {
         }
     };
     // z 控制屏幕中所有方块移动
-    GameScene.prototype.update = function (x, y) {
-        egret.Tween.removeAllTweens();
+    GameScene.prototype.update = function (x, y, increText) {
+        // egret.Tween.removeAllTweens();
         for (var i = this.blockArr.length - 1; i >= 0; i--) {
             var blockNode = this.blockArr[i];
             if (blockNode.x + (blockNode.width - 222) < 0 || blockNode.x - 222 > this.width || blockNode.y - 78 > this.height) {
@@ -239,7 +266,17 @@ var GameScene = (function (_super) {
                 egret.Tween.get(blockNode).to({
                     x: blockNode.x - x,
                     y: blockNode.y - y
-                }, 1000);
+                }, 900);
+                egret.Tween.get(increText).to({
+                    x: increText.x - x * 4 / 9,
+                    y: increText.y - y * 4 / 9,
+                }, 400).call(function () {
+                    egret.Tween.get(increText).to({
+                        x: increText.x - x * 5 / 9,
+                        y: increText.y - y * 5 / 9,
+                        alpha: 0
+                    }, 500);
+                });
             }
         }
         console.log(this.blockArr);
