@@ -86,7 +86,8 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		// 设置玩家的锚点
 		this.player.anchorOffsetX = this.player.width / 2;
 		this.player.anchorOffsetY = this.player.height - 20;
-
+		// 获取、设置初始生命值
+		var req = new egret.HttpRequest();
 		// 心跳计时器
 		egret.Ticker.getInstance().register(function (dt) {
 			dt /= 1000;
