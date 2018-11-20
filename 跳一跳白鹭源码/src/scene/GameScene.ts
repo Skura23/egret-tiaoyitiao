@@ -4,8 +4,14 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	public blockPanel: eui.Group;
 	// 小 i
 	public player: eui.Image;
+	// 分数图标
+	public scoreIcon: eui.Image;
+	// 生命图标
+	public lifeIcon: eui.Image;
 	// 游戏场景中的积分
 	public scoreLabel: eui.Label;
+	// 生命值
+	public lifeLabel: eui.Label;
 	// 所有方块资源的数组
 	private blockSourceNames: Array<string> = [];
 	// 按下的音频
@@ -40,11 +46,14 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	private rightOrigin = { "x": 505, "y": 350 };
 	// 游戏中得分
 	private score = 0;
+	// 游戏中生命数
+	public life = 1;
 
 	// 游戏结束场景
 	public overPanel: eui.Group;
 	public overScoreLabel: eui.Label;
 	public restart: eui.Button;
+	public relive: eui.Button;
 
 
 
@@ -72,6 +81,8 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		this.blockPanel.addEventListener(egret.TouchEvent.TOUCH_END, this.onKeyUp, this);
 		// 绑定结束按钮
 		this.restart.addEventListener(egret.TouchEvent.TOUCH_TAP, this.restartHandler, this);
+		// 绑定复活按钮
+		this.relive.addEventListener(egret.TouchEvent.TOUCH_TAP, this.reliveHandler, this);
 		// 设置玩家的锚点
 		this.player.anchorOffsetX = this.player.width / 2;
 		this.player.anchorOffsetY = this.player.height - 20;
@@ -153,6 +164,10 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		this.player.y = this.currentBlock.y;
 		this.player.x = this.currentBlock.x;
 		this.blockPanel.addChild(this.player);
+		this.blockPanel.addChild(this.scoreIcon);
+		this.blockPanel.addChild(this.scoreLabel);
+		this.blockPanel.addChild(this.lifeIcon);
+		this.blockPanel.addChild(this.lifeLabel);
 		this.direction = 1;
 		// 添加积分
 		this.blockPanel.addChild(this.scoreLabel);
@@ -201,6 +216,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	private judgeResult() {
 		// 根据this.jumpDistance来判断跳跃是否成功
 		if (Math.pow(this.currentBlock.x - this.player.x, 2) + Math.pow(this.currentBlock.y - this.player.y, 2) <= 70 * 70) {
+			// 小人落在方块上
 			var increment = 1
 			// if(){
 			// 	// 靠近中心 2分
@@ -279,25 +295,27 @@ class GameScene extends eui.Component implements eui.UIComponent {
 				this.reBackBlockArr.push(blockNode);
 			} else {
 				// 没有超出屏幕的话,则移动
+				// 方块移动
 				egret.Tween.get(blockNode).to({
 					x: blockNode.x - x,
 					y: blockNode.y - y
 				}, 900)
-				egret.Tween.get(increText).to({
-					x: increText.x - x*4/9,
-					y: increText.y - y*4/9,
-					// alpha: 0
-				}, 400).call(()=>{
-					egret.Tween.get(increText).to({
-						x: increText.x - x*5/9,
-						y: increText.y - y*5/9 ,
-						alpha: 0
-					}, 500)
-				})
 			}
 		}
+		if(increText){
+			egret.Tween.get(increText).to({
+				x: increText.x - x*4/9,
+				y: increText.y - y*4/9,
+				// alpha: 0
+			}, 400).call(()=>{
+				egret.Tween.get(increText).to({
+					x: increText.x - x*5/9,
+					y: increText.y - y*5/9 ,
+					alpha: 0
+				}, 500)
+			})
+		}
 		console.log(this.blockArr);
-
 	}
 	// 重新一局
 	private restartHandler() {
@@ -309,6 +327,31 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		// 开始放置方块
 		this.reset();
 		// 游戏场景可点
+		this.blockPanel.touchEnabled = true;
+	}
+	// 复活
+	private reliveHandler() {
+		// 隐藏结束场景
+		this.overPanel.visible = false;
+		// 生命值 -1 ajax
+		// this.score = 0;
+		// this.scoreLabel.text = this.score.toString();
+		// 开始放置方块
+		// this.reset();
+		// 游戏场景可点
+		this.life--;
+		if (this.life < 0) this.life = 0;
+		this.lifeLabel.text = this.life.toString();
+		if(this.life === 0) this.relive.visible = false;
+		// direction判断失败界面倒数第二个方块的位置
+		if(this.direction === 1){
+			this.player.x = this.leftOrigin.x;
+			this.player.y = this.height / 2 + this.currentBlock.height;
+		} else if(this.direction === -1) {
+			this.player.x = this.rightOrigin.x;
+			this.player.y = this.height / 2 + this.currentBlock.height;
+		}
+		// this.player
 		this.blockPanel.touchEnabled = true;
 	}
 	//添加factor的set,get方法,注意用public  
