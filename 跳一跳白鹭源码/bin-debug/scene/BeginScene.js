@@ -22,6 +22,7 @@ var BeginScene = (function (_super) {
         this.init();
     };
     // 初始化(给开始按钮绑定点击事件)
+    // z 点击开始按钮切换场景
     BeginScene.prototype.init = function () {
         this.beginBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, this.tapHandler, this);
     };

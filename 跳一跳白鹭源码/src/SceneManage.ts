@@ -16,6 +16,7 @@ class SceneMange extends egret.Sprite {
 		this.gameScene = new GameScene();
 		// 默认添加开始场景
 		this.addChild(this.beginScene);
+		
 	}
 	// 实例化单例获取方法
 	public static getInstance(): SceneMange{

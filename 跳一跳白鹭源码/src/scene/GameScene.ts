@@ -52,6 +52,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	// 游戏结束场景
 	public overPanel: eui.Group;
 	public overScoreLabel: eui.Label;
+	public loadingPop: eui.Group;
 	public restart: eui.Button;
 	public relive: eui.Button;
 
@@ -66,6 +67,17 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	}
 	protected childrenCreated(): void {
 		super.childrenCreated();
+		// 添加loading动图
+		var data = RES.getRes("loading_json");
+		var txtr = RES.getRes("loading_png");
+		var mcFactory:egret.MovieClipDataFactory = new egret.MovieClipDataFactory( data, txtr );
+		var mc:egret.MovieClip = new egret.MovieClip( mcFactory.generateMovieClipData( "loading" ) );
+		mc.scaleX = 0.5;
+		mc.scaleY = 0.5;
+		mc.x = 11;
+		mc.y = 52;
+		this.loadingPop.addChild(mc)
+		mc.gotoAndPlay(0, -1);
 		this.init();
 		this.reset();
 	}
@@ -86,8 +98,24 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		// 设置玩家的锚点
 		this.player.anchorOffsetX = this.player.width / 2;
 		this.player.anchorOffsetY = this.player.height - 20;
-		// 获取、设置初始生命值
+		// 获取、设置初始生命值 life ajax
 		var req = new egret.HttpRequest();
+		req.responseType = egret.HttpResponseType.TEXT;
+		req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife",egret.HttpMethod.GET);
+		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		req.send();
+		req.addEventListener(egret.Event.COMPLETE,function(event:egret.Event):void{
+			var request = <egret.HttpRequest>event.currentTarget;
+			var data = JSON.parse(request.response).data;
+			this.life = data.life;
+			this.lifeLabel.text = this.life.toString();
+			this.blockPanel.touchEnabled = true;
+			console.log(request.response);
+		},this);
+		req.addEventListener(egret.ProgressEvent.PROGRESS,function(event:egret.Event):void{
+			this.blockPanel.touchEnabled = false;
+		},this)
+		// req.addEventListener(egret.IOErrorEvent.IO_ERROR,this.onGetIOError,this);
 		// 心跳计时器
 		egret.Ticker.getInstance().register(function (dt) {
 			dt /= 1000;
@@ -332,28 +360,37 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	}
 	// 复活
 	private reliveHandler() {
-		// 隐藏结束场景
-		this.overPanel.visible = false;
 		// 生命值 -1 ajax
-		// this.score = 0;
-		// this.scoreLabel.text = this.score.toString();
-		// 开始放置方块
-		// this.reset();
-		// 游戏场景可点
-		this.life--;
-		if (this.life < 0) this.life = 0;
-		this.lifeLabel.text = this.life.toString();
-		if(this.life === 0) this.relive.visible = false;
-		// direction判断失败界面倒数第二个方块的位置
-		if(this.direction === 1){
-			this.player.x = this.leftOrigin.x;
-			this.player.y = this.height / 2 + this.currentBlock.height;
-		} else if(this.direction === -1) {
-			this.player.x = this.rightOrigin.x;
-			this.player.y = this.height / 2 + this.currentBlock.height;
+		var req = new egret.HttpRequest();
+		var params = "?curLife="+this.life;
+		req.responseType = egret.HttpResponseType.TEXT;
+		req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife"+params,egret.HttpMethod.GET);
+		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		req.send();
+		req.addEventListener(egret.Event.COMPLETE,onSuccess,this);
+		req.addEventListener(egret.ProgressEvent.PROGRESS, function(event:egret.Event):void{
+			
+		}, this)
+		// todo loading 弹窗; 生命数初始载入问题;
+		function onSuccess(event:egret.Event):void{
+			var request = <egret.HttpRequest>event.currentTarget;
+			var data = JSON.parse(request.response).data;
+			this.life = data.curLife;
+			// 隐藏结束场景
+			this.overPanel.visible = false;
+			if (this.life < 0) this.life = 0;
+			this.lifeLabel.text = this.life.toString();
+			if(this.life === 0) this.relive.visible = false;
+			// direction判断失败界面倒数第二个方块的位置
+			if(this.direction === 1){
+				this.player.x = this.leftOrigin.x;
+				this.player.y = this.height / 2 + this.currentBlock.height;
+			} else if(this.direction === -1) {
+				this.player.x = this.rightOrigin.x;
+				this.player.y = this.height / 2 + this.currentBlock.height;
+			}
+			this.blockPanel.touchEnabled = true;
 		}
-		// this.player
-		this.blockPanel.touchEnabled = true;
 	}
 	//添加factor的set,get方法,注意用public  
 	public get factor(): number {

@@ -22,6 +22,7 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 	}
 	
 	// 初始化(给开始按钮绑定点击事件)
+	// z 点击开始按钮切换场景
 	private init(){
 		this.beginBtn.addEventListener(egret.TouchEvent.TOUCH_TAP,this.tapHandler,this);
 	}

@@ -30,4 +30,8 @@
 			</e:skinName>
 		</e:Button>
 	</e:Group>
+	<e:Group id="loadingPop" horizontalCenter="-8.5" anchorOffsetY="105.34" height="207" verticalCenter="-103.5" anchorOffsetX="132.05" width="261" visible="false">
+		<e:Label id="loadingLabel" text="    请稍等" x="11" y="46" textColor="0x070303" size="40" fontFamily="SimHei" backgroundColor="0xf7f4f4" background="true" anchorOffsetX="0" width="244" anchorOffsetY="0" height="112" verticalAlign="middle" textAlign="center" border="true" borderColor="0x8c8a8a"/>
+		<!--<e:Image source="loading_gif" scaleX="0.5" scaleY="0.5" x="11" y="52"/>-->
+	</e:Group>
 </e:Skin>
