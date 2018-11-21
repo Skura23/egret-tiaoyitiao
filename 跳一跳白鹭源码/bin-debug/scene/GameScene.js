@@ -74,24 +74,8 @@ var GameScene = (function (_super) {
         // 设置玩家的锚点
         this.player.anchorOffsetX = this.player.width / 2;
         this.player.anchorOffsetY = this.player.height - 20;
-        // 获取、设置初始生命值 life ajax
-        var req = new egret.HttpRequest();
-        req.responseType = egret.HttpResponseType.TEXT;
-        req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife", egret.HttpMethod.GET);
-        req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        req.send();
-        req.addEventListener(egret.Event.COMPLETE, function (event) {
-            var request = event.currentTarget;
-            var data = JSON.parse(request.response).data;
-            this.life = data.life;
-            this.lifeLabel.text = this.life.toString();
-            this.blockPanel.touchEnabled = true;
-            console.log(request.response);
-        }, this);
-        req.addEventListener(egret.ProgressEvent.PROGRESS, function (event) {
-            this.blockPanel.touchEnabled = false;
-        }, this);
-        // req.addEventListener(egret.IOErrorEvent.IO_ERROR,this.onGetIOError,this);
+        this.life = bus.life;
+        this.lifeLabel.text = this.life.toString();
         // 心跳计时器
         egret.Ticker.getInstance().register(function (dt) {
             dt /= 1000;
@@ -343,30 +327,36 @@ var GameScene = (function (_super) {
         req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife" + params, egret.HttpMethod.GET);
         req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         req.send();
+        this.loadingPop.visible = true;
+        this.relive.touchEnabled = false;
         req.addEventListener(egret.Event.COMPLETE, onSuccess, this);
-        req.addEventListener(egret.ProgressEvent.PROGRESS, function (event) {
-        }, this);
+        // req.addEventListener(egret.ProgressEvent.PROGRESS, function(event:egret.Event):void{
+        // }, this)
+        // todo loading 弹窗; 生命数初始载入问题;
         function onSuccess(event) {
             var request = event.currentTarget;
             var data = JSON.parse(request.response).data;
-            this.life = data.curLife;
-            // 隐藏结束场景
-            this.overPanel.visible = false;
-            if (this.life < 0)
-                this.life = 0;
-            this.lifeLabel.text = this.life.toString();
-            if (this.life === 0)
-                this.relive.visible = false;
-            // direction判断失败界面倒数第二个方块的位置
-            if (this.direction === 1) {
-                this.player.x = this.leftOrigin.x;
-                this.player.y = this.height / 2 + this.currentBlock.height;
-            }
-            else if (this.direction === -1) {
-                this.player.x = this.rightOrigin.x;
-                this.player.y = this.height / 2 + this.currentBlock.height;
-            }
-            this.blockPanel.touchEnabled = true;
+            egret.setTimeout(function () {
+                this.life = data.curLife;
+                if (this.life < 0)
+                    this.life = 0;
+                this.lifeLabel.text = this.life.toString();
+                if (this.life === 0)
+                    this.relive.visible = false;
+                // direction判断失败界面倒数第二个方块的位置
+                if (this.direction === 1) {
+                    this.player.x = this.leftOrigin.x;
+                    this.player.y = this.height / 2 + this.currentBlock.height;
+                }
+                else if (this.direction === -1) {
+                    this.player.x = this.rightOrigin.x;
+                    this.player.y = this.height / 2 + this.currentBlock.height;
+                }
+                // 隐藏结束场景
+                this.overPanel.visible = false;
+                this.loadingPop.visible = false;
+                this.relive.touchEnabled = true;
+            }, this, 600);
         }
     };
     Object.defineProperty(GameScene.prototype, "factor", {

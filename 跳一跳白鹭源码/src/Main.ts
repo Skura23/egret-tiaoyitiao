@@ -28,8 +28,8 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 class Main extends eui.UILayer {
-
-
+    // Main -> LoadingUI -> SceneManage -> 
+    // Main -> runGame -> loadResource(LoadingUI) -> createGameScene(SceneMange) -> 
     protected createChildren(): void {
         super.createChildren();
 
@@ -56,9 +56,34 @@ class Main extends eui.UILayer {
             console.log(e);
         })
     }
-
+    // 异步执行运行游戏
     private async runGame() {
+        var that = this;
+        // 通过Promise保证ajax执行完成再执行后面的代码
+        await new Promise((resolve)=>{
+            // 获取、设置初始生命值 life ajax
+            var req = new egret.HttpRequest();
+            req.responseType = egret.HttpResponseType.TEXT;
+            req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife",egret.HttpMethod.GET);
+            req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            req.send();
+            req.addEventListener(egret.Event.COMPLETE,function(event:egret.Event):void{
+                var request = <egret.HttpRequest>event.currentTarget;
+                var data = JSON.parse(request.response).data;
+                bus.life = data.life;
+                resolve()
+                console.log(1);
+            },that);
+            // req.addEventListener(egret.ProgressEvent.PROGRESS,function(event:egret.Event):void{
+            // 	this.blockPanel.touchEnabled = false;
+            // },this)
+            // req.addEventListener(egret.IOErrorEvent.IO_ERROR,this.onGetIOError,this);
+        }); 
+        console.log(2);
+        
         await this.loadResource()
+        // 等待this.loadResource(资源加载)完成执行下面代码
+        // 创建游戏场景
         this.createGameScene();
         const result = await RES.getResAsync("description_json")
         this.startAnimation(result);
@@ -67,7 +92,7 @@ class Main extends eui.UILayer {
         console.log(userInfo);
 
     }
-
+    // 异步执行加载资源
     private async loadResource() {
         try {
             const loadingView = new LoadingUI();

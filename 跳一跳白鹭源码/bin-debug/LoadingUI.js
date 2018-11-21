@@ -44,12 +44,29 @@ var LoadingUI = (function (_super) {
         return _this;
     }
     LoadingUI.prototype.createView = function () {
+        // 获取、设置初始生命值 life ajax
+        var req = new egret.HttpRequest();
+        req.responseType = egret.HttpResponseType.TEXT;
+        req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife", egret.HttpMethod.GET);
+        req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        req.send();
+        req.addEventListener(egret.Event.COMPLETE, function (event) {
+            var request = event.currentTarget;
+            var data = JSON.parse(request.response).data;
+            bus.life = data.life;
+            console.log(request.response);
+        }, this);
+        // req.addEventListener(egret.ProgressEvent.PROGRESS,function(event:egret.Event):void{
+        // 	this.blockPanel.touchEnabled = false;
+        // },this)
+        // req.addEventListener(egret.IOErrorEvent.IO_ERROR,this.onGetIOError,this);
         this.textField = new egret.TextField();
         this.addChild(this.textField);
         this.textField.y = 300;
         this.textField.width = 480;
         this.textField.height = 100;
         this.textField.textAlign = "center";
+        this.textField.textColor = 0x000000;
     };
     LoadingUI.prototype.onProgress = function (current, total) {
         this.textField.text = "Loading..." + current + "/" + total;

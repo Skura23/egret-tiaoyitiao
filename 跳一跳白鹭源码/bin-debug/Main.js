@@ -76,6 +76,8 @@ var Main = (function (_super) {
     function Main() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    // Main -> LoadingUI -> SceneManage -> 
+    // Main -> runGame -> loadResource(LoadingUI) -> createGameScene(SceneMange) -> 
     Main.prototype.createChildren = function () {
         _super.prototype.createChildren.call(this);
         egret.lifecycle.addLifecycleListener(function (context) {
@@ -96,24 +98,56 @@ var Main = (function (_super) {
             console.log(e);
         });
     };
+    // 异步执行运行游戏
     Main.prototype.runGame = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var result, userInfo;
+            var that, result, userInfo;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.loadResource()];
+                    case 0:
+                        that = this;
+                        // 通过Promise保证ajax执行完成再执行后面的代码
+                        return [4 /*yield*/, new Promise(function (resolve) {
+                                // 获取、设置初始生命值 life ajax
+                                var req = new egret.HttpRequest();
+                                req.responseType = egret.HttpResponseType.TEXT;
+                                req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife", egret.HttpMethod.GET);
+                                req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                                req.send();
+                                req.addEventListener(egret.Event.COMPLETE, function (event) {
+                                    var request = event.currentTarget;
+                                    var data = JSON.parse(request.response).data;
+                                    bus.life = data.life;
+                                    resolve();
+                                    console.log(1);
+                                }, that);
+                                // req.addEventListener(egret.ProgressEvent.PROGRESS,function(event:egret.Event):void{
+                                // 	this.blockPanel.touchEnabled = false;
+                                // },this)
+                                // req.addEventListener(egret.IOErrorEvent.IO_ERROR,this.onGetIOError,this);
+                            })];
                     case 1:
+                        // 通过Promise保证ajax执行完成再执行后面的代码
                         _a.sent();
+                        console.log(2);
+                        return [4 /*yield*/, this.loadResource()
+                            // 等待this.loadResource(资源加载)完成执行下面代码
+                            // 创建游戏场景
+                        ];
+                    case 2:
+                        _a.sent();
+                        // 等待this.loadResource(资源加载)完成执行下面代码
+                        // 创建游戏场景
                         this.createGameScene();
                         return [4 /*yield*/, RES.getResAsync("description_json")];
-                    case 2:
+                    case 3:
                         result = _a.sent();
                         this.startAnimation(result);
                         return [4 /*yield*/, platform.login()];
-                    case 3:
+                    case 4:
                         _a.sent();
                         return [4 /*yield*/, platform.getUserInfo()];
-                    case 4:
+                    case 5:
                         userInfo = _a.sent();
                         console.log(userInfo);
                         return [2 /*return*/];
@@ -121,6 +155,7 @@ var Main = (function (_super) {
             });
         });
     };
+    // 异步执行加载资源
     Main.prototype.loadResource = function () {
         return __awaiter(this, void 0, void 0, function () {
             var loadingView, e_1;
