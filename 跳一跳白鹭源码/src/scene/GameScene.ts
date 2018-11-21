@@ -291,7 +291,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 			// console.log('x' + x);
 			console.log(this.currentBlock.x);
 		} else if( Math.pow(lastButOneBlock.x - this.player.x, 2) + Math.pow(lastButOneBlock.y - this.player.y, 2) <= 70 * 70){
-			
+			this.blockPanel.touchEnabled = true;
 		} else {
 			// 失败,弹出重新开始的panel
 			console.log('游戏失败!')
