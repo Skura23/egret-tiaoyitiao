@@ -227,6 +227,8 @@ class GameScene extends eui.Component implements eui.UIComponent {
 
 	
 	private judgeResult() {
+		// 界面的倒数第二个方块
+		var lastButOneBlock = this.blockArr[this.blockArr.length-2]
 		// 根据this.jumpDistance来判断跳跃是否成功
 		if (Math.pow(this.currentBlock.x - this.player.x, 2) + Math.pow(this.currentBlock.y - this.player.y, 2) <= 70 * 70) {
 			// 小人落在方块上
@@ -288,6 +290,8 @@ class GameScene extends eui.Component implements eui.UIComponent {
 			})
 			// console.log('x' + x);
 			console.log(this.currentBlock.x);
+		} else if( Math.pow(lastButOneBlock.x - this.player.x, 2) + Math.pow(lastButOneBlock.y - this.player.y, 2) <= 70 * 70){
+			
 		} else {
 			// 失败,弹出重新开始的panel
 			console.log('游戏失败!')
@@ -378,6 +382,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 				this.overPanel.visible = false;
 				this.loadingPop.visible = false;
 				this.relive.touchEnabled = true;
+				this.blockPanel.touchEnabled = true;
 			}, this, 600)
 		}
 	}
