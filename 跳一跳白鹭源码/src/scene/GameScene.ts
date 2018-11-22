@@ -51,10 +51,12 @@ class GameScene extends eui.Component implements eui.UIComponent {
 
 	// 游戏结束场景
 	public overPanel: eui.Group;
+	public rankPanel: eui.Group;
 	public overScoreLabel: eui.Label;
 	public loadingPop: eui.Group;
 	public restart: eui.Button;
 	public relive: eui.Button;
+	public viewRankBtn: eui.Button;
 
 
 
@@ -78,6 +80,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		mc.y = 52;
 		this.loadingPop.addChild(mc)
 		mc.gotoAndPlay(0, -1);
+
 		this.init();
 		this.reset();
 	}
@@ -95,6 +98,8 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		this.restart.addEventListener(egret.TouchEvent.TOUCH_TAP, this.restartHandler, this);
 		// 绑定复活按钮
 		this.relive.addEventListener(egret.TouchEvent.TOUCH_TAP, this.reliveHandler, this);
+		// 绑定结束页排行榜查看按钮
+		this.viewRankBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, this.viewRankHandler, this);
 		// 设置玩家的锚点
 		this.player.anchorOffsetX = this.player.width / 2;
 		this.player.anchorOffsetY = this.player.height - 20;
@@ -345,6 +350,18 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		this.reset();
 		// 游戏场景可点
 		this.blockPanel.touchEnabled = true;
+	}
+	// 为按钮绑定链接
+	private bindLink(){
+		// 查看排行榜链接
+		// this.viewRankBtn.addEventListener(egret.TouchEvent.TOUCH_TAP,function(){
+		// 	window.open("http://www.sina.com");
+		// },this)
+	}
+	// 查看排行handler
+	private viewRankHandler() {
+		this.overPanel.visible = false;
+		this.rankPanel.visible = true;
 	}
 	// 复活
 	private reliveHandler() {

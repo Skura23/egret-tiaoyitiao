@@ -71,6 +71,8 @@ var GameScene = (function (_super) {
         this.restart.addEventListener(egret.TouchEvent.TOUCH_TAP, this.restartHandler, this);
         // 绑定复活按钮
         this.relive.addEventListener(egret.TouchEvent.TOUCH_TAP, this.reliveHandler, this);
+        // 绑定结束页排行榜查看按钮
+        this.viewRankBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, this.viewRankHandler, this);
         // 设置玩家的锚点
         this.player.anchorOffsetX = this.player.width / 2;
         this.player.anchorOffsetY = this.player.height - 20;
@@ -322,6 +324,18 @@ var GameScene = (function (_super) {
         this.reset();
         // 游戏场景可点
         this.blockPanel.touchEnabled = true;
+    };
+    // 为按钮绑定链接
+    GameScene.prototype.bindLink = function () {
+        // 查看排行榜链接
+        // this.viewRankBtn.addEventListener(egret.TouchEvent.TOUCH_TAP,function(){
+        // 	window.open("http://www.sina.com");
+        // },this)
+    };
+    // 查看排行handler
+    GameScene.prototype.viewRankHandler = function () {
+        this.overPanel.visible = false;
+        this.rankPanel.visible = true;
     };
     // 复活
     GameScene.prototype.reliveHandler = function () {
