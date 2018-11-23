@@ -16,7 +16,7 @@
   },
   "global": {
     "globalBindingDataTestObj": [],
-    "globalAutoLayerMarkEnable": false,
+    "globalAutoLayerMarkEnable": true,
     "globalAdsorbEnable": true
   },
   "1616fab207f": {

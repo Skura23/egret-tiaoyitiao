@@ -73,6 +73,13 @@ var GameScene = (function (_super) {
         this.relive.addEventListener(egret.TouchEvent.TOUCH_TAP, this.reliveHandler, this);
         // 绑定结束页排行榜查看按钮
         this.viewRankBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, this.viewRankHandler, this);
+        this.rankReturn.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
+            this.rankPanel.visible = false;
+            this.overPanel.visible = true;
+        }, this);
+        // this.rankPanel.addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+        // 	window.open('http://www.baidu.com','targetWindow','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=350,height=250')
+        // }, this);
         // 设置玩家的锚点
         this.player.anchorOffsetX = this.player.width / 2;
         this.player.anchorOffsetY = this.player.height - 20;
