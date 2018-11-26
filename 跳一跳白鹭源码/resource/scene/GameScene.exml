@@ -56,7 +56,7 @@
 						<e:Label text="{data.rankPoint}" right="30" verticalAlign="middle" textAlign="center" height="65"/>
                     </e:Skin>
                 </e:itemRendererSkinName>
-                <e:ArrayCollection>
+                <!--<e:ArrayCollection>
                     <e:Array>
 						<e:Object rankOrder="1" rankHead="rank_head_png" rankName="abc" rankPoint="233"/>
 						<e:Object rankOrder="1" rankHead="rank_head_png" rankName="abc" rankPoint="233"/>
@@ -64,10 +64,11 @@
 						<e:Object rankOrder="1" rankHead="rank_head_png" rankName="abc" rankPoint="233"/>
 						<e:Object rankOrder="1" rankHead="rank_head_png" rankName="abc" rankPoint="233"/>
                     </e:Array>
-                </e:ArrayCollection>
+                </e:ArrayCollection>-->
 
             </e:List>
 		</e:Scroller>
+		<!--用户排行-->
 		<e:List id="userRankData" width="540"  y="578" horizontalCenter="0">
 			<!-- 布局 -->
 			<e:layout>

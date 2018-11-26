@@ -35,6 +35,8 @@ var GameScene = (function (_super) {
         _this.rightOrigin = { "x": 505, "y": 350 };
         // 游戏中得分
         _this.score = 0;
+        // rank列表是否刷新flag
+        _this.isRefresh = 0;
         // 游戏中生命数
         _this.life = 1;
         return _this;
@@ -77,9 +79,15 @@ var GameScene = (function (_super) {
             this.rankPanel.visible = false;
             this.overPanel.visible = true;
         }, this);
+        // 绑定rankScroller滑动刷新
+        this.rankScroller.addEventListener(eui.UIEvent.CHANGE, this.onScrollerChangeHander, this);
+        this.rankScroller.addEventListener(eui.UIEvent.CHANGE_END, this.onScrollerChangeEndHander, this);
         // this.rankPanel.addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
         // 	window.open('http://www.baidu.com','targetWindow','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=350,height=250')
         // }, this);
+        this.rankArrCollection = new eui.ArrayCollection();
+        this.rankArrCollection.source = [];
+        this.rankDataList.dataProvider = this.rankArrCollection;
         // 设置玩家的锚点
         this.player.anchorOffsetX = this.player.width / 2;
         this.player.anchorOffsetY = this.player.height - 20;
@@ -343,6 +351,67 @@ var GameScene = (function (_super) {
     GameScene.prototype.viewRankHandler = function () {
         this.overPanel.visible = false;
         this.rankPanel.visible = true;
+        this.rankAjax();
+    };
+    // 获取排行榜ajax
+    GameScene.prototype.rankAjax = function () {
+        var req = new egret.HttpRequest();
+        // var params = "?curLife="+this.life;
+        req.responseType = egret.HttpResponseType.TEXT;
+        req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getRank", egret.HttpMethod.GET);
+        req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        req.send();
+        // 类似beforeSend, 发送前执行
+        // this.loadingPop.visible = true;
+        // this.relive.touchEnabled = false;
+        req.addEventListener(egret.Event.COMPLETE, onSuccess, this);
+        function onSuccess(event) {
+            var request = event.currentTarget;
+            var data = JSON.parse(request.response).data;
+            var listData = cloneAndRename(data, {
+                order: 'rankOrder',
+                name: 'rankName',
+                point: 'rankPoint'
+            });
+            // console.log(listData,this.rankDataList);
+            // 新增rankHead属性
+            for (var i = 0; i < listData.length; i++) {
+                Object.assign(listData[i], { rankHead: "rank_head_png" });
+            }
+            // var arrayCollection = new eui.ArrayCollection();
+            // arrayCollection.source = listData;
+            // this.rankDataList.dataProvider = arrayCollection
+            this.rankArrCollection.source = this.rankArrCollection.source.concat(listData);
+            console.log(listData, this.rankArrCollection);
+            this.rankArrCollection.refresh();
+            // todo: modi scroll pos
+            this.rankScroller.viewport.scrollV = this.rankScroller.viewport.contentHeight - 10 * 75;
+        }
+    };
+    // rank列表滚动时监听函数
+    GameScene.prototype.onScrollerChangeHander = function (e) {
+        var myScroller = e.currentTarget;
+        //  console.info("x:"+myScroller.viewport.scrollV);
+        if (myScroller.viewport.scrollV < -100) {
+            this.isRefresh = 1;
+        }
+        if (myScroller.viewport.scrollV > (this.rankArrCollection.length * 75 - this.rankDataList.height + 100)) {
+            this.isRefresh = -1;
+        }
+    };
+    // rank列表滚动结束时监听函数
+    GameScene.prototype.onScrollerChangeEndHander = function (e) {
+        if (this.isRefresh != 0) {
+            console.info("Refresh" + this.isRefresh);
+            if (this.isRefresh == -1) {
+                //这里是上拉加载更多逻辑
+                this.rankAjax();
+            }
+            if (this.isRefresh == 1) {
+                //这里是下拉刷新逻辑
+            }
+            this.isRefresh = 0;
+        }
     };
     // 复活
     GameScene.prototype.reliveHandler = function () {
@@ -353,6 +422,7 @@ var GameScene = (function (_super) {
         req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife" + params, egret.HttpMethod.GET);
         req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         req.send();
+        // 类似beforeSend, 发送前执行
         this.loadingPop.visible = true;
         this.relive.touchEnabled = false;
         req.addEventListener(egret.Event.COMPLETE, onSuccess, this);
@@ -402,4 +472,32 @@ var GameScene = (function (_super) {
     return GameScene;
 }(eui.Component));
 __reflect(GameScene.prototype, "GameScene", ["eui.UIComponent", "egret.DisplayObject"]);
+// 复制对象并重命名键名
+var cloneAndRename = function (obj, renames) {
+    var clone = {};
+    var cloneArr = [];
+    function _handler(i) {
+        var _obj = {};
+        _obj = (i || i === 0) ? obj[i] : obj;
+        Object.keys(_obj).forEach(function (key) {
+            if (renames[key] !== undefined) {
+                clone[renames[key]] = _obj[key];
+            }
+            else {
+                clone[key] = _obj[key];
+            }
+        });
+    }
+    if (!obj.length) {
+        _handler(null);
+        return clone;
+    }
+    else {
+        for (var i = 0; i < obj.length; i++) {
+            _handler(i);
+            cloneArr.push(JSON.parse(JSON.stringify(clone)));
+        }
+        return cloneArr;
+    }
+};
 //# sourceMappingURL=GameScene.js.map
