@@ -46,6 +46,22 @@ var GameScene = (function (_super) {
     };
     GameScene.prototype.childrenCreated = function () {
         _super.prototype.childrenCreated.call(this);
+        var mc0 = this.getLoadingClip();
+        this.loadingPop.addChild(mc0);
+        var mc1 = this.getLoadingClip();
+        var mc1Wra = new eui.Group();
+        mc1Wra.width = 50;
+        mc1Wra.height = 50;
+        mc1Wra.left = "40%";
+        mc1Wra.top = "25%";
+        mc1Wra.visible = false;
+        mc1Wra.name = 'rankLoadingMc';
+        mc1Wra.addChild(mc1);
+        this.rankScroller.addChild(mc1Wra);
+        this.init();
+        this.reset();
+    };
+    GameScene.prototype.getLoadingClip = function () {
         // 添加loading动图
         var data = RES.getRes("loading_json");
         var txtr = RES.getRes("loading_png");
@@ -55,16 +71,18 @@ var GameScene = (function (_super) {
         mc.scaleY = 0.5;
         mc.x = 11;
         mc.y = 52;
-        this.loadingPop.addChild(mc);
         mc.gotoAndPlay(0, -1);
-        this.init();
-        this.reset();
+        return mc;
     };
     GameScene.prototype.init = function () {
         this.blockSourceNames = ["block1_png", "block2_png", "block3_png"];
         // 初始化音频
         this.pushVoice = RES.getRes('push_mp3');
         this.jumpVoice = RES.getRes('jump_mp3');
+        // rank相关初始化
+        this.rankArrCollection = new eui.ArrayCollection();
+        this.rankArrCollection.source = [];
+        this.rankDataList.dataProvider = this.rankArrCollection;
         // 添加触摸事件
         this.blockPanel.touchEnabled = true;
         this.blockPanel.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onKeyDown, this);
@@ -82,12 +100,12 @@ var GameScene = (function (_super) {
         // 绑定rankScroller滑动刷新
         this.rankScroller.addEventListener(eui.UIEvent.CHANGE, this.onScrollerChangeHander, this);
         this.rankScroller.addEventListener(eui.UIEvent.CHANGE_END, this.onScrollerChangeEndHander, this);
+        // this.rankArrCollection.addEventListener(eui.CollectionEvent.COLLECTION_CHANGE,function(){
+        // 	this.rankScroller.viewport.scrollV = this.rankScroller.viewport.contentHeight - 10*71
+        // },this);
         // this.rankPanel.addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
         // 	window.open('http://www.baidu.com','targetWindow','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=350,height=250')
         // }, this);
-        this.rankArrCollection = new eui.ArrayCollection();
-        this.rankArrCollection.source = [];
-        this.rankDataList.dataProvider = this.rankArrCollection;
         // 设置玩家的锚点
         this.player.anchorOffsetX = this.player.width / 2;
         this.player.anchorOffsetY = this.player.height - 20;
@@ -355,6 +373,9 @@ var GameScene = (function (_super) {
     };
     // 获取排行榜ajax
     GameScene.prototype.rankAjax = function () {
+        var rankLoadingMc = this.rankScroller.getChildByName('rankLoadingMc');
+        rankLoadingMc.visible = true;
+        this.rankScroller.bounces = false;
         var req = new egret.HttpRequest();
         // var params = "?curLife="+this.life;
         req.responseType = egret.HttpResponseType.TEXT;
@@ -366,6 +387,8 @@ var GameScene = (function (_super) {
         // this.relive.touchEnabled = false;
         req.addEventListener(egret.Event.COMPLETE, onSuccess, this);
         function onSuccess(event) {
+            rankLoadingMc.visible = false;
+            this.rankScroller.bounces = true;
             var request = event.currentTarget;
             var data = JSON.parse(request.response).data;
             var listData = cloneAndRename(data, {
@@ -381,11 +404,12 @@ var GameScene = (function (_super) {
             // var arrayCollection = new eui.ArrayCollection();
             // arrayCollection.source = listData;
             // this.rankDataList.dataProvider = arrayCollection
-            this.rankArrCollection.source = this.rankArrCollection.source.concat(listData);
+            // this.rankArrCollection.source = this.rankArrCollection.source.concat(listData);
+            // this.rankArrCollection.refresh()
+            for (var i = 0; i < listData.length; i++) {
+                this.rankArrCollection.addItem(listData[i]);
+            }
             console.log(listData, this.rankArrCollection);
-            this.rankArrCollection.refresh();
-            // todo: modi scroll pos
-            this.rankScroller.viewport.scrollV = this.rankScroller.viewport.contentHeight - 10 * 75;
         }
     };
     // rank列表滚动时监听函数
@@ -395,7 +419,7 @@ var GameScene = (function (_super) {
         if (myScroller.viewport.scrollV < -100) {
             this.isRefresh = 1;
         }
-        if (myScroller.viewport.scrollV > (this.rankArrCollection.length * 75 - this.rankDataList.height + 100)) {
+        if (myScroller.viewport.scrollV > (this.rankArrCollection.length * 71 - this.rankDataList.height + 70)) {
             this.isRefresh = -1;
         }
     };

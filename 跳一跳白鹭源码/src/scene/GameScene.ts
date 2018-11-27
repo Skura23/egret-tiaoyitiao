@@ -76,6 +76,23 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	}
 	protected childrenCreated(): void {
 		super.childrenCreated();
+		var mc0 = this.getLoadingClip()
+		this.loadingPop.addChild(mc0)
+		var mc1 = this.getLoadingClip()
+		var mc1Wra = new eui.Group();
+		mc1Wra.width = 50;
+		mc1Wra.height = 50;
+		mc1Wra.left = "40%";
+		mc1Wra.top = "25%";
+		mc1Wra.visible = false;
+		mc1Wra.name = 'rankLoadingMc';
+		mc1Wra.addChild(mc1)
+		this.rankScroller.addChild(mc1Wra)
+
+		this.init();
+		this.reset();
+	}
+	private getLoadingClip(){
 		// 添加loading动图
 		var data = RES.getRes("loading_json");
 		var txtr = RES.getRes("loading_png");
@@ -85,18 +102,18 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		mc.scaleY = 0.5;
 		mc.x = 11;
 		mc.y = 52;
-		this.loadingPop.addChild(mc)
 		mc.gotoAndPlay(0, -1);
-
-		this.init();
-		this.reset();
+		return mc
 	}
 	private init() {
-		this.blockSourceNames = ["block1_png", "block2_png", "block3_png"];
+		this.blockSourceNames = ["block1_png", "block2_png", "block3_png", "block_jinmi_png", "block_juming_png"];
 		// 初始化音频
 		this.pushVoice = RES.getRes('push_mp3');
 		this.jumpVoice = RES.getRes('jump_mp3');
-
+		// rank相关初始化
+		this.rankArrCollection = new eui.ArrayCollection();
+		this.rankArrCollection.source = [];
+		this.rankDataList.dataProvider = this.rankArrCollection
 		// 添加触摸事件
 		this.blockPanel.touchEnabled = true;
 		this.blockPanel.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onKeyDown, this);
@@ -114,12 +131,14 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		// 绑定rankScroller滑动刷新
 		this.rankScroller.addEventListener(eui.UIEvent.CHANGE,this.onScrollerChangeHander,this);
 		this.rankScroller.addEventListener(eui.UIEvent.CHANGE_END,this.onScrollerChangeEndHander,this);
+		// this.rankArrCollection.addEventListener(eui.CollectionEvent.COLLECTION_CHANGE,function(){
+		// 	this.rankScroller.viewport.scrollV = this.rankScroller.viewport.contentHeight - 10*71
+		// },this);
+		 
 		// this.rankPanel.addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
 		// 	window.open('http://www.baidu.com','targetWindow','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=350,height=250')
 		// }, this);
-		this.rankArrCollection = new eui.ArrayCollection();
-		this.rankArrCollection.source = [];
-		this.rankDataList.dataProvider = this.rankArrCollection
+		
 		// 设置玩家的锚点
 		this.player.anchorOffsetX = this.player.width / 2;
 		this.player.anchorOffsetY = this.player.height - 20;
@@ -242,6 +261,8 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		let n = Math.floor(Math.random() * this.blockSourceNames.length);
 		blockNode.source = this.blockSourceNames[n];
 		this.blockPanel.addChild(blockNode);
+		// 添加品牌标语
+		this.addSlogan(blockNode)
 		// 设置方块的锚点
 		blockNode.anchorOffsetX = 222;
 		blockNode.anchorOffsetY = 78;
@@ -249,7 +270,15 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		this.blockArr.push(blockNode);
 		return blockNode;
 	}
+	// 添加品牌标语
+	private addSlogan(block) {
+		var blockName = block.source.replace('block_','').replace('_png','');
+		var sloganSource = '';
+		if (Number(blockName) === NaN) return false;
+		// todo
+		sloganSource = 'slogan_'+blockName+'_png';
 
+	}
 	private judgeResult() {
 		// 界面的倒数第二个方块
 		var lastButOneBlock = this.blockArr[this.blockArr.length-2]
@@ -385,6 +414,9 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	}
 	// 获取排行榜ajax
 	private rankAjax() {
+		var rankLoadingMc = this.rankScroller.getChildByName('rankLoadingMc');
+		rankLoadingMc.visible = true;
+		this.rankScroller.bounces = false;
 		var req = new egret.HttpRequest();
 		// var params = "?curLife="+this.life;
 		req.responseType = egret.HttpResponseType.TEXT;
@@ -396,6 +428,8 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		// this.relive.touchEnabled = false;
 		req.addEventListener(egret.Event.COMPLETE,onSuccess,this);
 		function onSuccess(event:egret.Event):void{
+			rankLoadingMc.visible = false;
+			this.rankScroller.bounces = true;
 			var request = <egret.HttpRequest>event.currentTarget;
 			var data = JSON.parse(request.response).data;
 			var listData = cloneAndRename(data, {
@@ -411,11 +445,16 @@ class GameScene extends eui.Component implements eui.UIComponent {
 			// var arrayCollection = new eui.ArrayCollection();
 			// arrayCollection.source = listData;
 			// this.rankDataList.dataProvider = arrayCollection
-			this.rankArrCollection.source = this.rankArrCollection.source.concat(listData);
+			// this.rankArrCollection.source = this.rankArrCollection.source.concat(listData);
+			// this.rankArrCollection.refresh()
+			for(let i =0;i<listData.length;i++){
+				this.rankArrCollection.addItem(listData[i])
+			}
+			
 			console.log(listData, this.rankArrCollection);
-			this.rankArrCollection.refresh()
-			// todo: modi scroll pos
-			this.rankScroller.viewport.scrollV = this.rankScroller.viewport.contentHeight - 10*75
+			
+			
+			
 		}
 	}
 	// rank列表滚动时监听函数
@@ -425,7 +464,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		if(myScroller.viewport.scrollV<-100){
 			this.isRefresh = 1;
 		}
-		if(myScroller.viewport.scrollV>(this.rankArrCollection.length*75-this.rankDataList.height+100)){
+		if(myScroller.viewport.scrollV>(this.rankArrCollection.length*71-this.rankDataList.height+70)){
 			this.isRefresh = -1;
 		}
 	}

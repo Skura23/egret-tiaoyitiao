@@ -41,7 +41,7 @@
 		<e:Rect anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0" strokeAlpha="0.6" fillAlpha="0.6"/>
 		<e:Label text="排行榜" y="190" size="25" horizontalCenter="0"/>
 		<e:Scroller skinName="skins.ScrollerSkin" id= "rankScroller" height="302.78" width="540" y="239.39" scrollPolicyH="off" anchorOffsetY="0" horizontalCenter="0">
-			<e:List id="rankDataList" width="100%">
+			<e:List id="rankDataList" width="100%" useVirtualLayout="true">
                 <!-- 布局 -->
                 <e:layout>
                     <e:VerticalLayout horizontalAlign="center" verticalAlign="top" />
@@ -65,7 +65,9 @@
 						<e:Object rankOrder="1" rankHead="rank_head_png" rankName="abc" rankPoint="233"/>
                     </e:Array>
                 </e:ArrayCollection>-->
-
+			<!--<e:Group width="50" height="50">
+				<e:Label text="本次得分" horizontalCenter="1" size="25"/>
+			</e:Group>-->
             </e:List>
 		</e:Scroller>
 		<!--用户排行-->
