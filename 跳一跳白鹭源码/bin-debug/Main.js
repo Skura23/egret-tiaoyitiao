@@ -121,6 +121,7 @@ var Main = (function (_super) {
                                     resolve();
                                     console.log(1);
                                 }, that);
+                                // bus.life = 4;
                                 // req.addEventListener(egret.ProgressEvent.PROGRESS,function(event:egret.Event):void{
                                 // 	this.blockPanel.touchEnabled = false;
                                 // },this)

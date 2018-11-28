@@ -75,7 +75,7 @@ var GameScene = (function (_super) {
         return mc;
     };
     GameScene.prototype.init = function () {
-        this.blockSourceNames = ["block1_png", "block2_png", "block3_png"];
+        this.blockSourceNames = ["block_1_png", "block_2_png", "block_3_png", "block_jinmi_png", "block_juming_png"];
         // 初始化音频
         this.pushVoice = RES.getRes('push_mp3');
         this.jumpVoice = RES.getRes('jump_mp3');
@@ -158,6 +158,9 @@ var GameScene = (function (_super) {
         egret.Tween.get(this).to({ factor: 1 }, 500).call(function () {
             _this.player.scaleY = 1;
             _this.jumpDistance = 0;
+            if (_this.blockPanel.getChildByName('sloganImg')) {
+                _this.blockPanel.removeChild(_this.blockPanel.getChildByName('sloganImg'));
+            }
             // 判断跳跃是否成功
             // z 跳跃动画结束后根据距离判断是否成功
             _this.judgeResult();
@@ -213,6 +216,7 @@ var GameScene = (function (_super) {
             blockNode.y = this.currentBlock.y - distance * this.tanAngle;
         }
         this.currentBlock = blockNode;
+        this.addSlogan();
     };
     // 工厂方法,创建一个方块
     GameScene.prototype.createBlock = function () {
@@ -229,12 +233,47 @@ var GameScene = (function (_super) {
         var n = Math.floor(Math.random() * this.blockSourceNames.length);
         blockNode.source = this.blockSourceNames[n];
         this.blockPanel.addChild(blockNode);
+        // 添加品牌标语
         // 设置方块的锚点
         blockNode.anchorOffsetX = 222;
         blockNode.anchorOffsetY = 78;
         // 把新创建的block添加进入blockArr里
         this.blockArr.push(blockNode);
         return blockNode;
+    };
+    // 添加品牌标语
+    GameScene.prototype.addSlogan = function () {
+        if (this.blockArr.length < 2) {
+            return false;
+        }
+        var block = this.blockArr[this.blockArr.length - 1];
+        var src = block.source;
+        var blockName = src.replace('block_', '').replace('_png', '');
+        var sloganSource = '', sloganX, sloganY, rotateDeg = getTanDeg(this.tanAngle);
+        // var 
+        // tanAngle
+        if (!isNaN(Number(blockName)))
+            return false;
+        // todo
+        sloganSource = 'slogan_' + blockName + '_png';
+        var sloganImg = new eui.Image();
+        sloganImg.source = sloganSource;
+        sloganImg.name = 'sloganImg';
+        if (this.direction === 1) {
+            sloganImg.rotation = rotateDeg;
+            sloganImg.addEventListener(egret.Event.COMPLETE, function () {
+                sloganImg.x = block.x - 60 - sloganImg.width * (-Math.cos(rotateDeg));
+                sloganImg.y = block.y - 60 - sloganImg.width * (-Math.sin(rotateDeg));
+            }, this);
+        }
+        else {
+            sloganImg.rotation = -rotateDeg;
+            sloganImg.addEventListener(egret.Event.COMPLETE, function () {
+                sloganImg.x = block.x + 70;
+                sloganImg.y = block.y - 70;
+            }, this);
+        }
+        this.blockPanel.addChild(sloganImg);
     };
     GameScene.prototype.judgeResult = function () {
         var _this = this;
@@ -308,7 +347,25 @@ var GameScene = (function (_super) {
             // 失败,弹出重新开始的panel
             console.log('游戏失败!');
             this.overPanel.visible = true;
+            this.getNeighborRankAjax();
             this.overScoreLabel.text = this.score.toString();
+        }
+    };
+    GameScene.prototype.getNeighborRankAjax = function () {
+        // var rankLoadingMc = this.rankScroller.getChildByName('rankLoadingMc');
+        // rankLoadingMc.visible = true;
+        // this.rankScroller.bounces = false;
+        var req = new egret.HttpRequest();
+        var params = "?totalPoint=" + this.score;
+        req.responseType = egret.HttpResponseType.TEXT;
+        req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getNeighborRank", egret.HttpMethod.GET);
+        req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        req.send();
+        req.addEventListener(egret.Event.COMPLETE, onSuccess, this);
+        function onSuccess(event) {
+            var request = event.currentTarget;
+            var data = JSON.parse(request.response).data;
+            console.log(data, 'getNeighborRank');
         }
     };
     // z 控制屏幕中所有方块移动
@@ -449,6 +506,7 @@ var GameScene = (function (_super) {
         // 类似beforeSend, 发送前执行
         this.loadingPop.visible = true;
         this.relive.touchEnabled = false;
+        this.restart.touchEnabled = false;
         req.addEventListener(egret.Event.COMPLETE, onSuccess, this);
         // req.addEventListener(egret.ProgressEvent.PROGRESS, function(event:egret.Event):void{
         // }, this)
@@ -476,6 +534,7 @@ var GameScene = (function (_super) {
                 this.overPanel.visible = false;
                 this.loadingPop.visible = false;
                 this.relive.touchEnabled = true;
+                this.restart.touchEnabled = true;
                 this.blockPanel.touchEnabled = true;
             }, this, 600);
         }
@@ -524,4 +583,10 @@ var cloneAndRename = function (obj, renames) {
         return cloneArr;
     }
 };
+// 根据tan值求角度值
+function getTanDeg(tan) {
+    var result = Math.atan(tan) / (Math.PI / 180);
+    result = Math.round(result);
+    return result;
+}
 //# sourceMappingURL=GameScene.js.map
