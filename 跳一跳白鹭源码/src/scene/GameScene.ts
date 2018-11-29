@@ -386,7 +386,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		var req = new egret.HttpRequest();
 		var params = "?totalPoint="+this.score;
 		req.responseType = egret.HttpResponseType.TEXT;
-		req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getNeighborRank",egret.HttpMethod.GET);
+		req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getNeighborRank"+params,egret.HttpMethod.GET);
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		req.send();
 		req.addEventListener(egret.Event.COMPLETE,onSuccess,this);

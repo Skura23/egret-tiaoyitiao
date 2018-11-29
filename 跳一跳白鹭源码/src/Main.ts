@@ -60,26 +60,27 @@ class Main extends eui.UILayer {
     private async runGame() {
         var that = this;
         // 通过Promise保证ajax执行完成再执行后面的代码
-        await new Promise((resolve)=>{
-            // 获取、设置初始生命值 life ajax
-            var req = new egret.HttpRequest();
-            req.responseType = egret.HttpResponseType.TEXT;
-            req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife",egret.HttpMethod.GET);
-            req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            req.send();
-            req.addEventListener(egret.Event.COMPLETE,function(event:egret.Event):void{
-                var request = <egret.HttpRequest>event.currentTarget;
-                var data = JSON.parse(request.response).data;
-                bus.life = data.life;
-                resolve()
-                console.log(1);
-            },that);
-            // bus.life = 4;
-            // req.addEventListener(egret.ProgressEvent.PROGRESS,function(event:egret.Event):void{
-            // 	this.blockPanel.touchEnabled = false;
-            // },this)
-            // req.addEventListener(egret.IOErrorEvent.IO_ERROR,this.onGetIOError,this);
-        }); 
+        // await new Promise((resolve)=>{
+        //     // 获取、设置初始生命值 life ajax
+        //     var req = new egret.HttpRequest();
+        //     req.responseType = egret.HttpResponseType.TEXT;
+        //     req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife",egret.HttpMethod.GET);
+        //     req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        //     req.send();
+        //     req.addEventListener(egret.Event.COMPLETE,function(event:egret.Event):void{
+        //         var request = <egret.HttpRequest>event.currentTarget;
+        //         var data = JSON.parse(request.response).data;
+        //         bus.life = data.life;
+        //         resolve()
+        //         console.log(1);
+        //     },that);
+        //     // bus.life = 4;
+        //     // req.addEventListener(egret.ProgressEvent.PROGRESS,function(event:egret.Event):void{
+        //     // 	this.blockPanel.touchEnabled = false;
+        //     // },this)
+        //     // req.addEventListener(egret.IOErrorEvent.IO_ERROR,this.onGetIOError,this);
+        // }); 
+        bus.life = 3;
         console.log(2);
         
         await this.loadResource()

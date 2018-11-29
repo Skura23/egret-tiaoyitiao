@@ -9,14 +9,84 @@
 		<e:Image id="lifeIcon" width="46.49" height="46.48" x="513.51" y="81.76" source="life_png" anchorOffsetX="0" anchorOffsetY="0"/>
 		<e:Label id="lifeLabel" text="1" x="576" y="75" textColor="0x070303" size="60"/>
 	</e:Group>
-	<e:Group id="overPanel" left="0" right="0" top="0" bottom="0" visible="false">
+	<e:Group id="overPanel" left="0" right="0" top="0" bottom="0">
 		<e:Rect anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0" strokeAlpha="0.6" fillAlpha="0.6"/>
-		<e:Label text="本次得分" y="190" horizontalCenter="1" size="25"/>
-		<e:Label id="overScoreLabel" text="0" y="228.9" anchorOffsetY="0" height="60.67" size="65" horizontalCenter="1" anchorOffsetX="0" width=""/>
-		<e:Label text="总积分" y="310" horizontalCenter="1" size="25"/>
-		<e:Label id="totalScoreLabel" text="0" y="348.9" anchorOffsetY="0" height="60.67" size="65" horizontalCenter="1" anchorOffsetX="0" width=""/>
-		<e:Label id="viewRankBtn" text="查看排行榜" y="430" horizontalCenter="1" size="35"/>
-		<e:Button id="relive" label="" y="807.49" horizontalCenter="1.5">
+		<e:Label text="本次得分" y="130" horizontalCenter="1" size="25"/>
+		<e:Label id="overScoreLabel" text="0" y="168.9" anchorOffsetY="0" height="60.67" size="65" horizontalCenter="1" anchorOffsetX="0" width=""/>
+		<e:Group y="250" horizontalCenter="0">
+			<e:Image source="totalPointBac_png"/>
+			<e:Group horizontalCenter="0" verticalCenter="0">
+				<e:layout>
+					<e:HorizontalLayout gap="10" verticalAlign="middle"/>
+				</e:layout>
+				<e:Label text="总得分: " size="20"  fontFamily="Microsoft YaHei"/>
+				<e:Label id="totalScore" text="220" size="20"/>
+			</e:Group>
+		</e:Group>
+		<e:Group y="350" width="73%" height="300" horizontalCenter="0">
+			<e:Image source="totalPointBac_png" width="100%" height="100%"  horizontalCenter="0"/>
+			
+			<e:Group width="100%">
+				<e:layout>
+					<e:VerticalLayout gap="0" horizontalAlign="center"/>
+				</e:layout>
+			<!--1-->
+				<e:Group width="100%">
+					<e:layout>
+						<e:HorizontalLayout gap="0" verticalAlign="middle"/>
+					</e:layout>
+					<!--2-->
+					<e:Group horizontalCenter="0" width="33%" height="250">
+						<e:layout>
+							<e:VerticalLayout gap="0" horizontalAlign="center"/>
+						</e:layout>
+						<!--3-->
+						<e:Label text="{data.text}" size="20"  fontFamily="Microsoft YaHei"/>
+						<e:Label text="{data.text}" size="20"  fontFamily="Microsoft YaHei"/>
+						<e:Label text="{data.text}" size="20"  fontFamily="Microsoft YaHei"/>
+					</e:Group>
+					<e:Group horizontalCenter="0" width="33%" height="250">
+						<e:layout>
+							<e:VerticalLayout gap="0" horizontalAlign="center"/>
+						</e:layout>
+						<!--3-->
+						<e:Label text="{data.text}" size="20"  fontFamily="Microsoft YaHei"/>
+						<e:Label text="{data.text}" size="20"  fontFamily="Microsoft YaHei"/>
+						<e:Label text="{data.text}" size="20"  fontFamily="Microsoft YaHei"/>
+					</e:Group>
+					<e:Group horizontalCenter="0" width="33%" height="250">
+						<e:layout>
+							<e:VerticalLayout gap="0" horizontalAlign="center"/>
+						</e:layout>
+						<!--3-->
+						<e:Label text="{data.text}" size="20"  fontFamily="Microsoft YaHei"/>
+						<e:Label text="{data.text}" size="20"  fontFamily="Microsoft YaHei"/>
+						<e:Label text="{data.text}" size="20"  fontFamily="Microsoft YaHei"/>
+					</e:Group>
+				</e:Group>
+				<e:Group width="100%" height="50">
+					<e:layout>
+						<e:BasicLayout/>
+					</e:layout>
+
+					<e:Label text="  排行榜: 实时更新" size="18"  fontFamily="Microsoft YaHei" verticalAlign="middle" height="100%" textColor="0x729eb7"/>
+					<e:Label text="查看全部排行 >  " id="viewRankBtn" size="18"  fontFamily="Microsoft YaHei"   right="0" verticalAlign="middle" height="100%" textColor="0xd7dee4"/>
+				</e:Group>
+			</e:Group>
+		</e:Group>
+		<e:Group y="660" width="73%" height="60" horizontalCenter="0">
+			<e:Image source="totalPointBac_png" width="100%" height="100%"  horizontalCenter="0"/>
+			<e:Group width="100%" height="100%">
+				<e:layout>
+					<e:HorizontalLayout gap="0" horizontalAlign="center" verticalAlign="middle" />
+				</e:layout>
+				<e:Label text="剩余生命值 " size="20"  fontFamily="Microsoft YaHei"/>
+				<e:Label text="220" size="20"/>
+			</e:Group>	
+		</e:Group>
+		<!--<e:Label id="viewRankBtn" text="查看排行榜" y="800" horizontalCenter="1" size="35"/>-->
+
+		<e:Button id="relive" label="" y="857.49" horizontalCenter="1.5">
 			<e:skinName>
 				<e:Skin states="up,down,disabled">
 				<e:Image width="100%" height="100%" source="relive_png"/>

@@ -107,48 +107,46 @@ var Main = (function (_super) {
                     case 0:
                         that = this;
                         // 通过Promise保证ajax执行完成再执行后面的代码
-                        return [4 /*yield*/, new Promise(function (resolve) {
-                                // 获取、设置初始生命值 life ajax
-                                var req = new egret.HttpRequest();
-                                req.responseType = egret.HttpResponseType.TEXT;
-                                req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife", egret.HttpMethod.GET);
-                                req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                                req.send();
-                                req.addEventListener(egret.Event.COMPLETE, function (event) {
-                                    var request = event.currentTarget;
-                                    var data = JSON.parse(request.response).data;
-                                    bus.life = data.life;
-                                    resolve();
-                                    console.log(1);
-                                }, that);
-                                // bus.life = 4;
-                                // req.addEventListener(egret.ProgressEvent.PROGRESS,function(event:egret.Event):void{
-                                // 	this.blockPanel.touchEnabled = false;
-                                // },this)
-                                // req.addEventListener(egret.IOErrorEvent.IO_ERROR,this.onGetIOError,this);
-                            })];
-                    case 1:
-                        // 通过Promise保证ajax执行完成再执行后面的代码
-                        _a.sent();
+                        // await new Promise((resolve)=>{
+                        //     // 获取、设置初始生命值 life ajax
+                        //     var req = new egret.HttpRequest();
+                        //     req.responseType = egret.HttpResponseType.TEXT;
+                        //     req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife",egret.HttpMethod.GET);
+                        //     req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                        //     req.send();
+                        //     req.addEventListener(egret.Event.COMPLETE,function(event:egret.Event):void{
+                        //         var request = <egret.HttpRequest>event.currentTarget;
+                        //         var data = JSON.parse(request.response).data;
+                        //         bus.life = data.life;
+                        //         resolve()
+                        //         console.log(1);
+                        //     },that);
+                        //     // bus.life = 4;
+                        //     // req.addEventListener(egret.ProgressEvent.PROGRESS,function(event:egret.Event):void{
+                        //     // 	this.blockPanel.touchEnabled = false;
+                        //     // },this)
+                        //     // req.addEventListener(egret.IOErrorEvent.IO_ERROR,this.onGetIOError,this);
+                        // }); 
+                        bus.life = 3;
                         console.log(2);
                         return [4 /*yield*/, this.loadResource()
                             // 等待this.loadResource(资源加载)完成执行下面代码
                             // 创建游戏场景
                         ];
-                    case 2:
+                    case 1:
                         _a.sent();
                         // 等待this.loadResource(资源加载)完成执行下面代码
                         // 创建游戏场景
                         this.createGameScene();
                         return [4 /*yield*/, RES.getResAsync("description_json")];
-                    case 3:
+                    case 2:
                         result = _a.sent();
                         this.startAnimation(result);
                         return [4 /*yield*/, platform.login()];
-                    case 4:
+                    case 3:
                         _a.sent();
                         return [4 /*yield*/, platform.getUserInfo()];
-                    case 5:
+                    case 4:
                         userInfo = _a.sent();
                         console.log(userInfo);
                         return [2 /*return*/];
