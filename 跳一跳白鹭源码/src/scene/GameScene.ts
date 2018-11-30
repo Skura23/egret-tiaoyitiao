@@ -106,8 +106,10 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		return mc
 	}
 	private init() {
-		this.blockSourceNames = ["block_1_png", "block_2_png", "block_3_png", "block_jinmi_png", "block_juming_png"];
-		// 初始化音频
+		this.blockSourceNames = ["block_digua_png","block_icp_png","block_jmkj_png","block_juming_png","block_namepre_png","block_yupu_png","block_1_png","block_2_png","block_3_png","block_4_png"]
+		// 加载左上头像图片
+		this.loadMyHeadImg("http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83erb9KD8YAjeDxh2z5yMaVxxtHEaPkkKTfRrDCU1UWbE0RrfE64aHiclZAtB2OkoFWSYBiaymbNpc5aQ/132")
+		// 初始化音频 
 		this.pushVoice = RES.getRes('push_mp3');
 		this.jumpVoice = RES.getRes('jump_mp3');
 		// rank相关初始化
@@ -178,9 +180,13 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		// 停止播放按压音频,并且播放弹跳音频
 		this.pushSoundChannel.stop()
 		this.jumpVoice.play(0, 1);
-		// 清楚所有动画
+		// 清除所有动画
 		egret.Tween.removeAllTweens();
 		this.blockPanel.addChild(this.player);
+		// 松开手指时去除slogan
+		if(this.blockPanel.getChildByName('slogan')){
+			this.blockPanel.removeChild(this.blockPanel.getChildByName('slogan'))
+		}
 		// 结束跳跃状态
 		this.isReadyJump = false;
 		// 落点坐标
@@ -191,9 +197,9 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		egret.Tween.get(this).to({ factor: 1 }, 500).call(() => {
 			this.player.scaleY = 1;
 			this.jumpDistance = 0;
-			if(this.blockPanel.getChildByName('sloganImg')){
-				this.blockPanel.removeChild(this.blockPanel.getChildByName('sloganImg'))
-			}
+			// if(this.blockPanel.getChildByName('sloganImg')){
+			// 	this.blockPanel.removeChild(this.blockPanel.getChildByName('sloganImg'))
+			// }
 			// 判断跳跃是否成功
 			// z 跳跃动画结束后根据距离判断是否成功
 			this.judgeResult();
@@ -223,6 +229,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		// 摆正小人的位置
 		this.player.y = this.currentBlock.y;
 		this.player.x = this.currentBlock.x;
+		this.player.source = 'person_r_png'
 		this.blockPanel.addChild(this.player);
 		this.blockPanel.addChild(this.scoreIcon);
 		this.blockPanel.addChild(this.scoreLabel);
@@ -249,7 +256,6 @@ class GameScene extends eui.Component implements eui.UIComponent {
 			blockNode.y = this.currentBlock.y - distance * this.tanAngle;
 		}
 		this.currentBlock = blockNode;
-		this.addSlogan()
 	}
 	// 工厂方法,创建一个方块
 	private createBlock(): eui.Image {
@@ -276,34 +282,46 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	}
 	// 添加品牌标语
 	private addSlogan() {
-		if(this.blockArr.length < 2) { return false}
+		var sloganMap = {
+			"block_digua_png": '让域名创造更多价值啊啊啊啊啊啊',
+			"block_icp_png":'让域名创造更多价值啊啊啊啊啊啊',
+			"block_jmkj_png":'让域名创造更多价值啊啊啊啊啊啊',
+			"block_juming_png":'让域名创造更多价值啊啊啊啊啊啊',
+			"block_namepre_png":'让域名创造更多价值',
+			"block_yupu_png":'让域名创造更多价值'
+		}
 		var block = this.blockArr[this.blockArr.length-1]
 		var src:any = block.source;
 		var blockName = src.replace('block_','').replace('_png','');
-		var sloganSource:string = '', sloganX:number, sloganY:number, 
-		rotateDeg = getTanDeg(this.tanAngle);
-		// var 
-		// tanAngle
 		if (!isNaN(Number(blockName))) return false;
+		var sloganTxt:string = '', sloganX:number, sloganY:number;
+		// rotateDeg = getTanDeg(this.tanAngle);
 		// todo
-		sloganSource = 'slogan_'+blockName+'_png';
-		var sloganImg = new eui.Image();
-		sloganImg.source = sloganSource;
-		sloganImg.name = 'sloganImg';
-		if(this.direction === 1){
-			sloganImg.rotation = rotateDeg;
-			sloganImg.addEventListener(egret.Event.COMPLETE,function(){
-				sloganImg.x = block.x-60-sloganImg.width*(-Math.cos(rotateDeg)) 
-				sloganImg.y = block.y-60-sloganImg.width*(-Math.sin(rotateDeg))
-			},this)
-		}else{
-			sloganImg.rotation = -rotateDeg;
-			sloganImg.addEventListener(egret.Event.COMPLETE,function(){
-				sloganImg.x = block.x+70 
-				sloganImg.y = block.y-70
-			},this)
+		var slogan = new eui.Label();
+		sloganTxt = sloganMap['block_'+blockName+'_png'];
+		slogan.size = 25;
+		sloganX = this.player.x;		
+		sloganY = this.player.y-192;		
+		slogan.name = 'slogan';
+		slogan.text = sloganTxt;
+		slogan.anchorOffsetX = slogan.width/2;
+		// 0xF6F705
+		slogan.textColor = 0x000000;
+		slogan.fontFamily = 'Microsoft YaHei';
+		slogan.x = sloganX
+		slogan.y = sloganY
+		this.blockPanel.addChild(slogan)
+	}
+	// 检查标语的边界, 控制标语不超出画布
+	// 1 为左边超出, 2 为右边超出
+	private checkSloganBorder(slogan) :Number{
+		if(slogan.x-slogan.width/2 < 0){
+			return 1
+		} else if(slogan.x+slogan.width/2 > this.blockPanel.width) {
+			return 2
+		} else {
+			return 0
 		}
-		this.blockPanel.addChild(sloganImg)
 	}
 	private judgeResult() {
 		// 界面的倒数第二个方块
@@ -329,6 +347,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 			increText.y = this.player.y-160;
 			// increText.alpha=0.2;
 			this.blockPanel.addChild(increText);
+			this.addSlogan()
 			// egret.Tween.get(increText).to({
 			// 	// x: 100,
 			// 	y: increText.y - 100,
@@ -344,6 +363,11 @@ class GameScene extends eui.Component implements eui.UIComponent {
 			// 随机下一个方块出现的位置
 			this.direction = Math.random() > 0.5 ? 1 : -1;
 			// 当前方块要移动到相应跳跃点的距离
+			if (this.direction === 1){
+				this.player.source = 'person_r_png'
+			} else {
+				this.player.source = 'person_l_png'
+			}
 			var blockX, blockY;
 			// z 跳跃点是固定的, 以方块位置作参考
 			blockX = this.direction > 0 ? this.leftOrigin.x : this.rightOrigin.x;
@@ -376,9 +400,12 @@ class GameScene extends eui.Component implements eui.UIComponent {
 			console.log('游戏失败!')
 			this.overPanel.visible = true;
 			this.getNeighborRankAjax()
+			// 失败时获取排行榜
+			this.rankAjax()
 			this.overScoreLabel.text = this.score.toString();
 		}
 	}
+	// todo 渲染neighbor数据
 	private getNeighborRankAjax(){
 		// var rankLoadingMc = this.rankScroller.getChildByName('rankLoadingMc');
 		// rankLoadingMc.visible = true;
@@ -429,6 +456,26 @@ class GameScene extends eui.Component implements eui.UIComponent {
 				}, 500)
 			})
 		}
+		let slogan = this.blockPanel.getChildByName('slogan');
+		if(slogan){
+			egret.Tween.get(slogan).to({
+				x: slogan.x - x,
+				y: slogan.y - y
+			}, 900).call(()=>{
+				// 设置显示层级最高以防止被方块遮挡
+				this.blockPanel.setChildIndex(slogan, 99)
+				let _flag = this.checkSloganBorder(slogan)
+				if (_flag === 1){
+					egret.Tween.get(slogan).to({
+						x: slogan.width/2+10
+					}, 250)
+				}else if(_flag === 2){
+					egret.Tween.get(slogan).to({
+						x: this.blockPanel.width-slogan.width/2-10
+					}, 250)
+				}
+			})
+		}
 		console.log(this.blockArr);
 	}
 	// 重新一局
@@ -436,12 +483,34 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		// 隐藏结束场景
 		this.overPanel.visible = false;
 		// 置空积分
-		this.score = 0;
+		// this.score = 0;
 		this.scoreLabel.text = this.score.toString();
+		// 清空排行列表
+		this.rankArrCollection.source = [];
 		// 开始放置方块
 		this.reset();
 		// 游戏场景可点
 		this.blockPanel.touchEnabled = true;
+	}
+	// 加载远程图片
+	private loadMyHeadImg(url){
+		var imgLoader:egret.ImageLoader = new egret.ImageLoader();
+		egret.ImageLoader.crossOrigin = "anonymous"
+		imgLoader.load(url);
+		imgLoader.once(egret.Event.COMPLETE, function (evt: egret.Event) {
+            if (evt.currentTarget.data) {
+                egret.log("加载左上头像成功: " + evt.currentTarget.data);
+                let texture = new egret.Texture();
+                texture.bitmapData = evt.currentTarget.data;
+                let bitmap = new egret.Bitmap(texture);
+                bitmap.x = 30;
+                bitmap.y = 30;
+				bitmap.width = 75;
+				bitmap.height = 75;
+				bitmap.mask = this.userIconMask;
+                this.addChild(bitmap);
+            }
+        }, this);
 	}
 	// 为按钮绑定链接
 	private bindLink(){
@@ -454,7 +523,6 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	private viewRankHandler() {
 		this.overPanel.visible = false;
 		this.rankPanel.visible = true;
-		this.rankAjax()
 	}
 	// 获取排行榜ajax
 	private rankAjax() {

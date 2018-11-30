@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "checkbox_select_disabled_png,checkbox_select_down_png,checkbox_select_up_png,checkbox_unselect_png,selected_png,border_png,header_png,radiobutton_select_disabled_png,radiobutton_select_down_png,radiobutton_select_up_png,radiobutton_unselect_png,roundthumb_png,thumb_png,track_png,tracklight_png,handle_png,off_png,on_png,button_down_png,button_up_png,thumb_pb_png,track_pb_png,track_sb_png,bg_jpg,egret_icon_png,description_json,back_btn_png,finger_png,jump_mp3,piece_png,push_mp3,relive_png,restart_btn_png,setting_bg_jpg,setting_btn_png,setting_off_png,setting_on_png,start_btn_png,streak_png,button_down2_png,button_up2_png,checkbox_select_disabled2_png,checkbox_select_down2_png,checkbox_select_up2_png,checkbox_unselect2_png,selected2_png,border2_png,header2_png,thumb_pb2_png,track_pb2_png,radiobutton_select_disabled2_png,radiobutton_select_down2_png,radiobutton_select_up2_png,radiobutton_unselect2_png,roundthumb2_png,track_sb2_png,thumb2_png,track2_png,tracklight2_png,handle2_png,off2_png,on2_png,button_down3_png,button_up3_png,checkbox_select_disabled3_png,checkbox_select_down3_png,checkbox_unselect3_png,checkbox_select_up3_png,selected3_png,border3_png,header3_png,thumb_pb3_png,track_pb3_png,radiobutton_select_disabled3_png,radiobutton_select_down3_png,radiobutton_select_up3_png,radiobutton_unselect3_png,roundthumb3_png,track_sb3_png,thumb3_png,track3_png,tracklight3_png,handle3_png,off3_png,on3_png,life_png,score_png,life2_png,score2_png,loading_gif,loading_json,loading_png,540x574_png,rank_item_png,rank_head_png,rank_return_png,slogan_jinmi_png,block_jinmi_png,block_juming_png,slogan_juming_png,block_1_png,block_2_png,block_3_png,totalPointBac_png",
+			"keys": "checkbox_select_disabled_png,checkbox_select_down_png,checkbox_select_up_png,checkbox_unselect_png,selected_png,border_png,header_png,radiobutton_select_disabled_png,radiobutton_select_down_png,radiobutton_select_up_png,radiobutton_unselect_png,roundthumb_png,thumb_png,track_png,tracklight_png,handle_png,off_png,on_png,button_down_png,button_up_png,thumb_pb_png,track_pb_png,track_sb_png,bg_jpg,egret_icon_png,description_json,back_btn_png,finger_png,jump_mp3,piece_png,push_mp3,relive_png,restart_btn_png,setting_bg_jpg,setting_btn_png,setting_off_png,setting_on_png,start_btn_png,streak_png,button_down2_png,button_up2_png,checkbox_select_disabled2_png,checkbox_select_down2_png,checkbox_select_up2_png,checkbox_unselect2_png,selected2_png,border2_png,header2_png,thumb_pb2_png,track_pb2_png,radiobutton_select_disabled2_png,radiobutton_select_down2_png,radiobutton_select_up2_png,radiobutton_unselect2_png,roundthumb2_png,track_sb2_png,thumb2_png,track2_png,tracklight2_png,handle2_png,off2_png,on2_png,button_down3_png,button_up3_png,checkbox_select_disabled3_png,checkbox_select_down3_png,checkbox_unselect3_png,checkbox_select_up3_png,selected3_png,border3_png,header3_png,thumb_pb3_png,track_pb3_png,radiobutton_select_disabled3_png,radiobutton_select_down3_png,radiobutton_select_up3_png,radiobutton_unselect3_png,roundthumb3_png,track_sb3_png,thumb3_png,track3_png,tracklight3_png,handle3_png,off3_png,on3_png,life_png,score_png,life2_png,score2_png,loading_gif,loading_json,loading_png,540x574_png,rank_item_png,rank_head_png,rank_return_png,slogan_jinmi_png,block_juming_png,slogan_juming_png,block_1_png,block_2_png,block_3_png,totalPointBac_png,person_r_png,person_l_png,block_yupu_png,block_4_png,block_digua_png,block_icp_png,block_jmkj_png,block_namepre_png",
 			"name": "preload"
 		}
 	],
@@ -492,11 +492,6 @@
 			"url": "assets/slogan_jinmi.png"
 		},
 		{
-			"name": "block_jinmi_png",
-			"type": "image",
-			"url": "assets/block_jinmi.png"
-		},
-		{
 			"name": "block_juming_png",
 			"type": "image",
 			"url": "assets/block_juming.png"
@@ -525,6 +520,46 @@
 			"name": "totalPointBac_png",
 			"type": "image",
 			"url": "assets/totalPointBac.png"
+		},
+		{
+			"name": "person_r_png",
+			"type": "image",
+			"url": "assets/person_r.png"
+		},
+		{
+			"name": "person_l_png",
+			"type": "image",
+			"url": "assets/person_l.png"
+		},
+		{
+			"name": "block_yupu_png",
+			"type": "image",
+			"url": "assets/block_yupu.png"
+		},
+		{
+			"name": "block_4_png",
+			"type": "image",
+			"url": "assets/block_4.png"
+		},
+		{
+			"name": "block_digua_png",
+			"type": "image",
+			"url": "assets/block_digua.png"
+		},
+		{
+			"name": "block_icp_png",
+			"type": "image",
+			"url": "assets/block_icp.png"
+		},
+		{
+			"name": "block_jmkj_png",
+			"type": "image",
+			"url": "assets/block_jmkj.png"
+		},
+		{
+			"name": "block_namepre_png",
+			"type": "image",
+			"url": "assets/block_namepre.png"
 		}
 	]
 }
