@@ -121,7 +121,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		this.blockPanel.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onKeyDown, this);
 		this.blockPanel.addEventListener(egret.TouchEvent.TOUCH_END, this.onKeyUp, this);
 		// 绑定结束按钮
-		this.restart.addEventListener(egret.TouchEvent.TOUCH_TAP, this.restartHandler, this);
+		// this.restart.addEventListener(egret.TouchEvent.TOUCH_TAP, this.restartHandler, this);
 		// 绑定复活按钮
 		this.relive.addEventListener(egret.TouchEvent.TOUCH_TAP, this.reliveHandler, this);
 		// 绑定结束页排行榜查看按钮
@@ -231,13 +231,13 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		this.player.x = this.currentBlock.x;
 		this.player.source = 'person_r_png'
 		this.blockPanel.addChild(this.player);
-		this.blockPanel.addChild(this.scoreIcon);
-		this.blockPanel.addChild(this.scoreLabel);
-		this.blockPanel.addChild(this.lifeIcon);
-		this.blockPanel.addChild(this.lifeLabel);
+		// this.blockPanel.addChild(this.scoreIcon);
+		// this.blockPanel.addChild(this.scoreLabel);
+		// this.blockPanel.addChild(this.lifeIcon);
+		// this.blockPanel.addChild(this.lifeLabel);
 		this.direction = 1;
 		// 添加积分
-		this.blockPanel.addChild(this.scoreLabel);
+		// this.blockPanel.addChild(this.scoreLabel);
 		// 添加下一个方块
 		this.addBlock();
 	}
@@ -270,7 +270,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		// 使用随机背景图
 		let n = Math.floor(Math.random() * this.blockSourceNames.length);
 		blockNode.source = this.blockSourceNames[n];
-		this.blockPanel.addChild(blockNode);
+		this.blockPanel.addChildAt(blockNode, 0);
 		// 添加品牌标语
 		// 设置方块的锚点
 		blockNode.anchorOffsetX = 222;
@@ -306,7 +306,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		slogan.text = sloganTxt;
 		slogan.anchorOffsetX = slogan.width/2;
 		// 0xF6F705
-		slogan.textColor = 0x000000;
+		slogan.textColor = 0xF6F705;
 		slogan.fontFamily = 'Microsoft YaHei';
 		slogan.x = sloganX
 		slogan.y = sloganY
@@ -341,7 +341,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 			var increText:egret.TextField = new egret.TextField();
 			increText.text = '+'+ increment;
 			increText.size = 40;
-			increText.textColor = 0x000000;
+			increText.textColor = 0xffffff;
 			// increTextSpr.addChild(increText);
 			increText.x = this.player.x - 20 ;
 			increText.y = this.player.y-160;
@@ -606,7 +606,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		// 类似beforeSend, 发送前执行
 		this.loadingPop.visible = true;
 		this.relive.touchEnabled = false;
-		this.restart.touchEnabled = false;
+		// this.restart.touchEnabled = false;
 		req.addEventListener(egret.Event.COMPLETE,onSuccess,this);
 		// req.addEventListener(egret.ProgressEvent.PROGRESS, function(event:egret.Event):void{
 			
@@ -619,7 +619,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 				this.life = data.curLife;
 				if (this.life < 0) this.life = 0;
 				this.lifeLabel.text = this.life.toString();
-				if(this.life === 0) this.relive.visible = false;
+				if(this.life === 0) this.relive.source = '3_png';
 				// direction判断失败界面倒数第二个方块的位置
 				if(this.direction === 1){
 					this.player.x = this.leftOrigin.x;
@@ -632,7 +632,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 				this.overPanel.visible = false;
 				this.loadingPop.visible = false;
 				this.relive.touchEnabled = true;
-				this.restart.touchEnabled = true;
+				// this.restart.touchEnabled = true;
 				this.blockPanel.touchEnabled = true;
 			}, this, 600)
 		}

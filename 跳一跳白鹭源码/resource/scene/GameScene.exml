@@ -4,17 +4,18 @@
 	<e:Image left="0" right="0" top="0" bottom="0" source="bg_jpg"/>
 	<e:Group id="blockPanel" left="0" right="0" top="0" bottom="0">
 		<e:Image id="player" width="85" height="134" x="192" y="448" source="person_r_png"/>
-		<e:Image id="scoreIcon" width="46.49" height="46.48" x="34.26" y="81.76" source="score_png" anchorOffsetX="0" anchorOffsetY="0" visible="false"/>
-		<e:Label id="scoreLabel" text="0" x="103" y="75" textColor="0x070303" size="60" visible="false"/>
-		<e:Image id="lifeIcon" width="46.49" height="46.48" x="513.51" y="81.76" source="life_png" anchorOffsetX="0" anchorOffsetY="0"/>
-		<e:Label id="lifeLabel" text="1" x="576" y="75" textColor="0x070303" size="60"/>
+		<e:Image id="scoreIcon" width="46.49" height="46.48" x="34.26" y="100.76" source="score_png" anchorOffsetX="0" anchorOffsetY="0" visible="false"/>
+		<!--<e:Label text="0" x="103" y="100" textColor="0x070303" size="60" visible="false"/>-->
+		<e:Image id="lifeIcon" width="46.49" height="46.48" x="513.51" y="100.76" source="life_png" anchorOffsetX="0" anchorOffsetY="0" visible="false"/>
+		<e:Label id="lifeLabel" text="1" x="576" y="100" textColor="0x070303" size="60" visible="false"/>
 	</e:Group>
 	<e:Group id="overPanel" left="0" right="0" top="0" bottom="0" visible="false">
 		<e:Rect anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0" strokeAlpha="0.6" fillAlpha="0.6"/>
 		<e:Label text="本次得分" y="130" horizontalCenter="1" size="25" fontFamily="Microsoft YaHei"/>
+		<e:Image  y="135" horizontalCenter="1" source="6_png"/>
 		<e:Label id="overScoreLabel" text="0" y="168.9" anchorOffsetY="0" height="60.67" size="65" horizontalCenter="1" anchorOffsetX="0" width=""/>
 		<e:Group y="250" horizontalCenter="0">
-			<e:Image source="totalPointBac_png"/>
+			<e:Image source="9_png" />
 			<e:Group horizontalCenter="0" verticalCenter="0">
 				<e:layout>
 					<e:HorizontalLayout gap="10" verticalAlign="middle"/>
@@ -85,12 +86,18 @@
 			</e:Group>	
 		</e:Group>
 		<!--<e:Label id="viewRankBtn" text="查看排行榜" y="800" horizontalCenter="1" size="35"/>-->
-
-		<e:Button id="relive" label="" y="857.49" horizontalCenter="1.5">
+		<e:Group horizontalCenter="0" y="800">
+			<e:layout>
+				<e:HorizontalLayout gap="35" horizontalAlign="center" verticalAlign="middle" />
+			</e:layout>
+			<e:Image source="5_png"/>
+			<e:Image id="relive" source="4_png"/>
+		</e:Group>
+		<!--<e:Button  label="" y="857.49" horizontalCenter="1.5">
 			<e:skinName>
 				<e:Skin states="up,down,disabled">
 				<e:Image width="100%" height="100%" source="relive_png"/>
-				<!--<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>-->
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
 				</e:Skin>
 			</e:skinName>
 		</e:Button>
@@ -98,18 +105,18 @@
 			<e:skinName>
 				<e:Skin states="up,down,disabled">
 				<e:Image width="100%" height="100%" source="restart_btn_png"/>
-				<!--<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>-->
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
 				</e:Skin>
 			</e:skinName>
-		</e:Button>
+		</e:Button>-->
 	</e:Group>
 	<e:Group id="loadingPop" horizontalCenter="-8.5" anchorOffsetY="105.34" height="207" verticalCenter="-103.5" anchorOffsetX="132.05" width="261" visible="false">
 		<e:Label id="loadingLabel" text="    请稍等" x="11" y="46" textColor="0x070303" size="40" fontFamily="SimHei" backgroundColor="0xf7f4f4" background="true" anchorOffsetX="0" width="244" anchorOffsetY="0" height="112" verticalAlign="middle" textAlign="center" border="true" borderColor="0x8c8a8a"/>
 		<!--<e:Image source="loading_gif" scaleX="0.5" scaleY="0.5" x="11" y="52"/>-->
 	</e:Group>
-	<e:Group id="rankPanel" left="0" right="0" top="0" bottom="0" visible="false">
+	<e:Group id="rankPanel" left="0" right="0" top="0" bottom="0">
 		<e:Rect anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0" strokeAlpha="0.6" fillAlpha="0.6"/>
-		<e:Label text="排行榜" y="190" size="25" horizontalCenter="0"/>
+		<e:Label text="好友排行榜" y="190" size="30" horizontalCenter="0" fontFamily="Microsoft YaHei"/>
 		<e:Scroller skinName="skins.ScrollerSkin" id= "rankScroller" height="302.78" width="540" y="239.39" scrollPolicyH="off" anchorOffsetY="0" horizontalCenter="0">
 			<e:List id="rankDataList" width="100%" useVirtualLayout="true">
                 <!-- 布局 -->
@@ -163,7 +170,7 @@
 			</e:ArrayCollection>
 
 		</e:List>
-		<e:Image id="rankReturn" width="200" height="60" bottom="352" source="rank_return_png" horizontalCenter="0"/>
+		<e:Image id="rankReturn"  bottom="260" source="7_png" horizontalCenter="0"/>
 		<!--rankListContner-->
 		<!--<e:Label id="rankListContner" text="0" y="228.9" anchorOffsetY="0" height="60.67" size="65" horizontalCenter="1" anchorOffsetX="0" width=""/>-->
 	</e:Group>
@@ -173,7 +180,17 @@
 		</e:mask>
 	</e:Image>-->
 	<!--设置圆形头像-->
-	<e:Rect id="userIconMask" width="75" x="30" y="30" height="75" ellipseWidth="150"
+	<e:Image x="30" y="30" source="10_png" />
+	<e:Rect id="userIconMask" width="73" x="31" y="31" height="73" ellipseWidth="150"
                 ellipseHeight="150" />
-	<e:Image id="userIcon" x="30" y="30" width="75" height="75" mask="{userIconMask}" />
+	<e:Image id="userIcon" x="31" y="31" width="73" height="73" mask="{userIconMask}" />
+	<!--<e:Image id="userIcon" x="31" y="31" width="73" height="73" mask="{userIconMask}" source="rank_head_png" />-->
+	<e:Group x="120" y="40">
+		<e:layout>
+			<e:VerticalLayout gap="10" verticalAlign="middle"/>
+		</e:layout>
+		<e:Label  text="1_png" size="26" />
+		<e:Label text="12_png" id="scoreLabel" size="20"  />
+	</e:Group>
+	<e:Image id="toHome" top="30" right="30" width="181" height="58" source="15_png" />
 </e:Skin>

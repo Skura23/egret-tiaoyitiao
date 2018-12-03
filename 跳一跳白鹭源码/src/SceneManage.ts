@@ -30,6 +30,8 @@ class SceneMange extends egret.Sprite {
 		// 释放资源
 		if(type == 'gameScene'){
 			this.beginScene.release();
+		} else if(type == 'beginScene'){
+			this.beginScene.init();
 		}
 		// 移除所有显示列表中的对象
 		this.removeChildren();

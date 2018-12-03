@@ -90,7 +90,7 @@ var GameScene = (function (_super) {
         this.blockPanel.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onKeyDown, this);
         this.blockPanel.addEventListener(egret.TouchEvent.TOUCH_END, this.onKeyUp, this);
         // 绑定结束按钮
-        this.restart.addEventListener(egret.TouchEvent.TOUCH_TAP, this.restartHandler, this);
+        // this.restart.addEventListener(egret.TouchEvent.TOUCH_TAP, this.restartHandler, this);
         // 绑定复活按钮
         this.relive.addEventListener(egret.TouchEvent.TOUCH_TAP, this.reliveHandler, this);
         // 绑定结束页排行榜查看按钮
@@ -197,13 +197,13 @@ var GameScene = (function (_super) {
         this.player.x = this.currentBlock.x;
         this.player.source = 'person_r_png';
         this.blockPanel.addChild(this.player);
-        this.blockPanel.addChild(this.scoreIcon);
-        this.blockPanel.addChild(this.scoreLabel);
-        this.blockPanel.addChild(this.lifeIcon);
-        this.blockPanel.addChild(this.lifeLabel);
+        // this.blockPanel.addChild(this.scoreIcon);
+        // this.blockPanel.addChild(this.scoreLabel);
+        // this.blockPanel.addChild(this.lifeIcon);
+        // this.blockPanel.addChild(this.lifeLabel);
         this.direction = 1;
         // 添加积分
-        this.blockPanel.addChild(this.scoreLabel);
+        // this.blockPanel.addChild(this.scoreLabel);
         // 添加下一个方块
         this.addBlock();
     };
@@ -238,7 +238,7 @@ var GameScene = (function (_super) {
         // 使用随机背景图
         var n = Math.floor(Math.random() * this.blockSourceNames.length);
         blockNode.source = this.blockSourceNames[n];
-        this.blockPanel.addChild(blockNode);
+        this.blockPanel.addChildAt(blockNode, 0);
         // 添加品牌标语
         // 设置方块的锚点
         blockNode.anchorOffsetX = 222;
@@ -274,7 +274,7 @@ var GameScene = (function (_super) {
         slogan.text = sloganTxt;
         slogan.anchorOffsetX = slogan.width / 2;
         // 0xF6F705
-        slogan.textColor = 0x000000;
+        slogan.textColor = 0xF6F705;
         slogan.fontFamily = 'Microsoft YaHei';
         slogan.x = sloganX;
         slogan.y = sloganY;
@@ -312,7 +312,7 @@ var GameScene = (function (_super) {
             var increText = new egret.TextField();
             increText.text = '+' + increment;
             increText.size = 40;
-            increText.textColor = 0x000000;
+            increText.textColor = 0xffffff;
             // increTextSpr.addChild(increText);
             increText.x = this.player.x - 20;
             increText.y = this.player.y - 160;
@@ -373,10 +373,12 @@ var GameScene = (function (_super) {
             console.log('游戏失败!');
             this.overPanel.visible = true;
             this.getNeighborRankAjax();
+            // 失败时获取排行榜
             this.rankAjax();
             this.overScoreLabel.text = this.score.toString();
         }
     };
+    // todo 渲染neighbor数据
     GameScene.prototype.getNeighborRankAjax = function () {
         // var rankLoadingMc = this.rankScroller.getChildByName('rankLoadingMc');
         // rankLoadingMc.visible = true;
@@ -575,7 +577,7 @@ var GameScene = (function (_super) {
         // 类似beforeSend, 发送前执行
         this.loadingPop.visible = true;
         this.relive.touchEnabled = false;
-        this.restart.touchEnabled = false;
+        // this.restart.touchEnabled = false;
         req.addEventListener(egret.Event.COMPLETE, onSuccess, this);
         // req.addEventListener(egret.ProgressEvent.PROGRESS, function(event:egret.Event):void{
         // }, this)
@@ -589,7 +591,7 @@ var GameScene = (function (_super) {
                     this.life = 0;
                 this.lifeLabel.text = this.life.toString();
                 if (this.life === 0)
-                    this.relive.visible = false;
+                    this.relive.source = '3_png';
                 // direction判断失败界面倒数第二个方块的位置
                 if (this.direction === 1) {
                     this.player.x = this.leftOrigin.x;
@@ -603,7 +605,7 @@ var GameScene = (function (_super) {
                 this.overPanel.visible = false;
                 this.loadingPop.visible = false;
                 this.relive.touchEnabled = true;
-                this.restart.touchEnabled = true;
+                // this.restart.touchEnabled = true;
                 this.blockPanel.touchEnabled = true;
             }, this, 600);
         }
