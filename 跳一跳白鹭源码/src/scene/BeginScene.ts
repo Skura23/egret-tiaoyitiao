@@ -17,6 +17,8 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 	protected childrenCreated():void
 	{
 		super.childrenCreated();
+		var mc0 = this.getLoadingClip()
+		this.loadingPop.addChild(mc0)
 		// 页面加载完毕后，调用自定义的初始化方法
 		this.init();
 	}
@@ -28,9 +30,30 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 	}
 	private tapHandler(){
 		// 切换场景
-		SceneMange.getInstance().changeScene('gameScene');
-		var mc0 = this.getLoadingClip()
-		this.loadingPop.addChild(mc0)
+		var req = new egret.HttpRequest();
+		var params = "?curLife="+bus.life;
+		req.responseType = egret.HttpResponseType.TEXT;
+		req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife"+params,egret.HttpMethod.GET);
+		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		req.send();
+		// 类似beforeSend, 发送前执行
+		this.loadingPop.visible = true;
+		this.beginBtn.touchEnabled = false;
+		// this.restart.touchEnabled = false;
+		req.addEventListener(egret.Event.COMPLETE,onSuccess,this);
+		// req.addEventListener(egret.ProgressEvent.PROGRESS, function(event:egret.Event):void{
+			
+		// }, this)
+		// todo loading 弹窗; 生命数初始载入问题;
+		function onSuccess(event:egret.Event):void{
+			var request = <egret.HttpRequest>event.currentTarget;
+			var data = JSON.parse(request.response).data;
+			egret.setTimeout(function(){
+				bus.life = data.curLife;
+				SceneMange.getInstance().changeScene('gameScene');
+			}, this, 600)
+		}
+		
 	}
 	// 移除事件
 	public release(){
