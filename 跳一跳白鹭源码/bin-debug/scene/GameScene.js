@@ -33,8 +33,10 @@ var GameScene = (function (_super) {
         _this.leftOrigin = { "x": 180, "y": 350 };
         // 右侧跳跃点
         _this.rightOrigin = { "x": 505, "y": 350 };
-        // 游戏中得分
+        // 游戏总累积得分
         _this.score = 0;
+        // 此次游戏得分
+        _this.thisTimeScore = 0;
         // rank列表是否刷新flag
         _this.isRefresh = 0;
         // 游戏中生命数
@@ -182,8 +184,8 @@ var GameScene = (function (_super) {
     };
     // 重置游戏
     GameScene.prototype.reset = function () {
-        // 清空舞台
-        this.blockPanel.removeChildren();
+        // 清空舞台(删除所有子元素)
+        // this.blockPanel.removeChildren();
         this.blockArr = [];
         // 添加一个方块
         var blockNode = this.createBlock();
@@ -195,8 +197,8 @@ var GameScene = (function (_super) {
         // 摆正小人的位置
         this.player.y = this.currentBlock.y;
         this.player.x = this.currentBlock.x;
-        this.player.source = 'person_r_png';
-        this.blockPanel.addChild(this.player);
+        // this.player.source = 'person_r_png'
+        // this.blockPanel.addChild(this.player);
         // this.blockPanel.addChild(this.scoreIcon);
         // this.blockPanel.addChild(this.scoreLabel);
         // this.blockPanel.addChild(this.lifeIcon);
@@ -307,6 +309,7 @@ var GameScene = (function (_super) {
             // }
             // 更新积分
             this.score += increment;
+            this.thisTimeScore += increment;
             // 直接新增、操作画布元素
             // var increTextSpr:egret.Sprite = new egret.Sprite();
             var increText = new egret.TextField();
@@ -375,7 +378,11 @@ var GameScene = (function (_super) {
             this.getNeighborRankAjax();
             // 失败时获取排行榜
             this.rankAjax();
+            this.leftLifeLabel.text = this.life.toString();
             this.overScoreLabel.text = this.score.toString();
+            this.thisTimeScoreLabel.text = this.thisTimeScore.toString();
+            // 此次游戏得分置零
+            this.thisTimeScore = 0;
         }
     };
     // todo 渲染neighbor数据
@@ -394,6 +401,14 @@ var GameScene = (function (_super) {
             var request = event.currentTarget;
             var data = JSON.parse(request.response).data;
             console.log(data, 'getNeighborRank');
+            this.renderNeighborRank(data);
+        }
+    };
+    GameScene.prototype.renderNeighborRank = function (data) {
+        for (var i = 0; i < data.length; i++) {
+            this['neighborRank' + i].getChildAt(0).text = data[i].order.toString();
+            this['neighborRank' + i].getChildAt(2).text = data[i].name.toString();
+            this['neighborRank' + i].getChildAt(3).text = data[i].point.toString();
         }
     };
     // z 控制屏幕中所有方块移动
@@ -457,8 +472,9 @@ var GameScene = (function (_super) {
     GameScene.prototype.restartHandler = function () {
         // 隐藏结束场景
         this.overPanel.visible = false;
-        // 置空积分
-        // this.score = 0;
+        // 置空此次游戏积分
+        this.thisTimeScore = 0;
+        // 记录总积分
         this.scoreLabel.text = this.score.toString();
         // 清空排行列表
         this.rankArrCollection.source = [];
@@ -587,6 +603,7 @@ var GameScene = (function (_super) {
             var data = JSON.parse(request.response).data;
             egret.setTimeout(function () {
                 this.life = data.curLife;
+                bus.life = this.life;
                 if (this.life < 0)
                     this.life = 0;
                 this.lifeLabel.text = this.life.toString();

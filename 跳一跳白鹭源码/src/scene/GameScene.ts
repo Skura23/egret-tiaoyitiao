@@ -44,8 +44,10 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	private leftOrigin = { "x": 180, "y": 350 };
 	// 右侧跳跃点
 	private rightOrigin = { "x": 505, "y": 350 };
-	// 游戏中得分
+	// 游戏总累积得分
 	private score = 0;
+	// 此次游戏得分
+	private thisTimeScore = 0;
 	// rank列表是否刷新flag
 	private isRefresh:number = 0;
 	// rank列表数据
@@ -59,13 +61,16 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	public rankScroller: eui.Scroller;
 	public rankDataList: eui.List;
 	public overScoreLabel: eui.Label;
+	public thisTimeScoreLabel: eui.Label;
+	public leftLifeLabel: eui.Label;
 	public loadingPop: eui.Group;
 	public restart: eui.Button;
 	public relive: eui.Button;
 	public viewRankBtn: eui.Button;
 	public rankReturn: eui.Button;
-
-
+	public neighborRank0: eui.Group;
+	public neighborRank1: eui.Group;
+	public neighborRank2: eui.Group;
 
 	public constructor() {
 		super();
@@ -216,8 +221,8 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	}
 	// 重置游戏
 	public reset() {
-		// 清空舞台
-		this.blockPanel.removeChildren();
+		// 清空舞台(删除所有子元素)
+		// this.blockPanel.removeChildren();
 		this.blockArr = [];
 		// 添加一个方块
 		let blockNode = this.createBlock();
@@ -229,8 +234,8 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		// 摆正小人的位置
 		this.player.y = this.currentBlock.y;
 		this.player.x = this.currentBlock.x;
-		this.player.source = 'person_r_png'
-		this.blockPanel.addChild(this.player);
+		// this.player.source = 'person_r_png'
+		// this.blockPanel.addChild(this.player);
 		// this.blockPanel.addChild(this.scoreIcon);
 		// this.blockPanel.addChild(this.scoreLabel);
 		// this.blockPanel.addChild(this.lifeIcon);
@@ -336,6 +341,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 			// }
 			// 更新积分
 			this.score += increment;
+			this.thisTimeScore += increment;
 			// 直接新增、操作画布元素
 			// var increTextSpr:egret.Sprite = new egret.Sprite();
 			var increText:egret.TextField = new egret.TextField();
@@ -402,7 +408,11 @@ class GameScene extends eui.Component implements eui.UIComponent {
 			this.getNeighborRankAjax()
 			// 失败时获取排行榜
 			this.rankAjax()
+			this.leftLifeLabel.text = this.life.toString();
 			this.overScoreLabel.text = this.score.toString();
+			this.thisTimeScoreLabel.text = this.thisTimeScore.toString();
+			// 此次游戏得分置零
+			this.thisTimeScore = 0
 		}
 	}
 	// todo 渲染neighbor数据
@@ -421,7 +431,16 @@ class GameScene extends eui.Component implements eui.UIComponent {
 			var request = <egret.HttpRequest>event.currentTarget;
 			var data = JSON.parse(request.response).data;
 			console.log(data, 'getNeighborRank');
+			this.renderNeighborRank(data)
 		}
+	}
+	private renderNeighborRank(data) {
+		for(let i = 0; i < data.length; i++) {
+			this['neighborRank'+i].getChildAt(0).text = data[i].order.toString();
+			this['neighborRank'+i].getChildAt(2).text = data[i].name.toString();
+			this['neighborRank'+i].getChildAt(3).text = data[i].point.toString();
+		}
+		
 	}
 	// z 控制屏幕中所有方块移动
 	private update(x, y, increText) {
@@ -482,8 +501,9 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	private restartHandler() {
 		// 隐藏结束场景
 		this.overPanel.visible = false;
-		// 置空积分
-		// this.score = 0;
+		// 置空此次游戏积分
+		this.thisTimeScore = 0;
+		// 记录总积分
 		this.scoreLabel.text = this.score.toString();
 		// 清空排行列表
 		this.rankArrCollection.source = [];
