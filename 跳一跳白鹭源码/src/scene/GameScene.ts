@@ -617,6 +617,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 			var data = JSON.parse(request.response).data;
 			egret.setTimeout(function(){
 				this.life = data.curLife;
+				bus.life = this.life;
 				if (this.life < 0) this.life = 0;
 				this.lifeLabel.text = this.life.toString();
 				if(this.life === 0) this.relive.source = '3_png';

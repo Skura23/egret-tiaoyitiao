@@ -6,8 +6,8 @@
 		<e:Image id="player" width="85" height="134" x="192" y="448" source="person_r_png"/>
 		<e:Image id="scoreIcon" width="46.49" height="46.48" x="34.26" y="100.76" source="score_png" anchorOffsetX="0" anchorOffsetY="0" visible="false"/>
 		<!--<e:Label text="0" x="103" y="100" textColor="0x070303" size="60" visible="false"/>-->
-		<e:Image id="lifeIcon" width="46.49" height="46.48" x="513.51" y="100.76" source="life_png" anchorOffsetX="0" anchorOffsetY="0" visible="false"/>
-		<e:Label id="lifeLabel" text="1" x="576" y="100" textColor="0x070303" size="60" visible="false"/>
+		<e:Image id="lifeIcon" width="46.49" height="46.48" x="513.51" y="100.76" source="life_png" anchorOffsetX="0" anchorOffsetY="0"/>
+		<e:Label id="lifeLabel" text="1" x="576" y="100" textColor="0x070303" size="60"/>
 	</e:Group>
 	<e:Group id="overPanel" left="0" right="0" top="0" bottom="0" visible="false">
 		<e:Rect anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0" strokeAlpha="0.6" fillAlpha="0.6"/>
