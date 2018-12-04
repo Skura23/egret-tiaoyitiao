@@ -80,7 +80,7 @@ class Main extends eui.UILayer {
         //     // },this)
         //     // req.addEventListener(egret.IOErrorEvent.IO_ERROR,this.onGetIOError,this);
         // }); 
-        bus.life = 4;
+        bus.life = 2;
         console.log(2);
         
         await this.loadResource()

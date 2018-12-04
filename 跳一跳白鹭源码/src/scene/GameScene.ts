@@ -58,6 +58,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	// 游戏结束场景
 	public overPanel: eui.Group;
 	public rankPanel: eui.Group;
+	public sharePanel: eui.Group;
 	public rankScroller: eui.Scroller;
 	public rankDataList: eui.List;
 	public overScoreLabel: eui.Label;
@@ -111,9 +112,11 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		return mc
 	}
 	private init() {
-		this.blockSourceNames = ["block_digua_png","block_icp_png","block_jmkj_png","block_juming_png","block_namepre_png","block_yupu_png","block_1_png","block_2_png","block_3_png","block_4_png"]
+		this.blockSourceNames = ["block_digua_png","block_icp_png","block_jmkj_png","block_juming_png","block_namepre_png","block_yupu_png","block_1_png","block_2_png","block_3_png","block_4_png","block_5_png"]
 		// 加载左上头像图片
 		this.loadMyHeadImg("http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83erb9KD8YAjeDxh2z5yMaVxxtHEaPkkKTfRrDCU1UWbE0RrfE64aHiclZAtB2OkoFWSYBiaymbNpc5aQ/132")
+		// 初始化分享积分获取弹窗功能
+		this.initSharePanelFuncs()
 		// 初始化音频 
 		this.pushVoice = RES.getRes('push_mp3');
 		this.jumpVoice = RES.getRes('jump_mp3');
@@ -332,7 +335,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		// 界面的倒数第二个方块
 		var lastButOneBlock = this.blockArr[this.blockArr.length-2]
 		// 根据this.jumpDistance来判断跳跃是否成功
-		if (Math.pow(this.currentBlock.x - this.player.x, 2) + Math.pow(this.currentBlock.y - this.player.y, 2) <= 70 * 70) {
+		if (Math.pow(this.currentBlock.x - this.player.x, 2) + Math.pow(this.currentBlock.y - this.player.y, 2) <= 73 * 73) {
 			// 小人落在方块上
 			var increment = 1
 			// if(){
@@ -524,7 +527,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
                 texture.bitmapData = evt.currentTarget.data;
                 let bitmap = new egret.Bitmap(texture);
                 bitmap.x = 30;
-                bitmap.y = 30;
+                bitmap.y = 70;
 				bitmap.width = 75;
 				bitmap.height = 75;
 				bitmap.mask = this.userIconMask;
@@ -582,11 +585,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 			for(let i =0;i<listData.length;i++){
 				this.rankArrCollection.addItem(listData[i])
 			}
-			
 			console.log(listData, this.rankArrCollection);
-			
-			
-			
 		}
 	}
 	// rank列表滚动时监听函数
@@ -614,8 +613,29 @@ class GameScene extends eui.Component implements eui.UIComponent {
 			this.isRefresh = 0;
 		}
 	}
+	// 初始化分享得积分的弹窗内功能
+	private initSharePanelFuncs() {
+		// 关闭按钮
+		this.sharePanel.getChildAt(2).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+			this.sharePanel.visible = false;
+			this.overPanel.visible = true;
+		}, this)
+		// 分享
+		this.sharePanel.getChildAt(3).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+			
+		}, this)
+		// 跳转到积分兑换
+		this.sharePanel.getChildAt(4).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+			window.location.href = "http://www.baidu.com"
+		}, this)
+	}
 	// 复活
 	private reliveHandler() {
+		if(this.life === 0) {
+			this.overPanel.visible = false;
+			this.sharePanel.visible = true;
+			return false;
+		}
 		// 生命值 -1 ajax
 		var req = new egret.HttpRequest();
 		var params = "?curLife="+this.life;

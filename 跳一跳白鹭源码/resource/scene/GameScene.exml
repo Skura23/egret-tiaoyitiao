@@ -9,12 +9,12 @@
 		<e:Image id="lifeIcon" width="46.49" height="46.48" x="513.51" y="100.76" source="life_png" anchorOffsetX="0" anchorOffsetY="0"/>
 		<e:Label id="lifeLabel" text="1" x="576" y="100" textColor="0x070303" size="60"/>
 	</e:Group>
-	<e:Group id="overPanel" left="0" right="0" top="0" bottom="0" visible="false">
+	<e:Group id="overPanel" left="0" right="0" top="0" bottom="0">
 		<e:Rect anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0" strokeAlpha="0.6" fillAlpha="0.6"/>
-		<e:Label  text="本次得分" y="130" horizontalCenter="1" size="25" fontFamily="Microsoft YaHei"/>
-		<e:Image  y="135" horizontalCenter="1" source="6_png"/>
-		<e:Label id="thisTimeScoreLabel"  text="0" y="168.9" anchorOffsetY="0" height="60.67" size="65" horizontalCenter="1" anchorOffsetX="0" width=""/>
-		<e:Group y="250" horizontalCenter="0">
+		<e:Label  text="本次得分" y="152.9" horizontalCenter="1" size="25" fontFamily="Microsoft YaHei"/>
+		<e:Image  y="159.9" horizontalCenter="2.5" source="6_png"/>
+		<e:Label id="thisTimeScoreLabel"  text="0" y="193.9" anchorOffsetY="0" height="60.67" size="65" horizontalCenter="1" anchorOffsetX="0" width=""/>
+		<e:Group y="271" horizontalCenter="1.5">
 			<e:Image source="9_png" />
 			<e:Group horizontalCenter="0" verticalCenter="0">
 				<e:layout>
@@ -38,31 +38,31 @@
 					<!--2-->
 					<e:Group id="neighborRank0" horizontalCenter="0" width="33%" height="250">
 						<e:layout>
-							<e:VerticalLayout gap="0" horizontalAlign="center"/>
+							<e:VerticalLayout gap="20" horizontalAlign="center" paddingTop="16"/>
 						</e:layout>
 						<!--3-->
+						<e:Label text="1" size="20" top="20" fontFamily="Microsoft YaHei"/>
+						<e:Image x="" y="" width="73" height="73" mask="{userIconMask}" source="rank_head_png" />
 						<e:Label text="1" size="20"  fontFamily="Microsoft YaHei"/>
-						<e:Image x="31" y="31" width="73" height="73" mask="{userIconMask}" source="rank_head_png" />
 						<e:Label text="1" size="20"  fontFamily="Microsoft YaHei"/>
-						<e:Label text="2" size="20"  fontFamily="Microsoft YaHei"/>
 					</e:Group>
 					<e:Group id="neighborRank1" horizontalCenter="0" width="33%" height="250">
 						<e:layout>
-							<e:VerticalLayout gap="0" horizontalAlign="center"/>
+							<e:VerticalLayout gap="20" horizontalAlign="center" paddingTop="16" />
 						</e:layout>
 						<!--3-->
 						<e:Label text="" size="20"  fontFamily="Microsoft YaHei"/>
-						<e:Image x="31" y="31" width="73" height="73" mask="{userIconMask}" source="rank_head_png" />
+						<e:Image x="" y="" width="73" height="73" mask="{userIconMask}" source="rank_head_png" />
 						<e:Label text="" size="20"  fontFamily="Microsoft YaHei"/>
 						<e:Label text="" size="20"  fontFamily="Microsoft YaHei"/>
 					</e:Group>
 					<e:Group id="neighborRank2" horizontalCenter="0" width="33%" height="250">
 						<e:layout>
-							<e:VerticalLayout gap="0" horizontalAlign="center"/>
+							<e:VerticalLayout gap="20" horizontalAlign="center" paddingTop="16" />
 						</e:layout>
 						<!--3-->
 						<e:Label text="" size="20"  fontFamily="Microsoft YaHei"/>
-						<e:Image x="31" y="31" width="73" height="73" mask="{userIconMask}" source="rank_head_png" />
+						<e:Image x="" y="" width="73" height="73" mask="{userIconMask}" source="rank_head_png" />
 						<e:Label text="" size="20"  fontFamily="Microsoft YaHei"/>
 						<e:Label text="" size="20"  fontFamily="Microsoft YaHei"/>
 					</e:Group>
@@ -128,7 +128,7 @@
                 <!-- 演示的数据 -->
 				<e:itemRendererSkinName>
                     <e:Skin>
-						<e:Image source="rank_item_png" width="540" height="65" />
+						<e:Image source="19_png" width="540" height="65" />
 						<e:Label text="{data.rankOrder}"  left="30"  verticalAlign="middle" textAlign="center" height="65"/>
 						<e:Image source="{data.rankHead}" top="10" width="45" height="45" left="100" />
 						<e:Label text="{data.rankName}" left="200" verticalAlign="middle" textAlign="center" height="65"/>
@@ -158,7 +158,7 @@
 			<!-- 演示的数据 -->
 			<e:itemRendererSkinName>
 				<e:Skin>
-					<e:Image source="rank_item_png" width="540" height="65" />
+					<e:Image source="20_png" width="540" height="65" />
 					<e:Label text="{data.rankOrder}"  left="30"  verticalAlign="middle" textAlign="center" height="65"/>
 					<e:Image source="{data.rankHead}" top="10" width="45" height="45" left="100" />
 					<e:Label text="{data.rankName}" left="200" verticalAlign="middle" textAlign="center" height="65"/>
@@ -176,23 +176,30 @@
 		<!--rankListContner-->
 		<!--<e:Label id="rankListContner" text="0" y="228.9" anchorOffsetY="0" height="60.67" size="65" horizontalCenter="1" anchorOffsetX="0" width=""/>-->
 	</e:Group>
+	<e:Group id="sharePanel" left="0" right="0" top="0" bottom="0"  visible="false">
+		<e:Rect anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0" strokeAlpha="0.6" fillAlpha="0.6"/>
+		<e:Image x="30" y="30" source="8_png" top="200" horizontalCenter="0" />
+		<e:Label width="80" height="80" text="" horizontalCenter="225" y="275.33"></e:Label>
+		<e:Label width="300" height="65" text="" horizontalCenter="1" y="596"></e:Label>
+		<e:Label width="300" height="65" text="" horizontalCenter="1" y="680.3"></e:Label>
+	</e:Group>
 	<!--<e:Image source="rank_head_png" width="45" height="45">
 		<e:mask>
 			<e:Rect width="45" height="45" ellipseWidth="45" ellipseHeight="45"/>
 		</e:mask>
 	</e:Image>-->
 	<!--设置圆形头像-->
-	<e:Image x="30" y="30" source="10_png" />
-	<e:Rect id="userIconMask" width="73" x="31" y="31" height="73" ellipseWidth="150"
+	<e:Image x="30" y="70" source="10_png" />
+	<e:Rect id="userIconMask" width="73" x="31" y="71" height="73" ellipseWidth="150"
                 ellipseHeight="150" />
-	<e:Image id="userIcon" x="31" y="31" width="73" height="73" mask="{userIconMask}" />
+	<e:Image id="userIcon" x="31" y="71" width="73" height="73" mask="{userIconMask}" />
 	<!--<e:Image id="userIcon" x="31" y="31" width="73" height="73" mask="{userIconMask}" source="rank_head_png" />-->
-	<e:Group x="120" y="40">
+	<e:Group x="120" y="80">
 		<e:layout>
 			<e:VerticalLayout gap="10" verticalAlign="middle"/>
 		</e:layout>
 		<e:Label  text="1_png" size="26" />
 		<e:Label text="12_png" id="scoreLabel" size="20"  />
 	</e:Group>
-	<e:Image id="toHome" top="30" right="30" width="181" height="58" source="15_png" />
+	<e:Image id="toHome" top="70" right="30" width="181" height="58" source="15_png" />
 </e:Skin>
