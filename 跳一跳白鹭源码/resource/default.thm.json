@@ -33,7 +33,8 @@
 		"resource/eui_skins/VScrollBarSkin.exml",
 		"resource/eui_skins/VSliderSkin.exml",
 		"resource/scene/BeginScene.exml",
-		"resource/scene/GameScene.exml"
+		"resource/scene/GameScene.exml",
+		"resource/scene/PublicScene.exml"
 	],
 	"path": "resource/default.thm.json"
 }

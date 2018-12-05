@@ -54,3 +54,5 @@ declare class BeginSceneSkin extends eui.Skin{
 }
 declare class GameSceneSkin extends eui.Skin{
 }
+declare class PublicSceneSkin extends eui.Skin{
+}

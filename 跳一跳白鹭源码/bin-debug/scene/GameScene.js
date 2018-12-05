@@ -48,9 +48,9 @@ var GameScene = (function (_super) {
     };
     GameScene.prototype.childrenCreated = function () {
         _super.prototype.childrenCreated.call(this);
-        var mc0 = this.getLoadingClip();
+        var mc0 = bus.getLoadingClip();
         this.loadingPop.addChild(mc0);
-        var mc1 = this.getLoadingClip();
+        var mc1 = bus.getLoadingClip();
         var mc1Wra = new eui.Group();
         mc1Wra.width = 50;
         mc1Wra.height = 50;
@@ -63,19 +63,8 @@ var GameScene = (function (_super) {
         this.init();
         this.reset();
     };
-    GameScene.prototype.getLoadingClip = function () {
-        // 添加loading动图
-        var data = RES.getRes("loading_json");
-        var txtr = RES.getRes("loading_png");
-        var mcFactory = new egret.MovieClipDataFactory(data, txtr);
-        var mc = new egret.MovieClip(mcFactory.generateMovieClipData("loading"));
-        mc.scaleX = 0.5;
-        mc.scaleY = 0.5;
-        mc.x = 11;
-        mc.y = 52;
-        mc.gotoAndPlay(0, -1);
-        return mc;
-    };
+    // private getLoadingClip(){
+    // }
     GameScene.prototype.init = function () {
         this.blockSourceNames = ["block_digua_png", "block_icp_png", "block_jmkj_png", "block_juming_png", "block_namepre_png", "block_yupu_png", "block_1_png", "block_2_png", "block_3_png", "block_4_png", "block_5_png"];
         // 加载左上头像图片
@@ -99,9 +88,14 @@ var GameScene = (function (_super) {
         this.relive.addEventListener(egret.TouchEvent.TOUCH_TAP, this.reliveHandler, this);
         // 绑定结束页排行榜查看按钮
         this.viewRankBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, this.viewRankHandler, this);
-        this.rankReturn.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
+        // game over 页返回上页按钮
+        this.rankToPrev.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
             this.rankPanel.visible = false;
             this.overPanel.visible = true;
+        }, this);
+        // game over 页返回主页按钮
+        this.overToHome.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
+            SceneMange.getInstance().changeScene('beginScene');
         }, this);
         // 绑定rankScroller滑动刷新
         this.rankScroller.addEventListener(eui.UIEvent.CHANGE, this.onScrollerChangeHander, this);

@@ -9,15 +9,16 @@
 		"libs/modules/game/game.js"
 	],
 	"game": [
+		"bin-debug/SceneManage.js",
 		"bin-debug/AssetAdapter.js",
-		"bin-debug/bus.js",
 		"bin-debug/LoadingUI.js",
 		"bin-debug/Main.js",
 		"bin-debug/Platform.js",
-		"bin-debug/SceneManage.js",
+		"bin-debug/bus.js",
 		"bin-debug/ScrollerDemo.js",
 		"bin-debug/ThemeAdapter.js",
 		"bin-debug/scene/BeginScene.js",
-		"bin-debug/scene/GameScene.js"
+		"bin-debug/scene/GameScene.js",
+		"bin-debug/scene/PublicScene.js"
 	]
 }

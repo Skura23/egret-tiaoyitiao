@@ -62,13 +62,14 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	public rankScroller: eui.Scroller;
 	public rankDataList: eui.List;
 	public overScoreLabel: eui.Label;
+	public overToHome: eui.Image;
 	public thisTimeScoreLabel: eui.Label;
 	public leftLifeLabel: eui.Label;
 	public loadingPop: eui.Group;
 	public restart: eui.Button;
 	public relive: eui.Button;
 	public viewRankBtn: eui.Button;
-	public rankReturn: eui.Button;
+	public rankToPrev: eui.Button;
 	public neighborRank0: eui.Group;
 	public neighborRank1: eui.Group;
 	public neighborRank2: eui.Group;
@@ -82,9 +83,9 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	}
 	protected childrenCreated(): void {
 		super.childrenCreated();
-		var mc0 = this.getLoadingClip()
+		var mc0 = bus.getLoadingClip()
 		this.loadingPop.addChild(mc0)
-		var mc1 = this.getLoadingClip()
+		var mc1 = bus.getLoadingClip()
 		var mc1Wra = new eui.Group();
 		mc1Wra.width = 50;
 		mc1Wra.height = 50;
@@ -98,19 +99,9 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		this.init();
 		this.reset();
 	}
-	private getLoadingClip(){
-		// 添加loading动图
-		var data = RES.getRes("loading_json");
-		var txtr = RES.getRes("loading_png");
-		var mcFactory:egret.MovieClipDataFactory = new egret.MovieClipDataFactory( data, txtr );
-		var mc:egret.MovieClip = new egret.MovieClip( mcFactory.generateMovieClipData( "loading" ) );
-		mc.scaleX = 0.5;
-		mc.scaleY = 0.5;
-		mc.x = 11;
-		mc.y = 52;
-		mc.gotoAndPlay(0, -1);
-		return mc
-	}
+	// private getLoadingClip(){
+		
+	// }
 	private init() {
 		this.blockSourceNames = ["block_digua_png","block_icp_png","block_jmkj_png","block_juming_png","block_namepre_png","block_yupu_png","block_1_png","block_2_png","block_3_png","block_4_png","block_5_png"]
 		// 加载左上头像图片
@@ -134,9 +125,14 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		this.relive.addEventListener(egret.TouchEvent.TOUCH_TAP, this.reliveHandler, this);
 		// 绑定结束页排行榜查看按钮
 		this.viewRankBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, this.viewRankHandler, this);
-		this.rankReturn.addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+		// game over 页返回上页按钮
+		this.rankToPrev.addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
 			this.rankPanel.visible = false;
 			this.overPanel.visible = true;
+		}, this);
+		// game over 页返回主页按钮
+		this.overToHome.addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+			SceneMange.getInstance().changeScene('beginScene');
 		}, this);
 		// 绑定rankScroller滑动刷新
 		this.rankScroller.addEventListener(eui.UIEvent.CHANGE,this.onScrollerChangeHander,this);
@@ -567,7 +563,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 			this.rankScroller.bounces = true;
 			var request = <egret.HttpRequest>event.currentTarget;
 			var data = JSON.parse(request.response).data;
-			var listData = cloneAndRename(data, {
+			var listData = bus.cloneAndRename(data, {
 				order: 'rankOrder',
 				name: 'rankName',
 				point: 'rankPoint'
@@ -689,32 +685,32 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	}
 }
 
-// 复制对象并重命名键名
-let cloneAndRename = (obj, renames):any => {
-    let clone = {};
-	let cloneArr = []
-	function _handler(i){
-		let _obj={};
-		_obj = (i || i===0) ? obj[i] : obj;
-		Object.keys(_obj).forEach(function (key) {
-			if (renames[key] !== undefined) {
-				clone[renames[key]] = _obj[key];
-			} else {
-				clone[key] = _obj[key];
-			}
-		});
-	}
-	if (!obj.length){
-		_handler(null)
-		return clone;
-	} else {
-		for(let i = 0; i < obj.length; i++){
-			_handler(i)
-			cloneArr.push(JSON.parse(JSON.stringify(clone))) 
-		}
-		return cloneArr
-	}
-}
+// // 复制对象并重命名键名
+// let cloneAndRename = (obj, renames):any => {
+//     let clone = {};
+// 	let cloneArr = []
+// 	function _handler(i){
+// 		let _obj={};
+// 		_obj = (i || i===0) ? obj[i] : obj;
+// 		Object.keys(_obj).forEach(function (key) {
+// 			if (renames[key] !== undefined) {
+// 				clone[renames[key]] = _obj[key];
+// 			} else {
+// 				clone[key] = _obj[key];
+// 			}
+// 		});
+// 	}
+// 	if (!obj.length){
+// 		_handler(null)
+// 		return clone;
+// 	} else {
+// 		for(let i = 0; i < obj.length; i++){
+// 			_handler(i)
+// 			cloneArr.push(JSON.parse(JSON.stringify(clone))) 
+// 		}
+// 		return cloneArr
+// 	}
+// }
 
 // 根据tan值求角度值
 function getTanDeg(tan) {

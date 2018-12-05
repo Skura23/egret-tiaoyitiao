@@ -19,8 +19,10 @@ var SceneMange = (function (_super) {
         // 实例化两个场景
         this.beginScene = new BeginScene();
         this.gameScene = new GameScene();
+        this.publicScene = new PublicScene();
         // 默认添加开始场景
         this.addChild(this.beginScene);
+        this.addChild(this.publicScene);
     };
     // 实例化单例获取方法
     SceneMange.getInstance = function () {
@@ -33,12 +35,13 @@ var SceneMange = (function (_super) {
     SceneMange.prototype.changeScene = function (type) {
         // 释放资源
         if (type == 'gameScene') {
-            this.beginScene.release();
+            // this.beginScene.release();
         }
         // 移除所有显示列表中的对象
         this.removeChildren();
         // 添加下一个场景
         this.addChild(this[type]);
+        this.addChild(this.publicScene);
     };
     return SceneMange;
 }(egret.Sprite));

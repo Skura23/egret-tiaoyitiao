@@ -3,7 +3,14 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 	// 开始按钮
 	public beginBtn:eui.Button;
 	public loadingPop:eui.Group;
+	public gameRulePop:eui.Group;
 	
+	// wrapper of beginscene
+	public beginWra:eui.Group;
+	// wrapper of btns
+	public btnWra:eui.Group;
+	private ruleClose:eui.Label;
+
 	public constructor() {
 		super();
 	}
@@ -17,7 +24,7 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 	protected childrenCreated():void
 	{
 		super.childrenCreated();
-		var mc0 = this.getLoadingClip()
+		var mc0 = bus.getLoadingClip()
 		this.loadingPop.addChild(mc0)
 		// 页面加载完毕后，调用自定义的初始化方法
 		this.init();
@@ -27,6 +34,22 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 	// z 点击开始按钮切换场景
 	public init(){
 		this.beginBtn.addEventListener(egret.TouchEvent.TOUCH_TAP,this.tapHandler,this);
+		// 下方按钮事件绑定
+		this.btnWra.getChildAt(0).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+			this.beginWra.visible = false;
+
+		}, this);
+		this.btnWra.getChildAt(1).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+			// this.beginWra.visible = false;
+		}, this);
+		this.btnWra.getChildAt(2).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+			this.beginWra.visible = false;
+			this.gameRulePop.visible = true;
+		}, this);
+		this.ruleClose.addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+			this.beginWra.visible = true;
+			this.gameRulePop.visible = false;
+		}, this);
 	}
 	private tapHandler(){
 		// 切换场景
@@ -51,9 +74,10 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 			egret.setTimeout(function(){
 				bus.life = data.curLife;
 				SceneMange.getInstance().changeScene('gameScene');
+				this.loadingPop.visible = false;
+				this.beginBtn.touchEnabled = true;
 			}, this, 600)
 		}
-		
 	}
 	// 移除事件
 	public release(){
@@ -61,17 +85,17 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 			this.beginBtn.removeEventListener(egret.TouchEvent.TOUCH_TAP,this.tapHandler,this);
 		}
 	}
-	private getLoadingClip(){
-		// 添加loading动图
-		var data = RES.getRes("loading_json");
-		var txtr = RES.getRes("loading_png");
-		var mcFactory:egret.MovieClipDataFactory = new egret.MovieClipDataFactory( data, txtr );
-		var mc:egret.MovieClip = new egret.MovieClip( mcFactory.generateMovieClipData( "loading" ) );
-		mc.scaleX = 0.5;
-		mc.scaleY = 0.5;
-		mc.x = 11;
-		mc.y = 52;
-		mc.gotoAndPlay(0, -1);
-		return mc
-	}
+	// private getLoadingClip(){
+	// 	// 添加loading动图
+	// 	var data = RES.getRes("loading_json");
+	// 	var txtr = RES.getRes("loading_png");
+	// 	var mcFactory:egret.MovieClipDataFactory = new egret.MovieClipDataFactory( data, txtr );
+	// 	var mc:egret.MovieClip = new egret.MovieClip( mcFactory.generateMovieClipData( "loading" ) );
+	// 	mc.scaleX = 0.5;
+	// 	mc.scaleY = 0.5;
+	// 	mc.x = 11;
+	// 	mc.y = 52;
+	// 	mc.gotoAndPlay(0, -1);
+	// 	return mc
+	// }
 }

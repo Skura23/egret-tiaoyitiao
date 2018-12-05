@@ -5,6 +5,7 @@ class SceneMange extends egret.Sprite {
 	private beginScene: BeginScene;
 	// 游戏场景
 	private gameScene: GameScene;
+	private publicScene: PublicScene;
 
 	public constructor() {
 		super();
@@ -14,8 +15,10 @@ class SceneMange extends egret.Sprite {
 		// 实例化两个场景
 		this.beginScene = new BeginScene();
 		this.gameScene = new GameScene();
+		this.publicScene = new PublicScene()
 		// 默认添加开始场景
 		this.addChild(this.beginScene);
+		this.addChild(this.publicScene);
 		
 	}
 	// 实例化单例获取方法
@@ -29,11 +32,12 @@ class SceneMange extends egret.Sprite {
 	public changeScene(type){
 		// 释放资源
 		if(type == 'gameScene'){
-			this.beginScene.release();
+			// this.beginScene.release();
 		} 
 		// 移除所有显示列表中的对象
 		this.removeChildren();
 		// 添加下一个场景
 		this.addChild(this[type]);
+		this.addChild(this.publicScene);
 	}
 }

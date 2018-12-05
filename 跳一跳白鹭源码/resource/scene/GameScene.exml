@@ -92,7 +92,7 @@
 			<e:layout>
 				<e:HorizontalLayout gap="35" horizontalAlign="center" verticalAlign="middle" />
 			</e:layout>
-			<e:Image source="5_png"/>
+			<e:Image id="overToHome" source="5_png"/>
 			<e:Image id="relive" source="4_png"/>
 		</e:Group>
 		<!--<e:Button  label="" y="857.49" horizontalCenter="1.5">
@@ -172,7 +172,7 @@
 			</e:ArrayCollection>
 
 		</e:List>
-		<e:Image id="rankReturn"  bottom="260" source="7_png" horizontalCenter="0"/>
+		<e:Image id="rankToPrev"  bottom="260" source="7_png" horizontalCenter="0"/>
 		<!--rankListContner-->
 		<!--<e:Label id="rankListContner" text="0" y="228.9" anchorOffsetY="0" height="60.67" size="65" horizontalCenter="1" anchorOffsetX="0" width=""/>-->
 	</e:Group>
@@ -201,5 +201,5 @@
 		<e:Label  text="1_png" size="26" />
 		<e:Label text="12_png" id="scoreLabel" size="20"  />
 	</e:Group>
-	<e:Image id="toHome" top="70" right="30" width="181" height="58" source="15_png" />
+	<!--<e:Image id="toHome" top="70" right="30" width="181" height="58" source="15_png" />-->
 </e:Skin>
