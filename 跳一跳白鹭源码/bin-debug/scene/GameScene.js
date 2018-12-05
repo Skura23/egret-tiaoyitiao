@@ -50,16 +50,16 @@ var GameScene = (function (_super) {
         _super.prototype.childrenCreated.call(this);
         var mc0 = bus.getLoadingClip();
         this.loadingPop.addChild(mc0);
-        var mc1 = bus.getLoadingClip();
-        var mc1Wra = new eui.Group();
-        mc1Wra.width = 50;
-        mc1Wra.height = 50;
-        mc1Wra.left = "40%";
-        mc1Wra.top = "25%";
-        mc1Wra.visible = false;
-        mc1Wra.name = 'rankLoadingMc';
-        mc1Wra.addChild(mc1);
-        this.rankScroller.addChild(mc1Wra);
+        // var mc1 = bus.getLoadingClip()
+        // var mc1Wra = new eui.Group();
+        // mc1Wra.width = 50;
+        // mc1Wra.height = 50;
+        // mc1Wra.left = "40%";
+        // mc1Wra.top = "25%";
+        // mc1Wra.visible = false;
+        // mc1Wra.name = 'rankLoadingMc';
+        // mc1Wra.addChild(mc1)
+        // this.rankScroller.addChild(mc1Wra)
         this.init();
         this.reset();
     };
@@ -75,9 +75,9 @@ var GameScene = (function (_super) {
         this.pushVoice = RES.getRes('push_mp3');
         this.jumpVoice = RES.getRes('jump_mp3');
         // rank相关初始化
-        this.rankArrCollection = new eui.ArrayCollection();
-        this.rankArrCollection.source = [];
-        this.rankDataList.dataProvider = this.rankArrCollection;
+        // this.rankArrCollection = new eui.ArrayCollection();
+        // this.rankArrCollection.source = [];
+        // this.rankDataList.dataProvider = this.rankArrCollection
         // 添加触摸事件
         this.blockPanel.touchEnabled = true;
         this.blockPanel.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onKeyDown, this);
@@ -97,9 +97,13 @@ var GameScene = (function (_super) {
         this.overToHome.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
             SceneMange.getInstance().changeScene('beginScene');
         }, this);
+        SceneMange.getInstance().publicScene.rankToPrev.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
+            this.overPanel.visible = true;
+            SceneMange.getInstance().publicScene.rankArrCollection.source = [];
+        }, this);
         // 绑定rankScroller滑动刷新
-        this.rankScroller.addEventListener(eui.UIEvent.CHANGE, this.onScrollerChangeHander, this);
-        this.rankScroller.addEventListener(eui.UIEvent.CHANGE_END, this.onScrollerChangeEndHander, this);
+        // this.rankScroller.addEventListener(eui.UIEvent.CHANGE,this.onScrollerChangeHander,this);
+        // this.rankScroller.addEventListener(eui.UIEvent.CHANGE_END,this.onScrollerChangeEndHander,this);
         // this.rankArrCollection.addEventListener(eui.CollectionEvent.COLLECTION_CHANGE,function(){
         // 	this.rankScroller.viewport.scrollV = this.rankScroller.viewport.contentHeight - 10*71
         // },this);
@@ -373,7 +377,7 @@ var GameScene = (function (_super) {
             this.overPanel.visible = true;
             this.getNeighborRankAjax();
             // 失败时获取排行榜
-            this.rankAjax();
+            SceneMange.getInstance().publicScene.rankAjax();
             this.leftLifeLabel.text = this.life.toString();
             this.overScoreLabel.text = this.score.toString();
             this.thisTimeScoreLabel.text = this.thisTimeScore.toString();
@@ -509,74 +513,75 @@ var GameScene = (function (_super) {
     // 查看排行handler
     GameScene.prototype.viewRankHandler = function () {
         this.overPanel.visible = false;
-        this.rankPanel.visible = true;
+        SceneMange.getInstance().publicScene.rankPanel.visible = true;
+        SceneMange.getInstance().publicScene.rankAjax();
     };
-    // 获取排行榜ajax
-    GameScene.prototype.rankAjax = function () {
-        var rankLoadingMc = this.rankScroller.getChildByName('rankLoadingMc');
-        rankLoadingMc.visible = true;
-        this.rankScroller.bounces = false;
-        var req = new egret.HttpRequest();
-        // var params = "?curLife="+this.life;
-        req.responseType = egret.HttpResponseType.TEXT;
-        req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getRank", egret.HttpMethod.GET);
-        req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        req.send();
-        // 类似beforeSend, 发送前执行
-        // this.loadingPop.visible = true;
-        // this.relive.touchEnabled = false;
-        req.addEventListener(egret.Event.COMPLETE, onSuccess, this);
-        function onSuccess(event) {
-            rankLoadingMc.visible = false;
-            this.rankScroller.bounces = true;
-            var request = event.currentTarget;
-            var data = JSON.parse(request.response).data;
-            var listData = cloneAndRename(data, {
-                order: 'rankOrder',
-                name: 'rankName',
-                point: 'rankPoint'
-            });
-            // console.log(listData,this.rankDataList);
-            // 新增rankHead属性
-            for (var i = 0; i < listData.length; i++) {
-                Object.assign(listData[i], { rankHead: "rank_head_png" });
-            }
-            // var arrayCollection = new eui.ArrayCollection();
-            // arrayCollection.source = listData;
-            // this.rankDataList.dataProvider = arrayCollection
-            // this.rankArrCollection.source = this.rankArrCollection.source.concat(listData);
-            // this.rankArrCollection.refresh()
-            for (var i = 0; i < listData.length; i++) {
-                this.rankArrCollection.addItem(listData[i]);
-            }
-            console.log(listData, this.rankArrCollection);
-        }
-    };
-    // rank列表滚动时监听函数
-    GameScene.prototype.onScrollerChangeHander = function (e) {
-        var myScroller = e.currentTarget;
-        //  console.info("x:"+myScroller.viewport.scrollV);
-        if (myScroller.viewport.scrollV < -100) {
-            this.isRefresh = 1;
-        }
-        if (myScroller.viewport.scrollV > (this.rankArrCollection.length * 71 - this.rankDataList.height + 70)) {
-            this.isRefresh = -1;
-        }
-    };
-    // rank列表滚动结束时监听函数
-    GameScene.prototype.onScrollerChangeEndHander = function (e) {
-        if (this.isRefresh != 0) {
-            console.info("Refresh" + this.isRefresh);
-            if (this.isRefresh == -1) {
-                //这里是上拉加载更多逻辑
-                this.rankAjax();
-            }
-            if (this.isRefresh == 1) {
-                //这里是下拉刷新逻辑
-            }
-            this.isRefresh = 0;
-        }
-    };
+    // // 获取排行榜ajax
+    // private rankAjax() {
+    // 	var rankLoadingMc = this.rankScroller.getChildByName('rankLoadingMc');
+    // 	rankLoadingMc.visible = true;
+    // 	this.rankScroller.bounces = false;
+    // 	var req = new egret.HttpRequest();
+    // 	// var params = "?curLife="+this.life;
+    // 	req.responseType = egret.HttpResponseType.TEXT;
+    // 	req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getRank",egret.HttpMethod.GET);
+    // 	req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    // 	req.send();
+    // 	// 类似beforeSend, 发送前执行
+    // 	// this.loadingPop.visible = true;
+    // 	// this.relive.touchEnabled = false;
+    // 	req.addEventListener(egret.Event.COMPLETE,onSuccess,this);
+    // 	function onSuccess(event:egret.Event):void{
+    // 		rankLoadingMc.visible = false;
+    // 		this.rankScroller.bounces = true;
+    // 		var request = <egret.HttpRequest>event.currentTarget;
+    // 		var data = JSON.parse(request.response).data;
+    // 		var listData = bus.cloneAndRename(data, {
+    // 			order: 'rankOrder',
+    // 			name: 'rankName',
+    // 			point: 'rankPoint'
+    // 		})
+    // 		// console.log(listData,this.rankDataList);
+    // 		// 新增rankHead属性
+    // 		for(let i =0;i<listData.length;i++){
+    // 			(<any>Object).assign(listData[i],{rankHead:"rank_head_png"});
+    // 		}
+    // 		// var arrayCollection = new eui.ArrayCollection();
+    // 		// arrayCollection.source = listData;
+    // 		// this.rankDataList.dataProvider = arrayCollection
+    // 		// this.rankArrCollection.source = this.rankArrCollection.source.concat(listData);
+    // 		// this.rankArrCollection.refresh()
+    // 		for(let i =0;i<listData.length;i++){
+    // 			this.rankArrCollection.addItem(listData[i])
+    // 		}
+    // 		console.log(listData, this.rankArrCollection);
+    // 	}
+    // }
+    // // rank列表滚动时监听函数
+    // private onScrollerChangeHander(e:eui.UIEvent):void{
+    // 	var myScroller:eui.Scroller = e.currentTarget;
+    // 	//  console.info("x:"+myScroller.viewport.scrollV);
+    // 	if(myScroller.viewport.scrollV<-100){
+    // 		this.isRefresh = 1;
+    // 	}
+    // 	if(myScroller.viewport.scrollV>(this.rankArrCollection.length*71-this.rankDataList.height+70)){
+    // 		this.isRefresh = -1;
+    // 	}
+    // }
+    // // rank列表滚动结束时监听函数
+    // private onScrollerChangeEndHander(e:eui.UIEvent):void{
+    // 	if(this.isRefresh!=0){
+    // 		console.info("Refresh"+this.isRefresh);
+    // 		if(this.isRefresh==-1){
+    // 			//这里是上拉加载更多逻辑
+    // 			this.rankAjax()
+    // 		}
+    // 		if(this.isRefresh==1){
+    // 			//这里是下拉刷新逻辑
+    // 		}
+    // 		this.isRefresh = 0;
+    // 	}
+    // }
     // 初始化分享得积分的弹窗内功能
     GameScene.prototype.initSharePanelFuncs = function () {
         // 关闭按钮
@@ -634,6 +639,7 @@ var GameScene = (function (_super) {
                     this.player.x = this.rightOrigin.x;
                     this.player.y = this.height / 2 + this.currentBlock.height;
                 }
+                // this.rankArrCollection.source = [];
                 // 隐藏结束场景
                 this.overPanel.visible = false;
                 this.loadingPop.visible = false;
@@ -659,34 +665,32 @@ var GameScene = (function (_super) {
     return GameScene;
 }(eui.Component));
 __reflect(GameScene.prototype, "GameScene", ["eui.UIComponent", "egret.DisplayObject"]);
-// 复制对象并重命名键名
-var cloneAndRename = function (obj, renames) {
-    var clone = {};
-    var cloneArr = [];
-    function _handler(i) {
-        var _obj = {};
-        _obj = (i || i === 0) ? obj[i] : obj;
-        Object.keys(_obj).forEach(function (key) {
-            if (renames[key] !== undefined) {
-                clone[renames[key]] = _obj[key];
-            }
-            else {
-                clone[key] = _obj[key];
-            }
-        });
-    }
-    if (!obj.length) {
-        _handler(null);
-        return clone;
-    }
-    else {
-        for (var i = 0; i < obj.length; i++) {
-            _handler(i);
-            cloneArr.push(JSON.parse(JSON.stringify(clone)));
-        }
-        return cloneArr;
-    }
-};
+// // 复制对象并重命名键名
+// let cloneAndRename = (obj, renames):any => {
+//     let clone = {};
+// 	let cloneArr = []
+// 	function _handler(i){
+// 		let _obj={};
+// 		_obj = (i || i===0) ? obj[i] : obj;
+// 		Object.keys(_obj).forEach(function (key) {
+// 			if (renames[key] !== undefined) {
+// 				clone[renames[key]] = _obj[key];
+// 			} else {
+// 				clone[key] = _obj[key];
+// 			}
+// 		});
+// 	}
+// 	if (!obj.length){
+// 		_handler(null)
+// 		return clone;
+// 	} else {
+// 		for(let i = 0; i < obj.length; i++){
+// 			_handler(i)
+// 			cloneArr.push(JSON.parse(JSON.stringify(clone))) 
+// 		}
+// 		return cloneArr
+// 	}
+// }
 // 根据tan值求角度值
 function getTanDeg(tan) {
     var result = Math.atan(tan) / (Math.PI / 180);

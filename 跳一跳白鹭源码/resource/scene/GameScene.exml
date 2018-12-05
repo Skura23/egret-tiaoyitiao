@@ -9,7 +9,7 @@
 		<e:Image id="lifeIcon" width="46.49" height="46.48" x="513.51" y="100.76" source="life_png" anchorOffsetX="0" anchorOffsetY="0"/>
 		<e:Label id="lifeLabel" text="1" x="576" y="100" textColor="0x070303" size="60"/>
 	</e:Group>
-	<e:Group id="overPanel" left="0" right="0" top="0" bottom="0">
+	<e:Group id="overPanel" left="0" right="0" top="0" bottom="0" visible="false">
 		<e:Rect anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0" strokeAlpha="0.6" fillAlpha="0.6"/>
 		<e:Label  text="本次得分" y="152.9" horizontalCenter="1" size="25" fontFamily="Microsoft YaHei"/>
 		<e:Image  y="159.9" horizontalCenter="2.5" source="6_png"/>

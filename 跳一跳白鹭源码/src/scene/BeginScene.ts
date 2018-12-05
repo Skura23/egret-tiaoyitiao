@@ -10,6 +10,10 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 	// wrapper of btns
 	public btnWra:eui.Group;
 	private ruleClose:eui.Label;
+	// 排行榜返回按钮
+	public rankToPrev: eui.Label;
+	// 排行榜弹窗
+	public rankPanel: eui.Group;
 
 	public constructor() {
 		super();
@@ -37,7 +41,9 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 		// 下方按钮事件绑定
 		this.btnWra.getChildAt(0).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
 			this.beginWra.visible = false;
-
+			// this.rankPanel.visible = true;
+			SceneMange.getInstance().publicScene.rankPanel.visible = true;
+			SceneMange.getInstance().publicScene.rankAjax()
 		}, this);
 		this.btnWra.getChildAt(1).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
 			// this.beginWra.visible = false;
@@ -50,6 +56,11 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 			this.beginWra.visible = true;
 			this.gameRulePop.visible = false;
 		}, this);
+		SceneMange.getInstance().publicScene.rankToPrev.addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+			this.beginWra.visible = true;
+			SceneMange.getInstance().publicScene.rankArrCollection.source = [];
+		}, this)
+
 	}
 	private tapHandler(){
 		// 切换场景

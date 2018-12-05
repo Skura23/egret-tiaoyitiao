@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin class="PublicSceneSkin" width="640" height="1136" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
 	<!--<w:Config id="1616faa8fe5" ></w:Config>-->
-	<e:Image id="foo" top="0" right="0" source="10_png"/>
+	<!--<e:Image id="foo" top="0" right="0" source="10_png"/>-->
 	<e:Group id="rankPanel" left="0" right="0" top="0" bottom="0" visible="false">
 		<e:Rect anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0" strokeAlpha="0.6" fillAlpha="0.6"/>
 		<e:Label text="好友排行榜" y="190" size="30" horizontalCenter="0" fontFamily="Microsoft YaHei"/>

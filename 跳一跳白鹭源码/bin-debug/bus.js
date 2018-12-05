@@ -13,6 +13,34 @@ var bus = {
         mc.y = 52;
         mc.gotoAndPlay(0, -1);
         return mc;
+    },
+    // 复制对象并重命名键名
+    cloneAndRename: function (obj, renames) {
+        var clone = {};
+        var cloneArr = [];
+        function _handler(i) {
+            var _obj = {};
+            _obj = (i || i === 0) ? obj[i] : obj;
+            Object.keys(_obj).forEach(function (key) {
+                if (renames[key] !== undefined) {
+                    clone[renames[key]] = _obj[key];
+                }
+                else {
+                    clone[key] = _obj[key];
+                }
+            });
+        }
+        if (!obj.length) {
+            _handler(null);
+            return clone;
+        }
+        else {
+            for (var i = 0; i < obj.length; i++) {
+                _handler(i);
+                cloneArr.push(JSON.parse(JSON.stringify(clone)));
+            }
+            return cloneArr;
+        }
     }
 };
 //# sourceMappingURL=bus.js.map
