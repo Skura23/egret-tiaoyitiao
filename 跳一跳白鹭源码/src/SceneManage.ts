@@ -40,6 +40,15 @@ class SceneMange extends egret.Sprite {
 			// 释放资源
 			// this.beginScene.release();
 			this.gameScene.reset()
+			this.gameScene.life = bus.life-1;
+			bus.life = this.gameScene.life;
+			// console.log(this.life);
+			// if (this.life < 0) {
+			// 	this.life = 0;
+			// 	bus.life = 0;
+			// }
+			this.gameScene.lifeLabel.text = this.gameScene.life.toString();
+			if(this.gameScene.life === 0) this.gameScene.relive.source = '3_png';
 		} 
 		// 切换到beginScene时修改开始按钮图片
 		if(type == 'beginScene'){

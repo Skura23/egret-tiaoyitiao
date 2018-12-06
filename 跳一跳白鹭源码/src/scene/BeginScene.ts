@@ -69,7 +69,7 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 			this.beginWra.visible = true;
 			// this.overPanel.visible = true;
 		}, this)
-		this.modiStartImg()
+		
 		this.beginInitAjax()
 	}
 	private beginInitAjax(){
@@ -95,10 +95,11 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 			console.log(data,'beginInitAjax');
 			bus.life = data.gamesycs;
 			bus.userDataset = data;
+			this.modiStartImg()
 		}
 	}
 	private tapHandler(){
-		if(bus.life === 0){
+		if(Number(bus.life) === 0){
 			this.beginWra.visible = false;
 			SceneMange.getInstance().publicScene.sharePanel.visible = true;
 			return false;
@@ -140,7 +141,7 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 		}
 	}
 	public modiStartImg(){
-		if(bus.life === 0) {
+		if(Number(bus.life) === 0) {
 			this.beginBtn.source = '3_png';
 		}else{
 			this.beginBtn.source = '2_png';

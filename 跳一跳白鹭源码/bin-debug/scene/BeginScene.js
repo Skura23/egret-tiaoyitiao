@@ -58,7 +58,6 @@ var BeginScene = (function (_super) {
             this.beginWra.visible = true;
             // this.overPanel.visible = true;
         }, this);
-        this.modiStartImg();
         this.beginInitAjax();
     };
     BeginScene.prototype.beginInitAjax = function () {
@@ -82,10 +81,11 @@ var BeginScene = (function (_super) {
             console.log(data, 'beginInitAjax');
             bus.life = data.gamesycs;
             bus.userDataset = data;
+            this.modiStartImg();
         }
     };
     BeginScene.prototype.tapHandler = function () {
-        if (bus.life === 0) {
+        if (Number(bus.life) === 0) {
             this.beginWra.visible = false;
             SceneMange.getInstance().publicScene.sharePanel.visible = true;
             return false;
@@ -126,7 +126,7 @@ var BeginScene = (function (_super) {
         }
     };
     BeginScene.prototype.modiStartImg = function () {
-        if (bus.life === 0) {
+        if (Number(bus.life) === 0) {
             this.beginBtn.source = '3_png';
         }
         else {

@@ -67,7 +67,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	public leftLifeLabel: eui.Label;
 	public loadingPop: eui.Group;
 	public restart: eui.Button;
-	public relive: eui.Button;
+	public relive: eui.Image;
 	public viewRankBtn: eui.Button;
 	public rankToPrev: eui.Button;
 	public neighborRank0: eui.Group;
@@ -420,7 +420,6 @@ class GameScene extends eui.Component implements eui.UIComponent {
 			this.getNeighborRankAjax()
 			// 失败时获取排行榜
 			SceneMange.getInstance().publicScene.rankAjax()
-			
 			// 此次游戏得分置零
 			this.thisTimeScore = 0
 		}
@@ -442,7 +441,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 			var data = JSON.parse(request.response).msg;
 			console.log(data, 'getNeighborRank');
 			bus.life = data.scroe.gamesycs;
-			bus.userDataset.zscore = data.score.zscore;
+			bus.userDataset.zscore = data.scroe.zscore;
 			this.life = bus.life;
 			this.score = bus.userDataset.zscore;
 			this.leftLifeLabel.text = this.life.toString();
@@ -453,7 +452,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	}
 	private renderNeighborRank(data) {
 		for(let i = 0; i < data.length; i++) {
-			this['neighborRank'+i].getChildAt(0).text = data[i].order.toString();
+			this['neighborRank'+i].getChildAt(0).text = data[i].ph.toString();
 			this['neighborRank'+i].getChildAt(2).text = data[i].id.toString();
 			this['neighborRank'+i].getChildAt(3).text = data[i].zscore.toString();
 		}
@@ -668,15 +667,17 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		// req.addEventListener(egret.ProgressEvent.PROGRESS, function(event:egret.Event):void{
 			
 		// }, this)
-		// todo loading 弹窗; 生命数初始载入问题;
 		function onSuccess(event:egret.Event):void{
 			var request = <egret.HttpRequest>event.currentTarget;
 			var data = JSON.parse(request.response).msg;
 			egret.setTimeout(function(){
-				this.life = data.gamesycs;
+				this.life --;
 				bus.life = this.life;
-				console.log(this.life);
-				if (this.life < 0) this.life = 0;
+				// console.log(this.life);
+				// if (this.life < 0) {
+				// 	this.life = 0;
+				// 	bus.life = 0;
+				// }
 				this.lifeLabel.text = this.life.toString();
 				if(this.life === 0) this.relive.source = '3_png';
 				// direction判断失败界面倒数第二个方块的位置

@@ -382,12 +382,10 @@ var GameScene = (function (_super) {
             // 失败,弹出重新开始的panel
             console.log('游戏失败!');
             this.overPanel.visible = true;
+            // 失败时获取相邻排行榜
             this.getNeighborRankAjax();
             // 失败时获取排行榜
             SceneMange.getInstance().publicScene.rankAjax();
-            this.leftLifeLabel.text = this.life.toString();
-            this.overScoreLabel.text = this.score.toString();
-            this.thisTimeScoreLabel.text = this.thisTimeScore.toString();
             // 此次游戏得分置零
             this.thisTimeScore = 0;
         }
@@ -398,24 +396,31 @@ var GameScene = (function (_super) {
         // rankLoadingMc.visible = true;
         // this.rankScroller.bounces = false;
         var req = new egret.HttpRequest();
-        var params = "?totalPoint=" + this.score;
+        // var params = "?totalPoint="+this.score;
         req.responseType = egret.HttpResponseType.TEXT;
-        req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getNeighborRank" + params, egret.HttpMethod.GET);
+        req.open("http://jmgzh.jo.cn/yx/?tyt_zhu/g_paih", egret.HttpMethod.GET);
         req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         req.send();
         req.addEventListener(egret.Event.COMPLETE, onSuccess, this);
         function onSuccess(event) {
             var request = event.currentTarget;
-            var data = JSON.parse(request.response).data;
+            var data = JSON.parse(request.response).msg;
             console.log(data, 'getNeighborRank');
-            this.renderNeighborRank(data);
+            bus.life = data.scroe.gamesycs;
+            bus.userDataset.zscore = data.scroe.zscore;
+            this.life = bus.life;
+            this.score = bus.userDataset.zscore;
+            this.leftLifeLabel.text = this.life.toString();
+            this.overScoreLabel.text = this.score.toString();
+            this.thisTimeScoreLabel.text = this.thisTimeScore.toString();
+            this.renderNeighborRank(data.dqph);
         }
     };
     GameScene.prototype.renderNeighborRank = function (data) {
         for (var i = 0; i < data.length; i++) {
-            this['neighborRank' + i].getChildAt(0).text = data[i].order.toString();
-            this['neighborRank' + i].getChildAt(2).text = data[i].name.toString();
-            this['neighborRank' + i].getChildAt(3).text = data[i].point.toString();
+            this['neighborRank' + i].getChildAt(0).text = data[i].ph.toString();
+            this['neighborRank' + i].getChildAt(2).text = data[i].id.toString();
+            this['neighborRank' + i].getChildAt(3).text = data[i].zscore.toString();
         }
     };
     // z 控制屏幕中所有方块移动
@@ -627,16 +632,17 @@ var GameScene = (function (_super) {
         req.addEventListener(egret.Event.COMPLETE, onSuccess, this);
         // req.addEventListener(egret.ProgressEvent.PROGRESS, function(event:egret.Event):void{
         // }, this)
-        // todo loading 弹窗; 生命数初始载入问题;
         function onSuccess(event) {
             var request = event.currentTarget;
             var data = JSON.parse(request.response).msg;
             egret.setTimeout(function () {
-                this.life = data.gamesycs;
+                this.life--;
                 bus.life = this.life;
-                console.log(this.life);
-                if (this.life < 0)
-                    this.life = 0;
+                // console.log(this.life);
+                // if (this.life < 0) {
+                // 	this.life = 0;
+                // 	bus.life = 0;
+                // }
                 this.lifeLabel.text = this.life.toString();
                 if (this.life === 0)
                     this.relive.source = '3_png';

@@ -21,7 +21,7 @@
 					<e:HorizontalLayout gap="10" verticalAlign="middle"/>
 				</e:layout>
 				<e:Label text="总得分: " size="20"  fontFamily="Microsoft YaHei"/>
-				<e:Label id="overScoreLabel" text="220" size="20"/>
+				<e:Label id="overScoreLabel" text="" size="20"/>
 			</e:Group>
 		</e:Group>
 		<e:Group y="350" width="73%" height="300" horizontalCenter="0">

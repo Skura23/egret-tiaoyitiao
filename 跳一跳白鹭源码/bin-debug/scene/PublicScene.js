@@ -56,6 +56,10 @@ var PublicScene = (function (_super) {
         this.rankToPrev.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
             this.rankPanel.visible = false;
         }, this);
+        this.shareMask.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
+            this.shareMask.visible = false;
+            this.sharePanel.visible = true;
+        }, this);
         this.initSharePanelFuncs();
     };
     // rank列表滚动时监听函数
@@ -132,11 +136,15 @@ var PublicScene = (function (_super) {
         }, this);
         // 分享
         this.sharePanel.getChildAt(3).addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
+            this.sharePanel.visible = false;
+            this.shareMask.visible = true;
         }, this);
         // 跳转到积分兑换
         this.sharePanel.getChildAt(4).addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
             window.location.href = "http://www.baidu.com";
         }, this);
+    };
+    PublicScene.prototype.showShareMask = function () {
     };
     return PublicScene;
 }(eui.Component));

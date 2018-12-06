@@ -127,7 +127,7 @@ var Main = (function (_super) {
                         //     // },this)
                         //     // req.addEventListener(egret.IOErrorEvent.IO_ERROR,this.onGetIOError,this);
                         // }); 
-                        bus.life = 2;
+                        // bus.life = 2;
                         console.log(2);
                         return [4 /*yield*/, this.loadResource()
                             // 等待this.loadResource(资源加载)完成执行下面代码
