@@ -30,14 +30,20 @@ class SceneMange extends egret.Sprite {
 	}
 	// 切换场景
 	public changeScene(type){
-		// 释放资源
-		if(type == 'gameScene'){
-			// this.beginScene.release();
-		} 
 		// 移除所有显示列表中的对象
 		this.removeChildren();
 		// 添加下一个场景
 		this[type].addChild(this.publicScene)
 		this.addChild(this[type]);
+		// 切换到gameScene时执行reset
+		if(type == 'gameScene'){
+			// 释放资源
+			// this.beginScene.release();
+			this.gameScene.reset()
+		} 
+		// 切换到beginScene时修改开始按钮图片
+		if(type == 'beginScene'){
+			this.beginScene.modiStartImg()
+		}
 	}
 }

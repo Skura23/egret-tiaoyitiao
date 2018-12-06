@@ -1,6 +1,16 @@
 // 用于存储全局变量
 var bus = {
     life: null,
+	userDataset:{
+		"id": "0",
+		"uid": null,
+		"openid": "0",
+		"zscore": "0",
+		"dqscore": "0",
+		"gamezcs": "0",
+		"gamesycs": "0",
+		"create_sj": "0"
+	},
     getLoadingClip(){
         // 添加loading动图
 		var data = RES.getRes("loading_json");
@@ -39,5 +49,6 @@ var bus = {
 			}
 			return cloneArr
 		}
-	}
+	},
+	testId: "?openid=o9DxL1I1F3n4LWjtlV88Sqkd09bM"
 };

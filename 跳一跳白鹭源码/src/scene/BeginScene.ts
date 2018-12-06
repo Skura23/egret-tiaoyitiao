@@ -1,7 +1,7 @@
 class BeginScene extends eui.Component implements  eui.UIComponent {
 	
 	// 开始按钮
-	public beginBtn:eui.Button;
+	public beginBtn:eui.Image;
 	public loadingPop:eui.Group;
 	public gameRulePop:eui.Group;
 	
@@ -14,9 +14,13 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 	public rankToPrev: eui.Label;
 	// 排行榜弹窗
 	public rankPanel: eui.Group;
+	
 
 	public constructor() {
 		super();
+		this.addEventListener(eui.UIEvent.COMPLETE, function(){
+			console.log(12);
+		}, this);
 	}
 
 	protected partAdded(partName:string,instance:any):void
@@ -37,13 +41,14 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 	// 初始化(给开始按钮绑定点击事件)
 	// z 点击开始按钮切换场景
 	public init(){
+		var publicScene = SceneMange.getInstance().publicScene
 		this.beginBtn.addEventListener(egret.TouchEvent.TOUCH_TAP,this.tapHandler,this);
 		// 下方按钮事件绑定
 		this.btnWra.getChildAt(0).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
 			this.beginWra.visible = false;
 			// this.rankPanel.visible = true;
-			SceneMange.getInstance().publicScene.rankPanel.visible = true;
-			SceneMange.getInstance().publicScene.rankAjax()
+			publicScene.rankPanel.visible = true;
+			publicScene.rankAjax()
 		}, this);
 		this.btnWra.getChildAt(1).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
 			// this.beginWra.visible = false;
@@ -56,18 +61,55 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 			this.beginWra.visible = true;
 			this.gameRulePop.visible = false;
 		}, this);
-		SceneMange.getInstance().publicScene.rankToPrev.addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+		publicScene.rankToPrev.addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
 			this.beginWra.visible = true;
-			SceneMange.getInstance().publicScene.rankArrCollection.source = [];
+			publicScene.rankArrCollection.source = [];
 		}, this)
-
+		publicScene.sharePanel.getChildAt(2).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+			this.beginWra.visible = true;
+			// this.overPanel.visible = true;
+		}, this)
+		this.modiStartImg()
+		this.beginInitAjax()
+	}
+	private beginInitAjax(){
+		var req = new egret.HttpRequest();
+		// var params = "?curLife="+bus.life;
+		// var params = bus.testId;
+		req.responseType = egret.HttpResponseType.TEXT;
+		// req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife"+params,egret.HttpMethod.GET);
+		req.open("http://jmgzh.jo.cn/yx/?tyt_zhu/cha",egret.HttpMethod.GET);
+		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		req.send();
+		// 类似beforeSend, 发送前执行
+		
+		// this.restart.touchEnabled = false;
+		req.addEventListener(egret.Event.COMPLETE,onSuccess,this);
+		// req.addEventListener(egret.ProgressEvent.PROGRESS, function(event:egret.Event):void{
+			
+		// }, this)
+		// todo loading 弹窗; 生命数初始载入问题;
+		function onSuccess(event:egret.Event):void{
+			var request = <egret.HttpRequest>event.currentTarget;
+			var data = JSON.parse(request.response).msg;
+			console.log(data,'beginInitAjax');
+			bus.life = data.gamesycs;
+			bus.userDataset = data;
+		}
 	}
 	private tapHandler(){
+		if(bus.life === 0){
+			this.beginWra.visible = false;
+			SceneMange.getInstance().publicScene.sharePanel.visible = true;
+			return false;
+		}
 		// 切换场景
 		var req = new egret.HttpRequest();
-		var params = "?curLife="+bus.life;
+		// var params = "?curLife="+bus.life;
+		// var params = bus.testId;
 		req.responseType = egret.HttpResponseType.TEXT;
-		req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife"+params,egret.HttpMethod.GET);
+		// req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife"+params,egret.HttpMethod.GET);
+		req.open("http://jmgzh.jo.cn/yx/?tyt_zhu/j_smz",egret.HttpMethod.GET);
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		req.send();
 		// 类似beforeSend, 发送前执行
@@ -81,9 +123,10 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 		// todo loading 弹窗; 生命数初始载入问题;
 		function onSuccess(event:egret.Event):void{
 			var request = <egret.HttpRequest>event.currentTarget;
-			var data = JSON.parse(request.response).data;
+			var data = JSON.parse(request.response);
 			egret.setTimeout(function(){
-				bus.life = data.curLife;
+				console.log(data, 123);
+				bus.life --;
 				SceneMange.getInstance().changeScene('gameScene');
 				this.loadingPop.visible = false;
 				this.beginBtn.touchEnabled = true;
@@ -94,6 +137,13 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 	public release(){
 		if(this.beginBtn.hasEventListener(egret.TouchEvent.TOUCH_TAP)){
 			this.beginBtn.removeEventListener(egret.TouchEvent.TOUCH_TAP,this.tapHandler,this);
+		}
+	}
+	public modiStartImg(){
+		if(bus.life === 0) {
+			this.beginBtn.source = '3_png';
+		}else{
+			this.beginBtn.source = '2_png';
 		}
 	}
 	// private getLoadingClip(){

@@ -76,6 +76,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 
 	public constructor() {
 		super();
+		
 	}
 
 	protected partAdded(partName: string, instance: any): void {
@@ -97,7 +98,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		// this.rankScroller.addChild(mc1Wra)
 
 		this.init();
-		this.reset();
+		// this.reset();
 	}
 	// private getLoadingClip(){
 		
@@ -107,7 +108,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		// 加载左上头像图片
 		this.loadMyHeadImg("http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83erb9KD8YAjeDxh2z5yMaVxxtHEaPkkKTfRrDCU1UWbE0RrfE64aHiclZAtB2OkoFWSYBiaymbNpc5aQ/132")
 		// 初始化分享积分获取弹窗功能
-		this.initSharePanelFuncs()
+		// this.initSharePanelFuncs()
 		// 初始化音频 
 		this.pushVoice = RES.getRes('push_mp3');
 		this.jumpVoice = RES.getRes('jump_mp3');
@@ -132,11 +133,16 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		}, this);
 		// game over 页返回主页按钮
 		this.overToHome.addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+			this.overPanel.visible = false;
+			// this.reset()
 			SceneMange.getInstance().changeScene('beginScene');
 		}, this);
 		SceneMange.getInstance().publicScene.rankToPrev.addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
 			this.overPanel.visible = true;
 			SceneMange.getInstance().publicScene.rankArrCollection.source = [];
+		}, this)
+		SceneMange.getInstance().publicScene.sharePanel.getChildAt(2).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+			this.overPanel.visible = true;
 		}, this)
 		// 绑定rankScroller滑动刷新
 		// this.rankScroller.addEventListener(eui.UIEvent.CHANGE,this.onScrollerChangeHander,this);
@@ -153,7 +159,9 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		this.player.anchorOffsetX = this.player.width / 2;
 		this.player.anchorOffsetY = this.player.height - 20;
 		this.life = bus.life;
+		this.score = Number(bus.userDataset.zscore);
 		this.lifeLabel.text = this.life.toString();
+		this.scoreLabel.text = this.score.toString();
 		// 心跳计时器
 		egret.Ticker.getInstance().register(function (dt) {
 			dt /= 1000;
@@ -225,7 +233,7 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	// 重置游戏
 	public reset() {
 		// 清空舞台(删除所有子元素)
-		// this.blockPanel.removeChildren();
+		this.blockPanel.removeChildren();
 		this.blockArr = [];
 		// 添加一个方块
 		let blockNode = this.createBlock();
@@ -237,12 +245,12 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		// 摆正小人的位置
 		this.player.y = this.currentBlock.y;
 		this.player.x = this.currentBlock.x;
-		// this.player.source = 'person_r_png'
-		// this.blockPanel.addChild(this.player);
+		this.player.source = 'person_r_png'
+		this.blockPanel.addChild(this.player);
 		// this.blockPanel.addChild(this.scoreIcon);
 		// this.blockPanel.addChild(this.scoreLabel);
-		// this.blockPanel.addChild(this.lifeIcon);
-		// this.blockPanel.addChild(this.lifeLabel);
+		this.blockPanel.addChild(this.lifeIcon);
+		this.blockPanel.addChild(this.lifeLabel);
 		this.direction = 1;
 		// 添加积分
 		// this.blockPanel.addChild(this.scoreLabel);
@@ -408,12 +416,11 @@ class GameScene extends eui.Component implements eui.UIComponent {
 			// 失败,弹出重新开始的panel
 			console.log('游戏失败!')
 			this.overPanel.visible = true;
+			// 失败时获取相邻排行榜
 			this.getNeighborRankAjax()
 			// 失败时获取排行榜
 			SceneMange.getInstance().publicScene.rankAjax()
-			this.leftLifeLabel.text = this.life.toString();
-			this.overScoreLabel.text = this.score.toString();
-			this.thisTimeScoreLabel.text = this.thisTimeScore.toString();
+			
 			// 此次游戏得分置零
 			this.thisTimeScore = 0
 		}
@@ -424,24 +431,31 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		// rankLoadingMc.visible = true;
 		// this.rankScroller.bounces = false;
 		var req = new egret.HttpRequest();
-		var params = "?totalPoint="+this.score;
+		// var params = "?totalPoint="+this.score;
 		req.responseType = egret.HttpResponseType.TEXT;
-		req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getNeighborRank"+params,egret.HttpMethod.GET);
+		req.open("http://jmgzh.jo.cn/yx/?tyt_zhu/g_paih",egret.HttpMethod.GET);
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		req.send();
 		req.addEventListener(egret.Event.COMPLETE,onSuccess,this);
 		function onSuccess(event:egret.Event):void{
 			var request = <egret.HttpRequest>event.currentTarget;
-			var data = JSON.parse(request.response).data;
+			var data = JSON.parse(request.response).msg;
 			console.log(data, 'getNeighborRank');
-			this.renderNeighborRank(data)
+			bus.life = data.scroe.gamesycs;
+			bus.userDataset.zscore = data.score.zscore;
+			this.life = bus.life;
+			this.score = bus.userDataset.zscore;
+			this.leftLifeLabel.text = this.life.toString();
+			this.overScoreLabel.text = this.score.toString();
+			this.thisTimeScoreLabel.text = this.thisTimeScore.toString();
+			this.renderNeighborRank(data.dqph)
 		}
 	}
 	private renderNeighborRank(data) {
 		for(let i = 0; i < data.length; i++) {
 			this['neighborRank'+i].getChildAt(0).text = data[i].order.toString();
-			this['neighborRank'+i].getChildAt(2).text = data[i].name.toString();
-			this['neighborRank'+i].getChildAt(3).text = data[i].point.toString();
+			this['neighborRank'+i].getChildAt(2).text = data[i].id.toString();
+			this['neighborRank'+i].getChildAt(3).text = data[i].zscore.toString();
 		}
 		
 	}
@@ -614,34 +628,36 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	// 		this.isRefresh = 0;
 	// 	}
 	// }
+	// +++
 	// 初始化分享得积分的弹窗内功能
-	private initSharePanelFuncs() {
-		// 关闭按钮
-		this.sharePanel.getChildAt(2).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
-			this.sharePanel.visible = false;
-			this.overPanel.visible = true;
-		}, this)
-		// 分享
-		this.sharePanel.getChildAt(3).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+	// private initSharePanelFuncs() {
+	// 	// 关闭按钮
+	// 	this.sharePanel.getChildAt(2).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+	// 		this.sharePanel.visible = false;
+	// 		this.overPanel.visible = true;
+	// 	}, this)
+	// 	// 分享
+	// 	this.sharePanel.getChildAt(3).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
 			
-		}, this)
-		// 跳转到积分兑换
-		this.sharePanel.getChildAt(4).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
-			window.location.href = "http://www.baidu.com"
-		}, this)
-	}
+	// 	}, this)
+	// 	// 跳转到积分兑换
+	// 	this.sharePanel.getChildAt(4).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+	// 		window.location.href = "http://www.baidu.com"
+	// 	}, this)
+	// }
 	// 复活
 	private reliveHandler() {
 		if(this.life === 0) {
 			this.overPanel.visible = false;
-			this.sharePanel.visible = true;
+			SceneMange.getInstance().publicScene.sharePanel.visible = true;
 			return false;
 		}
 		// 生命值 -1 ajax
 		var req = new egret.HttpRequest();
-		var params = "?curLife="+this.life;
+		// var params = "?curLife="+this.life;
 		req.responseType = egret.HttpResponseType.TEXT;
-		req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife"+params,egret.HttpMethod.GET);
+		// req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife"+params,egret.HttpMethod.GET);
+		req.open("http://jmgzh.jo.cn/yx/?tyt_zhu/j_smz",egret.HttpMethod.GET);
 		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		req.send();
 		// 类似beforeSend, 发送前执行
@@ -655,10 +671,11 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		// todo loading 弹窗; 生命数初始载入问题;
 		function onSuccess(event:egret.Event):void{
 			var request = <egret.HttpRequest>event.currentTarget;
-			var data = JSON.parse(request.response).data;
+			var data = JSON.parse(request.response).msg;
 			egret.setTimeout(function(){
-				this.life = data.curLife;
+				this.life = data.gamesycs;
 				bus.life = this.life;
+				console.log(this.life);
 				if (this.life < 0) this.life = 0;
 				this.lifeLabel.text = this.life.toString();
 				if(this.life === 0) this.relive.source = '3_png';

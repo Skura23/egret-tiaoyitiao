@@ -176,13 +176,14 @@
 		<!--rankListContner-->
 		<!--<e:Label id="rankListContner" text="0" y="228.9" anchorOffsetY="0" height="60.67" size="65" horizontalCenter="1" anchorOffsetX="0" width=""/>-->
 	</e:Group>
-	<e:Group id="sharePanel" left="0" right="0" top="0" bottom="0"  visible="false">
+	<!--+++-->
+	<!--<e:Group id="sharePanel" left="0" right="0" top="0" bottom="0"  visible="false">
 		<e:Rect anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0" strokeAlpha="0.6" fillAlpha="0.6"/>
 		<e:Image x="30" y="30" source="8_png" top="200" horizontalCenter="0" />
 		<e:Label width="80" height="80" text="" horizontalCenter="225" y="275.33"></e:Label>
 		<e:Label width="300" height="65" text="" horizontalCenter="1" y="596"></e:Label>
 		<e:Label width="300" height="65" text="" horizontalCenter="1" y="680.3"></e:Label>
-	</e:Group>
+	</e:Group>-->
 	<!--<e:Image source="rank_head_png" width="45" height="45">
 		<e:mask>
 			<e:Rect width="45" height="45" ellipseWidth="45" ellipseHeight="45"/>

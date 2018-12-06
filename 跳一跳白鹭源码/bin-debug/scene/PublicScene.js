@@ -56,6 +56,7 @@ var PublicScene = (function (_super) {
         this.rankToPrev.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
             this.rankPanel.visible = false;
         }, this);
+        this.initSharePanelFuncs();
     };
     // rank列表滚动时监听函数
     PublicScene.prototype.onScrollerChangeHander = function (e) {
@@ -122,6 +123,20 @@ var PublicScene = (function (_super) {
             }
             console.log(listData, this.rankArrCollection);
         }
+    };
+    PublicScene.prototype.initSharePanelFuncs = function () {
+        // 关闭按钮
+        this.sharePanel.getChildAt(2).addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
+            this.sharePanel.visible = false;
+            // this.overPanel.visible = true;
+        }, this);
+        // 分享
+        this.sharePanel.getChildAt(3).addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
+        }, this);
+        // 跳转到积分兑换
+        this.sharePanel.getChildAt(4).addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
+            window.location.href = "http://www.baidu.com";
+        }, this);
     };
     return PublicScene;
 }(eui.Component));

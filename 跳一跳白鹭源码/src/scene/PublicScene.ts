@@ -19,6 +19,8 @@ class PublicScene extends eui.Component{
 	public rankDataList: eui.List;
 	public rankScroller:eui.Scroller;
 	public rankPanel:eui.Group;
+
+	public sharePanel:eui.Group;
 	// 返回上一步按钮
 	public rankToPrev: eui.Label;
 	public rankFlag=true;
@@ -71,6 +73,8 @@ class PublicScene extends eui.Component{
 		this.rankToPrev.addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
 			this.rankPanel.visible = false;
 		}, this);
+
+		this.initSharePanelFuncs()
 	}
 	// rank列表滚动时监听函数
 	public onScrollerChangeHander(e:eui.UIEvent):void{
@@ -138,5 +142,20 @@ class PublicScene extends eui.Component{
 			console.log(listData, this.rankArrCollection);
 		}
 	}
-	
+
+	private initSharePanelFuncs() {
+		// 关闭按钮
+		this.sharePanel.getChildAt(2).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+			this.sharePanel.visible = false;
+			// this.overPanel.visible = true;
+		}, this)
+		// 分享
+		this.sharePanel.getChildAt(3).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+			
+		}, this)
+		// 跳转到积分兑换
+		this.sharePanel.getChildAt(4).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
+			window.location.href = "http://www.baidu.com"
+		}, this)
+	}	
 }
