@@ -121,7 +121,7 @@ var GameScene = (function (_super) {
         this.life = bus.life;
         this.score = Number(bus.userDataset.zscore);
         this.lifeLabel.text = this.life.toString();
-        this.scoreLabel.text = this.score.toString();
+        this.scoreLabel.text = '积分' + this.score.toString();
         // 心跳计时器
         egret.Ticker.getInstance().register(function (dt) {
             dt /= 1000;
@@ -340,7 +340,7 @@ var GameScene = (function (_super) {
             // 	this.blockPanel.removeChild(increText);
             // }, this, 800)
             // 直接新增、操作画布元素 end
-            this.scoreLabel.text = this.score.toString();
+            this.scoreLabel.text = '积分' + this.score.toString();
             // 随机下一个方块出现的位置
             this.direction = Math.random() > 0.5 ? 1 : -1;
             // 当前方块要移动到相应跳跃点的距离

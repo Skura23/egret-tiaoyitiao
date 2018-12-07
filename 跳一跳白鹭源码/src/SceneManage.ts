@@ -40,8 +40,8 @@ class SceneMange extends egret.Sprite {
 			// 释放资源
 			// this.beginScene.release();
 			this.gameScene.reset()
-			this.gameScene.life = bus.life-1;
-			bus.life = this.gameScene.life;
+			this.gameScene.life = bus.life;
+			// bus.life = this.gameScene.life;
 			// console.log(this.life);
 			// if (this.life < 0) {
 			// 	this.life = 0;
