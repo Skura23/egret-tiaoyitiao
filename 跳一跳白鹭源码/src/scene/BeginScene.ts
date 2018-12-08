@@ -92,14 +92,14 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 		function onSuccess(event:egret.Event):void{
 			var request = <egret.HttpRequest>event.currentTarget;
 			var data = JSON.parse(request.response).msg;
-			console.log(data,'beginInitAjax');
+			console.log(data.gamesycs,'beginInitAjax');
 			bus.life = data.gamesycs;
 			bus.userDataset = data;
 			this.modiStartImg()
 		}
 	}
 	private tapHandler(){
-		if(Number(bus.life) === 0){
+		if(Number(bus.life) === 0 || bus.life === undefined){
 			this.beginWra.visible = false;
 			SceneMange.getInstance().publicScene.sharePanel.visible = true;
 			return false;
@@ -141,7 +141,7 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 		}
 	}
 	public modiStartImg(){
-		if(Number(bus.life) === 0) {
+		if(Number(bus.life) === 0 || bus.life === undefined) {
 			this.beginBtn.source = '3_png';
 		}else{
 			this.beginBtn.source = '2_png';
