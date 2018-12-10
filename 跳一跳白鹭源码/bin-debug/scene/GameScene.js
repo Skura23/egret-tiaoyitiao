@@ -68,9 +68,12 @@ var GameScene = (function (_super) {
     GameScene.prototype.init = function () {
         this.blockSourceNames = ["block_digua_png", "block_icp_png", "block_jmkj_png", "block_juming_png", "block_namepre_png", "block_yupu_png", "block_1_png", "block_2_png", "block_3_png", "block_4_png", "block_5_png"];
         // 加载左上头像图片
-        this.loadMyHeadImg("http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83erb9KD8YAjeDxh2z5yMaVxxtHEaPkkKTfRrDCU1UWbE0RrfE64aHiclZAtB2OkoFWSYBiaymbNpc5aQ/132");
+        this.loadMyHeadImg(bus.userDataset.headimgurl);
+        this.scoreNameLabel.text = bus.userDataset.nickname;
         // 初始化分享积分获取弹窗功能
         // this.initSharePanelFuncs()
+        // 初始化红包弹窗功能
+        this.initGiftPanelFuncs();
         // 初始化音频 
         this.pushVoice = RES.getRes('push_mp3');
         this.jumpVoice = RES.getRes('jump_mp3');
@@ -101,7 +104,6 @@ var GameScene = (function (_super) {
         }, this);
         SceneMange.getInstance().publicScene.rankToPrev.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
             this.overPanel.visible = true;
-            SceneMange.getInstance().publicScene.rankArrCollection.source = [];
         }, this);
         SceneMange.getInstance().publicScene.sharePanel.getChildAt(2).addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
             this.overPanel.visible = true;
@@ -196,6 +198,8 @@ var GameScene = (function (_super) {
         this.blockArr = [];
         // 添加一个方块
         var blockNode = this.createBlock();
+        // 此次游戏得分置零
+        this.thisTimeScore = 0;
         blockNode.touchEnabled = false;
         // 设置方块的起始位置
         blockNode.x = 180;
@@ -386,8 +390,6 @@ var GameScene = (function (_super) {
             this.getNeighborRankAjax();
             // 失败时获取排行榜
             SceneMange.getInstance().publicScene.rankAjax();
-            // 此次游戏得分置零
-            this.thisTimeScore = 0;
         }
     };
     // todo 渲染neighbor数据
@@ -396,30 +398,46 @@ var GameScene = (function (_super) {
         // rankLoadingMc.visible = true;
         // this.rankScroller.bounces = false;
         var req = new egret.HttpRequest();
-        // var params = "?totalPoint="+this.score;
+        var params = "?score=" + this.thisTimeScore;
         req.responseType = egret.HttpResponseType.TEXT;
-        req.open("http://jmgzh.jo.cn/yx/?tyt_zhu/g_paih", egret.HttpMethod.GET);
+        req.open("http://jmgzh.jo.cn/yx/tyt_zhu/g_paih" + params, egret.HttpMethod.GET);
         req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         req.send();
         req.addEventListener(egret.Event.COMPLETE, onSuccess, this);
         function onSuccess(event) {
             var request = event.currentTarget;
+            // 相邻排行数据
             var data = JSON.parse(request.response).msg;
             console.log(data, 'getNeighborRank');
             bus.life = data.scroe.gamesycs;
             bus.userDataset.zscore = data.scroe.zscore;
             this.life = bus.life;
-            this.score = bus.userDataset.zscore;
+            this.score = Number(bus.userDataset.zscore);
             this.leftLifeLabel.text = this.life.toString();
             this.overScoreLabel.text = this.score.toString();
             this.thisTimeScoreLabel.text = this.thisTimeScore.toString();
             this.renderNeighborRank(data.dqph);
+            // 我的排行数据更新
+            SceneMange.getInstance().publicScene.userRankCollection.source = [{
+                    rankOrder: data.scroe.ph,
+                    rankHead: data.scroe.headimgurl,
+                    rankName: data.scroe.nickname,
+                    rankPoint: data.scroe.zscore
+                }];
+            // userRankData
         }
     };
     GameScene.prototype.renderNeighborRank = function (data) {
         for (var i = 0; i < data.length; i++) {
             this['neighborRank' + i].getChildAt(0).text = data[i].ph.toString();
-            this['neighborRank' + i].getChildAt(2).text = data[i].id.toString();
+            // 若有远程图则加载, 否则用默认图
+            this.loadRemoteImg(data[i].headimgurl, this['neighborRank' + i], 1);
+            if (data[i].nickname === null) {
+                this['neighborRank' + i].getChildAt(2).text = 'null';
+            }
+            else {
+                this['neighborRank' + i].getChildAt(2).text = data[i].nickname.toString();
+            }
             this['neighborRank' + i].getChildAt(3).text = data[i].zscore.toString();
         }
     };
@@ -495,7 +513,7 @@ var GameScene = (function (_super) {
         // 游戏场景可点
         this.blockPanel.touchEnabled = true;
     };
-    // 加载远程图片
+    // 加载左上远程图片
     GameScene.prototype.loadMyHeadImg = function (url) {
         var imgLoader = new egret.ImageLoader();
         egret.ImageLoader.crossOrigin = "anonymous";
@@ -515,6 +533,41 @@ var GameScene = (function (_super) {
             }
         }, this);
     };
+    // 加载远程图片
+    // url 地址, parent 父容器, index 图片深度索引, 
+    GameScene.prototype.loadRemoteImg = function (url, parent, index) {
+        // return bitmap;
+        var image = new eui.Image();
+        image.width = 75;
+        image.height = 75;
+        image.x = 41;
+        image.y = 58;
+        image.source = 'rank_head_png';
+        if (url === null) {
+            parent.removeChild(parent.getChildAt(index));
+            parent.addChildAt(image, index);
+        }
+        else {
+            var bitmap_1;
+            var imgLoader = new egret.ImageLoader();
+            egret.ImageLoader.crossOrigin = "anonymous";
+            imgLoader.load(url);
+            imgLoader.once(egret.Event.COMPLETE, function (evt) {
+                if (evt.currentTarget.data) {
+                    egret.log("加载左上头像成功: " + evt.currentTarget.data);
+                    var texture = new egret.Texture();
+                    texture.bitmapData = evt.currentTarget.data;
+                    bitmap_1 = new egret.Bitmap(texture);
+                    bitmap_1.width = 75;
+                    bitmap_1.height = 75;
+                    bitmap_1.x = 41;
+                    bitmap_1.y = 58;
+                    parent.removeChild(parent.getChildAt(index));
+                    parent.addChildAt(bitmap_1, index);
+                }
+            }, this);
+        }
+    };
     // 为按钮绑定链接
     GameScene.prototype.bindLink = function () {
         // 查看排行榜链接
@@ -526,7 +579,29 @@ var GameScene = (function (_super) {
     GameScene.prototype.viewRankHandler = function () {
         this.overPanel.visible = false;
         SceneMange.getInstance().publicScene.rankPanel.visible = true;
+        // SceneMange.getInstance().publicScene.
         SceneMange.getInstance().publicScene.rankAjax();
+    };
+    // 初始化分享得积分的弹窗内功能
+    GameScene.prototype.initGiftPanelFuncs = function () {
+        // 关闭按钮
+        this.giftPanel.getChildAt(6).addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
+            this.giftPanel.visible = false;
+            // this.overPanel.visible = true;
+            this.giftOpen.visible = true;
+            this.giftNum.text = '' + '元';
+            this.giftNum.visible = false;
+        }, this);
+        // 拆红包
+        this.giftPanel.getChildAt(3).addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
+            // 拆红包ajax
+            // 完成回调:
+            this.giftCap0.text = '恭喜您获得红包';
+            this.giftCap1.text = '已存入零钱，可直接提现';
+            this.giftOpen.visible = false;
+            this.giftNum.text = '' + '元';
+            this.giftNum.visible = true;
+        }, this);
     };
     // // 获取排行榜ajax
     // private rankAjax() {
@@ -638,6 +713,8 @@ var GameScene = (function (_super) {
             egret.setTimeout(function () {
                 this.life--;
                 bus.life = this.life;
+                // 此次游戏得分置零
+                this.thisTimeScore = 0;
                 // console.log(this.life);
                 // if (this.life < 0) {
                 // 	this.life = 0;

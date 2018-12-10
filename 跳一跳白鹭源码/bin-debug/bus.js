@@ -9,6 +9,8 @@ var bus = {
         "dqscore": "0",
         "gamezcs": "0",
         "gamesycs": "0",
+        "nickname": "",
+        "headimgurl": "",
         "create_sj": "0"
     },
     getLoadingClip: function () {

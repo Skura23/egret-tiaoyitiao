@@ -49,6 +49,33 @@ class BeginScene extends eui.Component implements  eui.UIComponent {
 			// this.rankPanel.visible = true;
 			publicScene.rankPanel.visible = true;
 			publicScene.rankAjax()
+			var req = new egret.HttpRequest();
+			// var params = "?curLife="+bus.life;
+			// var params = bus.testId;
+			req.responseType = egret.HttpResponseType.TEXT;
+			// req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife"+params,egret.HttpMethod.GET);
+			req.open("http://jmgzh.jo.cn/yx/tyt_zhu/g_paih",egret.HttpMethod.GET);
+			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			req.send();
+			// 类似beforeSend, 发送前执行
+			
+			// this.restart.touchEnabled = false;
+			req.addEventListener(egret.Event.COMPLETE,onSuccess,this);
+			// req.addEventListener(egret.ProgressEvent.PROGRESS, function(event:egret.Event):void{
+				
+			// }, this)
+			// todo loading 弹窗; 生命数初始载入问题;
+			function onSuccess(event:egret.Event):void{
+				var request = <egret.HttpRequest>event.currentTarget;
+				// 相邻排行数据
+				var data = JSON.parse(request.response).msg;
+				SceneMange.getInstance().publicScene.userRankCollection.source = [{
+					rankOrder: data.scroe.ph,
+					rankHead: data.scroe.headimgurl,
+					rankName: data.scroe.nickname,
+					rankPoint: data.scroe.zscore
+				}]
+			}
 		}, this);
 		this.btnWra.getChildAt(1).addEventListener(egret.TouchEvent.TOUCH_TAP, function(){
 			// this.beginWra.visible = false;

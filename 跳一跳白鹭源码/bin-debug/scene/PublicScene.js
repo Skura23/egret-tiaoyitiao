@@ -15,6 +15,7 @@ var PublicScene = (function (_super) {
         // rank列表是否刷新flag
         _this.isRefresh = 0;
         _this.rankFlag = true;
+        _this.page = 1;
         // UI skin加载完毕后，调用自定义的init初始化方法
         // this.init();
         _this.addEventListener(eui.UIEvent.COMPLETE, _this.init, _this);
@@ -47,6 +48,9 @@ var PublicScene = (function (_super) {
         mc1Wra.name = 'rankLoadingMc';
         mc1Wra.addChild(mc1);
         this.rankScroller.addChild(mc1Wra);
+        this.userRankCollection = new eui.ArrayCollection();
+        this.userRankCollection.source = [];
+        this.userRankData.dataProvider = this.userRankCollection;
         this.rankArrCollection = new eui.ArrayCollection();
         this.rankArrCollection.source = [];
         this.rankDataList.dataProvider = this.rankArrCollection;
@@ -55,6 +59,8 @@ var PublicScene = (function (_super) {
         this.rankScroller.addEventListener(eui.UIEvent.CHANGE_END, this.onScrollerChangeEndHander, this);
         this.rankToPrev.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
             this.rankPanel.visible = false;
+            this.rankArrCollection.source = [];
+            this.page = 1;
         }, this);
         this.shareMask.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
             this.shareMask.visible = false;
@@ -93,9 +99,9 @@ var PublicScene = (function (_super) {
         rankLoadingMc.visible = true;
         this.rankScroller.bounces = false;
         var req = new egret.HttpRequest();
-        // var params = "?curLife="+this.life;
+        var params = "?page=" + this.page;
         req.responseType = egret.HttpResponseType.TEXT;
-        req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getRank", egret.HttpMethod.GET);
+        req.open("http://jmgzh.jo.cn/yx/tyt_zhu/g_zpaih" + params, egret.HttpMethod.GET);
         req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         req.send();
         // 类似beforeSend, 发送前执行
@@ -106,17 +112,18 @@ var PublicScene = (function (_super) {
             rankLoadingMc.visible = false;
             this.rankScroller.bounces = true;
             var request = event.currentTarget;
-            var data = JSON.parse(request.response).data;
-            var listData = bus.cloneAndRename(data, {
-                order: 'rankOrder',
-                name: 'rankName',
-                point: 'rankPoint'
+            var data = JSON.parse(request.response).msg.zph;
+            var listData = bus.cloneAndRename(data.content, {
+                ph: 'rankOrder',
+                nickname: 'rankName',
+                zscore: 'rankPoint',
+                headimgurl: 'rankHead'
             });
             // console.log(listData,this.rankDataList);
             // 新增rankHead属性
-            for (var i = 0; i < listData.length; i++) {
-                Object.assign(listData[i], { rankHead: "rank_head_png" });
-            }
+            // for(let i =0;i<listData.length;i++){
+            // 	(<any>Object).assign(listData[i],{rankHead:"rank_head_png"});
+            // }
             // var arrayCollection = new eui.ArrayCollection();
             // arrayCollection.source = listData;
             // this.rankDataList.dataProvider = arrayCollection
@@ -126,6 +133,7 @@ var PublicScene = (function (_super) {
                 this.rankArrCollection.addItem(listData[i]);
             }
             console.log(listData, this.rankArrCollection);
+            this.page = data.currPage + 1;
         }
     };
     PublicScene.prototype.initSharePanelFuncs = function () {
