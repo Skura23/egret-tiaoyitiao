@@ -49,6 +49,7 @@ class SceneMange extends egret.Sprite {
 			// 	bus.life = 0;
 			// }
 			this.gameScene.lifeLabel.text = this.gameScene.life.toString();
+			this.gameScene.blockPanel.touchEnabled = true;
 			if(this.gameScene.life === 0) this.gameScene.relive.source = '3_png';
 		} 
 		// 切换到beginScene时修改开始按钮图片

@@ -24,7 +24,19 @@
 			<e:Scroller skinName="skins.ScrollerSkin" height="430" width="400" scrollPolicyH="off" anchorOffsetY="0" horizontalCenter="0">
 				<e:viewport>
 					<e:Group>
-						<e:Image source="slogan_juming_png" width="100%" height="570" />
+						<e:layout>
+							<e:VerticalLayout gap="10" horizontalAlign="center" />
+						</e:layout>
+						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="1、活动时间：2018.12.12-2018.12.24（12.25公布获奖名单）。" />
+						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="2、关注聚名网微信公众号即可参与游戏，每天固定享有3个生命值。" />
+						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="3、分享到朋友圈或者微信群，成功分享一次可多获取1个生命值（每天≦10次）" />
+						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="4、邀请好友额外获取生命值，每成功邀请一位好友参与游戏，可多获取1个生命值。" />
+						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="5、聚名网积分可兑换生命值，500积分兑换一次，每天最多可兑换3次。" />
+						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="6、所有生命值的有效期是当天，系统每天凌晨0点清空，恢复默认3个生命值。" />
+						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="7、跳一跳游戏采用积分制度，每成功跳一个小方块即可获得一分。" />
+						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="8、获取的积分可累加，截止活动结束，累计积分高的小伙伴将获得奖品。" />
+						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="9、游戏中设有随机现金红包，领取到的红包将发放到玩家微信钱包中。" />
+						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="10、本次活动最终解释权归聚名网所有。" />
 					</e:Group>
 				</e:viewport>
 			</e:Scroller>
