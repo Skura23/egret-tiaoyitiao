@@ -57,6 +57,8 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	// 游戏中生命数
 	// todo
 	private giftTriggerCounter=0;
+	// gift flag
+	private giftFlag = false;
 
 	public life = 1;
 
@@ -358,6 +360,11 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		var lastButOneBlock = this.blockArr[this.blockArr.length-2]
 		// 根据this.jumpDistance来判断跳跃是否成功
 		if (Math.pow(this.currentBlock.x - this.player.x, 2) + Math.pow(this.currentBlock.y - this.player.y, 2) <= 73 * 73) {
+			if(this.giftFlag === true){
+				// gift 弹窗
+				// 结束时giftFlag 置false
+			}
+			this.giftTriggerHandler()
 			// 小人落在方块上
 			var increment = 1
 			// if(){
@@ -429,6 +436,8 @@ class GameScene extends eui.Component implements eui.UIComponent {
 		} else {
 			// 失败,弹出重新开始的panel
 			console.log('游戏失败!')
+			this.giftFlag = false;
+			this.giftTriggerCounter = 0;
 			this.overPanel.visible = true;
 			// 失败时获取相邻排行榜
 			this.getNeighborRankAjax()
@@ -734,7 +743,14 @@ class GameScene extends eui.Component implements eui.UIComponent {
 	// }
 	// 红包触发器
 	private giftTriggerHandler(){
-
+		this.giftTriggerCounter++
+		if(this.giftTriggerCounter === 5){
+			// ajax
+			// 存储gift信息
+			// gift flag 置true
+			this.giftFlag = true;
+		}
+		this.giftTriggerCounter = 0
 	}
 	// 复活
 	private reliveHandler() {

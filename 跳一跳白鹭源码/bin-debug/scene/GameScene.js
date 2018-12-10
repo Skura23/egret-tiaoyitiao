@@ -40,6 +40,8 @@ var GameScene = (function (_super) {
         // rank列表是否刷新flag
         _this.isRefresh = 0;
         // 游戏中生命数
+        // todo
+        _this.giftTriggerCounter = 0;
         _this.life = 1;
         return _this;
     }
@@ -685,6 +687,9 @@ var GameScene = (function (_super) {
     // 		window.location.href = "http://www.baidu.com"
     // 	}, this)
     // }
+    // 红包触发器
+    GameScene.prototype.giftTriggerHandler = function () {
+    };
     // 复活
     GameScene.prototype.reliveHandler = function () {
         if (this.life === 0) {
