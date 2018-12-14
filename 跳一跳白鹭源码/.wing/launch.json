@@ -11,7 +11,12 @@
 			"sourceMaps": true,
 			"webRoot": "${workspaceRoot}",
 			"preLaunchTask":"build",
-			"port":5971
+			"port":5971,
+			"runtimeArgs": [
+				"--allow-file-access-from-files",
+				"--allow-file-access-frome-files",
+				" --disable-web-security"
+			]
 		},
 		{
 			"name": "Launch Chrome",
@@ -23,7 +28,12 @@
 			"webRoot": "${workspaceRoot}",
 			"preLaunchTask":"build",
 			"userDataDir":"${tmpdir}",
-			"port":5971
+			"port":5971,
+			// "runtimeArgs": [
+			// 	"--allow-file-access-from-files",
+			// 	"--allow-file-access-frome-files",
+			// 	" --disable-web-security"
+			// ]
 		}
 	]
 }

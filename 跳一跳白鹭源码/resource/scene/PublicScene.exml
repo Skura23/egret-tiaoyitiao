@@ -4,39 +4,42 @@
 	<!--<e:Image id="foo" top="0" right="0" source="10_png"/>-->
 	<e:Group id="rankPanel" left="0" right="0" top="0" bottom="0" visible="false">
 		<e:Rect anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0" strokeAlpha="0.6" fillAlpha="0.6"/>
-		<e:Label text="好友排行榜" y="190" size="30" horizontalCenter="0" fontFamily="Microsoft YaHei"/>
-		<e:Scroller skinName="skins.ScrollerSkin" id= "rankScroller" height="302.78" width="540" y="239.39" scrollPolicyH="off" anchorOffsetY="0" horizontalCenter="0">
-			<e:List id="rankDataList" width="100%" useVirtualLayout="true">
+		<!--<e:Label text="好友排行榜"  size="30" horizontalCenter="0" fontFamily="Microsoft YaHei"/>-->
+		
+		<e:Image y="116"  source="35_png" horizontalCenter="0"/>
+		<e:Scroller skinName="skins.ScrollerSkin" id= "rankScroller" height="390.78" width="540" y="208.39" scrollPolicyH="off" anchorOffsetY="0" horizontalCenter="0">
+			<e:List id="rankDataList" width="100%" useVirtualLayout="true" height="474.78">
                 <!-- 布局 -->
                 <e:layout>
-                    <e:VerticalLayout horizontalAlign="center" verticalAlign="top" />
+                    <e:VerticalLayout gap="0" horizontalAlign="center" verticalAlign="top" />
                 </e:layout>
                 <!-- 演示的数据 -->
 				<e:itemRendererSkinName>
                     <e:Skin>
-						<e:Image source="19_png" width="540" height="65" />
+						<e:Image source="36_png" width="540" height="65" />
 						<e:Label text="{data.rankOrder}"  left="30"  verticalAlign="middle" textAlign="center" height="65"/>
 						<e:Image source="{data.rankHead}" top="10" width="45" height="45" left="100" />
-						<e:Label text="{data.rankName}" left="200" verticalAlign="middle" textAlign="center" height="65"/>
+						<e:Label text="{data.rankName}" left="180" verticalAlign="middle" textAlign="center" width="230" height="30" top="17" />
 						<e:Label text="{data.rankPoint}" right="30" verticalAlign="middle" textAlign="center" height="65"/>
                     </e:Skin>
                 </e:itemRendererSkinName>
-                <!--<e:ArrayCollection>
+                <e:ArrayCollection>
                     <e:Array>
+						<e:Object rankOrder="1" rankHead="rank_head_png" rankName="dfsg adfghdf adfhgdf asdfasd asdgadf sadfasdf" rankPoint="233"/>
 						<e:Object rankOrder="1" rankHead="rank_head_png" rankName="abc" rankPoint="233"/>
 						<e:Object rankOrder="1" rankHead="rank_head_png" rankName="abc" rankPoint="233"/>
 						<e:Object rankOrder="1" rankHead="rank_head_png" rankName="abc" rankPoint="233"/>
 						<e:Object rankOrder="1" rankHead="rank_head_png" rankName="abc" rankPoint="233"/>
 						<e:Object rankOrder="1" rankHead="rank_head_png" rankName="abc" rankPoint="233"/>
                     </e:Array>
-                </e:ArrayCollection>-->
+                </e:ArrayCollection>
 			<!--<e:Group width="50" height="50">
 				<e:Label text="本次得分" horizontalCenter="1" size="25"/>
 			</e:Group>-->
             </e:List>
 		</e:Scroller>
 		<!--用户排行-->
-		<e:List id="userRankData" width="540"  y="578" horizontalCenter="0">
+		<e:List id="userRankData" width="540"  y="633" horizontalCenter="0">
 			<!-- 布局 -->
 			<e:layout>
 				<e:VerticalLayout horizontalAlign="center" verticalAlign="top" />
@@ -58,7 +61,7 @@
 			</e:ArrayCollection>
 
 		</e:List>
-		<e:Image id="rankToPrev"  bottom="260" source="7_png" horizontalCenter="0"/>
+		<e:Image id="rankToPrev"  source="7_png" horizontalCenter="0" y="781"/>
 		<!--rankListContner-->
 		<!--<e:Label id="rankListContner" text="0" y="228.9" anchorOffsetY="0" height="60.67" size="65" horizontalCenter="1" anchorOffsetX="0" width=""/>-->
 	</e:Group>

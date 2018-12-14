@@ -11,7 +11,8 @@ var bus = {
         "gamesycs": "0",
         "nickname": "",
         "headimgurl": "",
-        "create_sj": "0"
+        "create_sj": "0",
+        "maxfs": 4
     },
     getLoadingClip: function () {
         // 添加loading动图

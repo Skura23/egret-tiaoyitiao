@@ -34,7 +34,8 @@ class LoadingUI extends egret.Sprite implements RES.PromiseTaskReporter {
         this.createView();
     }
 
-    private textField: egret.TextField;
+    private textField: eui.Label;
+    private bac: eui.Rect;
 
     private createView(){
         // 获取、设置初始生命值 life ajax
@@ -54,16 +55,30 @@ class LoadingUI extends egret.Sprite implements RES.PromiseTaskReporter {
 		// },this)
 		// req.addEventListener(egret.IOErrorEvent.IO_ERROR,this.onGetIOError,this);
 
-        this.textField = new egret.TextField();
-        this.addChild(this.textField);
-        this.textField.y = 300;
+        this.textField = new eui.Label();
+        this.textField.horizontalCenter="0"
+        // this.textField.textColor = 0xffffff;
+        this.textField.y = 400;
+        this.textField.x = 70;
         this.textField.width = 480;
         this.textField.height = 100;
         this.textField.textAlign = "center";
-        this.textField.textColor=0x000000;
+        this.textField.textColor=0xffffff;
+        // this.bac = new eui.Rect();
+        // this.bac.left = 0;
+        // this.bac.right = 0;
+        // this.bac.top = 0;
+        // this.bac.bottom = 0;
+        // this.bac.fillColor = 0x0D88D8;
+        // <e:Rect anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0" strokeAlpha="0.6" fillAlpha="0.6"/>
+        // this.addChild(this.bac);
+        this.addChild(this.textField);
     }
 
     public onProgress(current: number, total: number): void {
-        this.textField.text = `Loading...${current}/${total}`;
+        // var num:any = current/total
+        // var per = num.toFixed(2)*100 + '%';
+        // this.textField.text = `加载中...${current}/${total}`;
+        this.textField.text = `加载中...`;
     }
 }

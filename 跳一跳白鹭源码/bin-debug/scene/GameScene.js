@@ -42,6 +42,9 @@ var GameScene = (function (_super) {
         // 游戏中生命数
         // todo
         _this.giftTriggerCounter = 0;
+        // gift flag
+        _this.giftFlag = false;
+        _this.giftSize = '0';
         _this.life = 1;
         return _this;
     }
@@ -79,6 +82,8 @@ var GameScene = (function (_super) {
         // 初始化音频 
         this.pushVoice = RES.getRes('push_mp3');
         this.jumpVoice = RES.getRes('jump_mp3');
+        this.giftVoice = RES.getRes('gift_mp3');
+        // this.overVoice = RES.getRes('over_mp3');
         // rank相关初始化
         // this.rankArrCollection = new eui.ArrayCollection();
         // this.rankArrCollection.source = [];
@@ -104,6 +109,12 @@ var GameScene = (function (_super) {
             // this.reset()
             SceneMange.getInstance().changeScene('beginScene');
         }, this);
+        this.yzmSubmit.addEventListener(egret.TouchEvent.TOUCH_TAP, this.submitYzm, this);
+        this.yzmWra.getChildAt(7).addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
+            console.log(123);
+            this.loadSingleRemoteImg();
+        }, this);
+        // this.yzmWra.getChildAt(0).source = 'http://www.juming.com/xcode.htm'
         SceneMange.getInstance().publicScene.rankToPrev.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
             this.overPanel.visible = true;
         }, this);
@@ -125,7 +136,7 @@ var GameScene = (function (_super) {
         this.life = bus.life;
         this.score = Number(bus.userDataset.zscore);
         this.lifeLabel.text = this.life.toString();
-        this.scoreLabel.text = '积分' + this.score.toString();
+        this.scoreLabel.text = '得分' + this.score.toString();
         // 心跳计时器
         egret.Ticker.getInstance().register(function (dt) {
             dt /= 1000;
@@ -265,12 +276,12 @@ var GameScene = (function (_super) {
     // 添加品牌标语
     GameScene.prototype.addSlogan = function () {
         var sloganMap = {
-            "block_digua_png": '让域名创造更多价值啊啊啊啊啊啊',
-            "block_icp_png": '让域名创造更多价值啊啊啊啊啊啊',
-            "block_jmkj_png": '让域名创造更多价值啊啊啊啊啊啊',
-            "block_juming_png": '让域名创造更多价值啊啊啊啊啊啊',
-            "block_namepre_png": '让域名创造更多价值',
-            "block_yupu_png": '让域名创造更多价值'
+            "block_digua_png": '一站式建站服务',
+            "block_icp_png": '域名综合查询平台',
+            "block_jmkj_png": '中小企业综合服务商',
+            "block_juming_png": '域名综合服务商',
+            "block_namepre_png": '域名释放拍卖平台',
+            "block_yupu_png": '域名可赎回交易平台'
         };
         var block = this.blockArr[this.blockArr.length - 1];
         var src = block.source;
@@ -314,6 +325,15 @@ var GameScene = (function (_super) {
         var lastButOneBlock = this.blockArr[this.blockArr.length - 2];
         // 根据this.jumpDistance来判断跳跃是否成功
         if (Math.pow(this.currentBlock.x - this.player.x, 2) + Math.pow(this.currentBlock.y - this.player.y, 2) <= 73 * 73) {
+            if (this.giftFlag === true) {
+                this.giftVoice.play(0, 1);
+                // gift 弹窗
+                this.giftPanel.visible = true;
+                // ajax 存储上个ajax返回的红包信息到账户
+                // 结束时giftFlag 置false
+                this.giftFlag = false;
+            }
+            this.giftTriggerHandler();
             // 小人落在方块上
             var increment = 1;
             // if(){
@@ -346,7 +366,7 @@ var GameScene = (function (_super) {
             // 	this.blockPanel.removeChild(increText);
             // }, this, 800)
             // 直接新增、操作画布元素 end
-            this.scoreLabel.text = '积分' + this.score.toString();
+            this.scoreLabel.text = '得分' + this.score.toString();
             // 随机下一个方块出现的位置
             this.direction = Math.random() > 0.5 ? 1 : -1;
             // 当前方块要移动到相应跳跃点的距离
@@ -385,8 +405,41 @@ var GameScene = (function (_super) {
             this.blockPanel.touchEnabled = true;
         }
         else {
+            // bus.userDataset.maxfs = 100
+            this.thisTimeScore = 200;
+            var that = this;
+            // 失败充值flag
+            this.giftFlag = false;
+            this.giftTriggerCounter = 0;
             // 失败,弹出重新开始的panel
-            console.log('游戏失败!');
+            // overFunc.call(this)
+            // console.log('游戏失败!')
+            if (bus.userDataset.maxfs === 0) {
+                overFunc.call(this);
+            }
+            else {
+                // if(this.thisTimeScore >= bus.userDataset.maxfs){
+                if (this.thisTimeScore >= bus.userDataset.maxfs) {
+                    // 执行验证码弹窗
+                    // public yzmPanel;
+                    // public yzmImg;
+                    // public yzmInp;
+                    // public yzmSubmit;
+                    // public yzmMsg;
+                    this.yzmPanel.visible = true;
+                    this.loadSingleRemoteImg();
+                    // this.yzmImg.source = 'http://jmgzh.jo.cn/yx/user_zhu/g_getcode'
+                    // overFunc.call(this)
+                }
+                else {
+                    // 不执行弹窗
+                    overFunc.call(this);
+                }
+            }
+        }
+        function overFunc() {
+            // this.overVoice.play(0, 1)
+            // this.yzmPanel.visible = false;
             this.overPanel.visible = true;
             // 失败时获取相邻排行榜
             this.getNeighborRankAjax();
@@ -394,6 +447,110 @@ var GameScene = (function (_super) {
             SceneMange.getInstance().publicScene.rankAjax();
         }
     };
+    GameScene.prototype.submitYzm = function () {
+        var req = new egret.HttpRequest();
+        var sessionId = getCookie('PHPSESSID');
+        // var params = "?score="+this.thisTimeScore+'&yzm='+this.yzmInp.text;
+        var params = "?score=" + this.thisTimeScore + '&yzm=' + this.yzmInp.text + '&sessionId=' + sessionId;
+        // console.log(params, 'ada');
+        req.responseType = egret.HttpResponseType.TEXT;
+        req.open("http://jmgzh.jo.cn/yx/tyt_zhu/g_paih" + params, egret.HttpMethod.GET);
+        req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        req.send();
+        this.yzmSubmit.touchEnabled = false;
+        req.addEventListener(egret.Event.COMPLETE, onSuccess, this);
+        function onSuccess(event) {
+            this.yzmSubmit.touchEnabled = true;
+            var request = event.currentTarget;
+            // 相邻排行数据
+            console.log(request.response, 'getNeighborRankad');
+            var data = JSON.parse(request.response).msg;
+            var code = JSON.parse(request.response).code;
+            console.log(data, 'getNeighborRank');
+            if (code == 1) {
+                // 成功
+                bus.life = data.scroe.gamesycs;
+                bus.userDataset.zscore = data.scroe.zscore;
+                this.life = bus.life;
+                this.score = Number(bus.userDataset.zscore);
+                this.leftLifeLabel.text = this.life.toString();
+                this.overScoreLabel.text = this.score.toString();
+                this.thisTimeScoreLabel.text = this.thisTimeScore.toString();
+                console.log(123);
+                // this.renderNeighborRank(data.dqph)
+                this.renderNeighborRank(data.dqph);
+                // 我的排行数据更新
+                SceneMange.getInstance().publicScene.userRankCollection.source = [{
+                        rankOrder: data.scroe.ph,
+                        rankHead: data.scroe.headimgurl,
+                        rankName: data.scroe.nickname,
+                        rankPoint: data.scroe.zscore
+                    }];
+                this.yzmPanel.visible = false;
+                this.overPanel.visible = true;
+                // 失败时获取排行榜
+                SceneMange.getInstance().publicScene.rankAjax();
+                // userRankData
+            }
+            else if (code == -1) {
+                // 失败	
+                this.yzmMsg.text = '验证码错误';
+                this.loadSingleRemoteImg();
+            }
+        }
+        // this.yzmMsg.text = '验证码错误'
+        // this.loadSingleRemoteImg()
+    };
+    GameScene.prototype.loadSingleRemoteImg = function () {
+        var bitmap;
+        var imgLoader = new egret.ImageLoader();
+        egret.ImageLoader.crossOrigin = "anonymous";
+        var stamp = Date.now();
+        imgLoader.load('http://jmgzh.jo.cn/yx/user_zhu/g_getcode?t=' + stamp);
+        imgLoader.once(egret.Event.COMPLETE, function (evt) {
+            if (evt.currentTarget.data) {
+                // egret.log("加载左上头像成功: " + evt.currentTarget.data);
+                var texture = new egret.Texture();
+                texture.bitmapData = evt.currentTarget.data;
+                bitmap = new egret.Bitmap(texture);
+                bitmap.width = 122;
+                bitmap.height = 67;
+                bitmap.x = 312;
+                bitmap.y = 445;
+                this.yzmWra.removeChildAt(6);
+                this.yzmWra.addChildAt(bitmap, 6);
+                // 6
+                // bitmap.addEventListener(egret.TouchEvent.TOUCH_TAP,function(){
+                // 	console.log(123);
+                // 	this.loadSingleRemoteImg2()
+                // },this)
+            }
+        }, this);
+    };
+    // private loadSingleRemoteImg2() {
+    // 	let bitmap;
+    // 	let imgLoader:egret.ImageLoader = new egret.ImageLoader();
+    // 	egret.ImageLoader.crossOrigin = "anonymous"
+    // 	imgLoader.load('http://thirdwx.qlogo.cn/mmopen/PZI7pLaVibDNiaia2ggPXLS27U72t1g7uD6MRwaZakicvrFe5unfnMtlUDibicwZhRH1OMz1lf6EK8FK9cFJc42rxYkRczIRj0tCXD/132');
+    // 	imgLoader.once(egret.Event.COMPLETE, function (evt: egret.Event) {
+    // 		if (evt.currentTarget.data) {
+    // 			// egret.log("加载左上头像成功: " + evt.currentTarget.data);
+    // 			let texture = new egret.Texture();
+    // 			texture.bitmapData = evt.currentTarget.data;
+    // 			bitmap = new egret.Bitmap(texture);
+    // 			bitmap.width = 122;
+    // 			bitmap.height = 67;
+    // 			bitmap.x = 312;
+    // 			bitmap.y = 445;
+    // 			this.yzmWra.removeChildAt(6)
+    // 			this.yzmWra.addChildAt(bitmap, 6)
+    // 			// bitmap.addEventListener(egret.TouchEvent.TOUCH_TAP,function(){
+    // 			// 	this.loadSingleRemoteImg()
+    // 			// },this)
+    // 			// 6
+    // 		}
+    // 	}, this);
+    // }
     // todo 渲染neighbor数据
     GameScene.prototype.getNeighborRankAjax = function () {
         // var rankLoadingMc = this.rankScroller.getChildByName('rankLoadingMc');
@@ -418,6 +575,8 @@ var GameScene = (function (_super) {
             this.leftLifeLabel.text = this.life.toString();
             this.overScoreLabel.text = this.score.toString();
             this.thisTimeScoreLabel.text = this.thisTimeScore.toString();
+            console.log(123);
+            // this.renderNeighborRank(data.dqph)
             this.renderNeighborRank(data.dqph);
             // 我的排行数据更新
             SceneMange.getInstance().publicScene.userRankCollection.source = [{
@@ -434,7 +593,7 @@ var GameScene = (function (_super) {
             this['neighborRank' + i].getChildAt(0).text = data[i].ph.toString();
             // 若有远程图则加载, 否则用默认图
             this.loadRemoteImg(data[i].headimgurl, this['neighborRank' + i], 1);
-            if (data[i].nickname === null) {
+            if (!data[i].nickname) {
                 this['neighborRank' + i].getChildAt(2).text = 'null';
             }
             else {
@@ -601,7 +760,7 @@ var GameScene = (function (_super) {
             this.giftCap0.text = '恭喜您获得红包';
             this.giftCap1.text = '已存入零钱，可直接提现';
             this.giftOpen.visible = false;
-            this.giftNum.text = '' + '元';
+            // this.giftNum.text = '' + '元';
             this.giftNum.visible = true;
         }, this);
     };
@@ -689,10 +848,53 @@ var GameScene = (function (_super) {
     // }
     // 红包触发器
     GameScene.prototype.giftTriggerHandler = function () {
+        this.giftTriggerCounter++;
+        console.log('counter', this.giftTriggerCounter);
+        if (this.giftTriggerCounter === 3) {
+            this.giftTriggerCounter = 0;
+            // http://jmgzh.jo.cn/yx/tyt_zhu/g_hongbao
+            // ajax
+            // var req = new egret.HttpRequest();
+            // var params = "?score="+this.thisTimeScore;
+            // req.responseType = egret.HttpResponseType.TEXT;
+            // // req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife"+params,egret.HttpMethod.GET);
+            // req.open("http://jmgzh.jo.cn/yx/tyt_zhu/g_hongbao" + params,egret.HttpMethod.GET);
+            // req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            // req.send();
+            // // 类似beforeSend, 发送前执行
+            // // this.loadingPop.visible = true;
+            // // this.relive.touchEnabled = false;
+            // // this.restart.touchEnabled = false;
+            // // req.addEventListener(egret.ProgressEvent.PROGRESS, function(event:egret.Event):void{
+            // // }, this)
+            // var onSuccess=function(event){
+            // 	var request = <egret.HttpRequest>event.currentTarget;
+            // 	var data = JSON.parse(request.response);
+            // 	// 前端测试数据
+            // 	// data = {
+            // 	// 	msg:'1.2',
+            // 	// 	code:1
+            // 	// }
+            // 	// 存储gift信息
+            // 	if(data.code == '-1'){
+            // 		// 未获得gift
+            // 		console.log('未获得');
+            // 	} else {
+            // 		// gift flag 置true
+            // 		// 获得gift
+            // 		this.giftFlag = true;
+            // 		// gift大小
+            // 		this.giftSize = data.msg
+            // 		this.giftNum.text = this.giftSize + '元'
+            // 		console.log('获得');
+            // 	}
+            // }
+            // req.addEventListener(egret.Event.COMPLETE,onSuccess,this);
+        }
     };
     // 复活
     GameScene.prototype.reliveHandler = function () {
-        if (this.life === 0) {
+        if (Number(this.life) === 0) {
             this.overPanel.visible = false;
             SceneMange.getInstance().publicScene.sharePanel.visible = true;
             return false;
@@ -794,5 +996,21 @@ function getTanDeg(tan) {
     var result = Math.atan(tan) / (Math.PI / 180);
     result = Math.round(result);
     return result;
+}
+// ts cookie
+function setCookie(name, val) {
+    var date = new Date();
+    var value = val;
+    // Set it expire in 7 days
+    date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000));
+    // Set it
+    document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/";
+}
+function getCookie(name) {
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + name + "=");
+    if (parts.length == 2) {
+        return parts.pop().split(";").shift();
+    }
 }
 //# sourceMappingURL=GameScene.js.map

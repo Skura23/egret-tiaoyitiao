@@ -72,11 +72,13 @@ var PublicScene = (function (_super) {
     PublicScene.prototype.onScrollerChangeHander = function (e) {
         var myScroller = e.currentTarget;
         //  console.info("x:"+myScroller.viewport.scrollV);
+        // myScroller.viewport.scrollV是指viewport相对内容的竖直高度
         if (myScroller.viewport.scrollV < -100) {
             this.isRefresh = 1;
         }
-        if (myScroller.viewport.scrollV > (this.rankArrCollection.length * 71 - this.rankDataList.height + 70)) {
+        if (myScroller.viewport.scrollV > (this.rankArrCollection.length * 65 - this.rankDataList.height + 70)) {
             this.isRefresh = -1;
+            console.log(this.rankDataList.height);
         }
     };
     // rank列表滚动结束时监听函数
@@ -95,6 +97,7 @@ var PublicScene = (function (_super) {
     };
     // 获取排行榜ajax
     PublicScene.prototype.rankAjax = function () {
+        egret.ImageLoader.crossOrigin = "anonymous";
         var rankLoadingMc = this.rankScroller.getChildByName('rankLoadingMc');
         rankLoadingMc.visible = true;
         this.rankScroller.bounces = false;
@@ -144,12 +147,13 @@ var PublicScene = (function (_super) {
         }, this);
         // 分享
         this.sharePanel.getChildAt(3).addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
-            this.sharePanel.visible = false;
-            this.shareMask.visible = true;
+            window.location.href = "http://jmgzh.jo.cn/fxym.html";
+            // this.sharePanel.visible = false;
+            // this.shareMask.visible = true;
         }, this);
         // 跳转到积分兑换
         this.sharePanel.getChildAt(4).addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
-            window.location.href = "http://www.baidu.com";
+            window.location.href = "http://jmgzh.jo.cn/yx/tyt_zhu/g_dh";
         }, this);
     };
     PublicScene.prototype.showShareMask = function () {

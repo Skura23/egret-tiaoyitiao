@@ -3,10 +3,11 @@
 	<w:Config id="1616faa8fe5" ></w:Config>
 	<e:Image left="0" top="0" right="0" bottom="0" source="14_png"/>
 	<e:Group id="beginWra" horizontalCenter="0">
-		<e:Image top="300" horizontalCenter="0" source="21_png"/>
-		<e:Image id="beginBtn" y="700" horizontalCenter="0.5">
+		<e:Image horizontalCenter="0" source="21_png" y="180"/>
+		<e:Label id="leftLifeLabel" text="" width="357" height="30"   horizontalCenter="0" y="475" textAlign="center" size="27" fontFamily="Microsoft Yahei"/>
+		<e:Image id="beginBtn" y="536" horizontalCenter="0.5" source="2_png">
 		</e:Image>
-		<e:Group id="btnWra" horizontalCenter="0" y="920">
+		<e:Group id="btnWra" horizontalCenter="0" y="773">
 			<e:layout>
 				<e:HorizontalLayout gap="30" verticalAlign="middle"/>
 			</e:layout>
@@ -15,7 +16,7 @@
 			<e:Image source="12_png" />
 		</e:Group>
 	</e:Group>
-	<e:Group id="gameRulePop" horizontalCenter="0" verticalCenter="0" visible="false">
+	<e:Group id="gameRulePop" horizontalCenter="0" y="55" visible="false">
 		<e:Image source="13_png" />
 		<e:Group horizontalCenter="0" y="305">
 			<e:layout>
@@ -25,18 +26,18 @@
 				<e:viewport>
 					<e:Group>
 						<e:layout>
-							<e:VerticalLayout gap="10" horizontalAlign="center" />
+							<e:VerticalLayout gap="20" horizontalAlign="center" />
 						</e:layout>
-						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="1、活动时间：2018.12.12-2018.12.24（12.25公布获奖名单）。" />
-						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="2、关注聚名网微信公众号即可参与游戏，每天固定享有3个生命值。" />
-						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="3、分享到朋友圈或者微信群，成功分享一次可多获取1个生命值（每天≦10次）" />
-						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="4、邀请好友额外获取生命值，每成功邀请一位好友参与游戏，可多获取1个生命值。" />
-						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="5、聚名网积分可兑换生命值，500积分兑换一次，每天最多可兑换3次。" />
-						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="6、所有生命值的有效期是当天，系统每天凌晨0点清空，恢复默认3个生命值。" />
-						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="7、跳一跳游戏采用积分制度，每成功跳一个小方块即可获得一分。" />
-						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="8、获取的积分可累加，截止活动结束，累计积分高的小伙伴将获得奖品。" />
-						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="9、游戏中设有随机现金红包，领取到的红包将发放到玩家微信钱包中。" />
-						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="10、本次活动最终解释权归聚名网所有。" />
+						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="1、活动时间：2018.12.12-2018.12.24（12.25公布获奖名单）。"  lineSpacing="10"/>
+						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="2、关注聚名网微信公众号即可参与游戏，每天固定享有3个生命值。"  lineSpacing="10"/>
+						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="3、分享到朋友圈或者微信群，成功分享一次可多获取1个生命值（每天≦10次）"  lineSpacing="10"/>
+						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="4、邀请好友额外获取生命值，每成功邀请一位好友参与游戏，可多获取1个生命值。"  lineSpacing="10"/>
+						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="5、聚名网积分可兑换生命值，500积分兑换一次，每天最多可兑换3次。"  lineSpacing="10"/>
+						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="6、所有生命值的有效期是当天，系统每天凌晨0点清空，恢复默认3个生命值。"  lineSpacing="10"/>
+						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="7、跳一跳游戏采用积分制度，每成功跳一个小方块即可获得一分。"  lineSpacing="10"/>
+						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="8、获取的积分可累加，截止活动结束，累计积分高的小伙伴将获得奖品。"  lineSpacing="10"/>
+						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="9、游戏中设有随机现金红包，领取到的红包将发放到玩家微信钱包中。"  lineSpacing="10"/>
+						<e:Label width="380" fontFamily="Microsoft YaHei" size="22" text="10、本次活动最终解释权归聚名网所有。"  lineSpacing="10"/>
 					</e:Group>
 				</e:viewport>
 			</e:Scroller>
@@ -46,6 +47,40 @@
 		<!--<e:layout>
 			<e:HorizontalLayout verticalAlign="middle"/>
 		</e:layout>-->
+	</e:Group>
+	
+	<e:Group id="brandStoryPop" horizontalCenter="0" width="100%" y="0" height="100%" visible="false">
+		<!--<e:Image source="13_png" />-->
+		<e:Group horizontalCenter="0" y="0" width="100%" height="100%">
+			<e:layout>
+				<e:VerticalLayout gap="50" horizontalAlign="center" />
+			</e:layout>
+			<e:Scroller skinName="skins.ScrollerSkin" width="100%" scrollPolicyH="off" anchorOffsetY="0" horizontalCenter="0" height="100%">
+				<e:viewport>
+					<e:Group width="100%" height="100%">
+						<e:layout>
+							<e:VerticalLayout gap="0" horizontalAlign="center" />
+						</e:layout>
+						<!--<e:VerticalLayout gap="0" horizontalAlign="center" />-->
+						<!--<e:Image source="25_png" height="5212" width="100%"/>-->
+						<e:Image source="27_jpg" height="1429" width="100%"/>
+						<e:Image source="28_jpg" height="1429" width="100%"/>
+						<e:Image source="29_jpg" height="1429" width="100%"/>
+						<e:Image source="30_jpg" height="1429" width="100%"/>
+						<e:Image source="31_jpg" height="1429" width="100%"/>
+						<e:Image source="32_jpg" height="1429" width="100%"/>
+						<e:Image source="33_jpg" height="1429" width="100%"/>
+						<e:Image source="34_jpg" height="1429" width="100%"/>
+					</e:Group>
+				</e:viewport>
+			</e:Scroller>
+			<!--<e:Label id="brandStoryClose" width="80" height="80" horizontalCenter="0" text="" />-->
+		</e:Group>
+		<!--400 430-->
+		<!--<e:layout>
+			<e:HorizontalLayout verticalAlign="middle"/>
+		</e:layout>-->
+		<e:Image id="brandStoryClose" source="26_png" height="45" width="45" y="2" anchorOffsetX="0" anchorOffsetY="0" x="594"/>
 	</e:Group>
 
 	<!--与游戏场景重复部分-->

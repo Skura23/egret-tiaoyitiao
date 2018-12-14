@@ -10,10 +10,11 @@
     <meta name="screen-orientation" content="portrait" />
     <meta name="x5-fullscreen" content="true" />
     <meta name="360-fullscreen" content="true" />
+    <!--<script src="https://cdn.bootcss.com/crypto-js/3.1.9-1/crypto-js.min.js"></script>-->
     <style>
         html, body {
             -ms-touch-action: none;
-            background: #ccc;
+            background: #0D88D8;
             padding: 0;
             border: 0;
             margin: 0;
@@ -23,10 +24,13 @@
 </head>
 
 <body>
+    <!--noBorder-->
+    <!--fixedWide -->
+    <!--fixedWidth -->
     <div style="margin: auto;width: 100%;height: 100%;" class="egret-player"
          data-entry-class="Main"
          data-orientation="auto"
-         data-scale-mode="noBorder"
+         data-scale-mode="fixedWidth"
          data-frame-rate="60"
          data-content-width="640"
          data-content-height="1136"
@@ -89,6 +93,173 @@
         });
     });
     xhr.send(null);
+</script>
+<!--<script>
+const key = CryptoJS.enc.Utf8.parse("1234123412ABCDEF"); //十六位十六进制数作为密钥
+const iv = CryptoJS.enc.Utf8.parse('ABCDEF1234123412'); //十六位十六进制数作为密钥偏移量
+
+//解密方法
+function Decrypt(word) {
+let encryptedHexStr = CryptoJS.enc.Hex.parse(word);
+let srcs = CryptoJS.enc.Base64.stringify(encryptedHexStr);
+let decrypt = CryptoJS.AES.decrypt(srcs, key, {
+    iv: iv,
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.Pkcs7
+});
+let decryptedStr = decrypt.toString(CryptoJS.enc.Utf8);
+return decryptedStr.toString();
+}
+
+//加密方法
+function Encrypt(word) {
+let srcs = CryptoJS.enc.Utf8.parse(word);
+let encrypted = CryptoJS.AES.encrypt(srcs, key, {
+    iv: iv,
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.Pkcs7
+});
+return encrypted.ciphertext.toString().toUpperCase();
+}
+
+console.log(Encrypt('123'));
+</script>-->
+<script type="text/javascript" src="//res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<!--<script type="text/javascript" src="http://cdn.bootcss.com/crypto-js/3.1.9/crypto-js.js"></script>-->
+<!--<script type="text/javascript" src="http://cdn.bootcss.com/crypto-js/3.1.9/aes.js"></script>-->
+
+
+<script>
+// var ajax = new XMLHttpRequest();
+// //步骤二:设置请求的url参数,参数一是请求的类型,参数二是请求的url,可以带参数,动态的传递参数starName到服务端
+// ajax.open('get','http://jmgzh.jo.cn/yx/tyt_zhu/g_zpaih');
+// //步骤三:发送请求
+// ajax.send();
+// //步骤四:注册事件 onreadystatechange 状态改变就会调用
+// ajax.onreadystatechange = function () {
+//     if (ajax.readyState==4 &&ajax.status==200) {
+//         console.log(ajax.responseText);
+//     }
+// }
+
+//步骤一:创建异步对象
+var ajax = new XMLHttpRequest();
+//步骤二:设置请求的url参数,参数一是请求的类型,参数二是请求的url,可以带参数,动态的传递参数starName到服务端
+ajax.open('get','http://jmgzh.jo.cn/yx/tyt_zhu/fenxiang');
+//步骤三:发送请求
+ajax.send();
+//步骤四:注册事件 onreadystatechange 状态改变就会调用
+ajax.onreadystatechange = function () {
+   if (ajax.readyState==4 &&ajax.status==200) {
+    //步骤五 如果能够进到这个判断 说明 数据 完美的回来了,并且请求的页面是存在的
+    // 　　　　console.log(ajax.responseText);//输入相应的内容
+        var data = JSON.parse(ajax.responseText)
+        console.log('shareajax',data);
+        wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: data.appId, // 必填，公众号的唯一标识
+            timestamp: data.timestamp, // 必填，生成签名的时间戳
+            nonceStr: data.nonceStr, // 必填，生成签名的随机串
+            signature: data.signature,// 必填，签名
+            jsApiList: [
+                'onMenuShareTimeline',
+                'onMenuShareAppMessage',
+                'onMenuShareQQ',
+                'onMenuShareWeibo',
+                'openLocation',
+                'hideOptionMenu',
+                'closeWindow'
+            ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+        wx.ready(function(){
+            // 分享到朋友
+            wx.onMenuShareAppMessage({
+                title: '邀请您一起来玩小聚跳一跳', // 分享标题
+                desc: '超多现金红包享不停，还有大奖等您来拿！', // 分享描述
+                link: 'http://jmgzh.jo.cn/yx/tyt_zhu/g_yaoqing?openid='+data.openid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: 'http://jmgzh.jo.cn/yx/common/imgs/rank_head.png', // 分享图标
+                type: 'link', // 分享类型,music、video或link，不填默认为link
+                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                success: function () {
+                    console.log('share friend');
+                    // 用户点击了分享后执行的回调函数
+                    var req = new egret.HttpRequest();
+                    // var params = "?curLife="+bus.life;
+                    // var params = bus.testId;
+                    req.responseType = egret.HttpResponseType.TEXT;
+                    // req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife"+params,egret.HttpMethod.GET);
+                    req.open("http://jmgzh.jo.cn/yx/?tyt_zhu/p_smz",egret.HttpMethod.GET);
+                    req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    req.send();
+                }
+            });
+            // 分享到朋友圈
+            wx.onMenuShareTimeline({
+                title: '邀请您一起来玩小聚跳一跳', // 分享标题
+                link: 'http://jmgzh.jo.cn/yx/tyt_zhu/g_yaoqing?openid='+data.openid, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: 'http://jmgzh.jo.cn/yx/common/imgs/rank_head.png', // 分享图标
+                success: function () {
+                    // 用户点击了分享后执行的回调函数
+                    var req = new egret.HttpRequest();
+                    // var params = "?curLife="+bus.life;
+                    // var params = bus.testId;
+                    req.responseType = egret.HttpResponseType.TEXT;
+                    // req.open("https://www.easy-mock.com/mock/5bf3a15a531b28495fc589d3/tyt/getLife"+params,egret.HttpMethod.GET);
+                    req.open("http://jmgzh.jo.cn/yx/?tyt_zhu/p_smz",egret.HttpMethod.GET);
+                    req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    req.send();
+                }
+            })
+
+        })
+        wx.error(function(res){
+            // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+            console.log(res)
+        });
+　　}
+  
+}
+
+// var ajax2 = new XMLHttpRequest();
+// //步骤二:设置请求的url参数,参数一是请求的类型,参数二是请求的url,可以带参数,动态的传递参数starName到服务端
+// ajax2.open('get','http://jmgzh.jo.cn/yx/tyt_zhu/getmm');
+// //步骤三:发送请求
+// ajax2.send();
+// //步骤四:注册事件 onreadystatechange 状态改变就会调用
+// ajax2.onreadystatechange = function () {
+//     if (ajax2.readyState==4 &&ajax2.status==200) {
+//         var data = JSON.parse(ajax2.responseText)
+//         var remoteC = data.my;
+//         var first10 = remoteCode.slice(0,-30);
+//         var fullC = first10+'2a0ae5545b451caf4725ed0487b7e71b'
+//         var iv = data.iv;
+//         var text = "After all, tomorrow is another day.";
+//         var key = CryptoJS.enc.Hex.parse(fullC);  //md5('123456')
+//         var iv  = CryptoJS.enc.Hex.parse(iv);
+    
+//         var opinion = {iv:iv, padding:CryptoJS.pad.ZeroPadding};
+        
+//         var encrypted = CryptoJS.AES.encrypt(text, key, opinion);
+//         encrypted = encrypted.toString();
+//         console.log(encrypted);
+        
+//         var decrypted = CryptoJS.AES.decrypt(encrypted, key, opinion);
+//         decrypted =  decrypted.toString(CryptoJS.enc.Utf8);
+//         console.log(decrypted);
+//     }
+// }
+
+</script>
+<script>
+// 统计代码
+
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?4a1bd122dd90d52f6ff66a63370ec4df";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
 </script>
 </body>
 

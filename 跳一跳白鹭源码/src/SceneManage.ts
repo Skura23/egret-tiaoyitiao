@@ -55,6 +55,7 @@ class SceneMange extends egret.Sprite {
 		// 切换到beginScene时修改开始按钮图片
 		if(type == 'beginScene'){
 			this.beginScene.modiStartImg()
+			this.beginScene.leftLifeLabel.text = '剩余生命值: ' + bus.life.toString();
 		}
 	}
 }
